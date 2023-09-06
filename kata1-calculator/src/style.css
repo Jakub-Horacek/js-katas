@@ -1,0 +1,44 @@
+:root {
+  --calculator-background-color: black;
+  --site-background-color: var(--dark-grey);
+  --highlight-color: rgb(237, 158, 43);
+  --foreground-color: white;
+
+  --dark-grey: rgb(49, 49, 49);
+  --light-grey: rgb(150, 150, 150);
+
+  --calculator-border-radius: 25px;
+  --buttons-border-radius: 50%;
+  --default-gap: 10px;
+}
+
+body {
+  font-family: Helvetica, sans-serif;
+  background: var(--site-background-color);
+  color: var(--foreground-color);
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+h1 {
+  position: absolute;
+  margin: var(--default-gap);
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.calculator {
+  align-self: center;
+  margin: auto;
+  background: var(--calculator-background-color);
+  border-radius: var(--calculator-border-radius);
+  width: 500px;
+  height: 1000px;
+}
