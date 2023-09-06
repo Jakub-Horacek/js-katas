@@ -1,21 +1,27 @@
 :root {
-  --calculator-background-color: black;
   --site-background-color: var(--dark-grey);
   --highlight-color: rgb(237, 158, 43);
-  --foreground-color: white;
+  --foreground-light-color: white;
+  --foreground-dark-color: black;
 
   --dark-grey: rgb(49, 49, 49);
   --light-grey: rgb(150, 150, 150);
 
-  --calculator-border-radius: 25px;
-  --buttons-border-radius: 50%;
+  --buttons-border-radius: 45px;
+  --button-size: 85px;
   --default-gap: 10px;
+  --result-number-size: 110px;
+
+  --calculator-width: 390px;
+  --calculator-height: 844px;
+  --calculator-border-radius: 25px;
+  --calculator-background-color: var(--foreground-dark-color);
 }
 
 body {
-  font-family: Helvetica, sans-serif;
+  font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
   background: var(--site-background-color);
-  color: var(--foreground-color);
+  color: var(--foreground-light-color);
   margin: 0;
   width: 100vw;
   height: 100vh;
@@ -24,6 +30,21 @@ body {
 h1 {
   position: absolute;
   margin: var(--default-gap);
+}
+
+button {
+  width: var(--button-size);
+  height: var(--button-size);
+  background: var(--dark-grey);
+  color: var(--foreground-light-color);
+  border: none;
+  border-radius: var(--buttons-border-radius);
+  font-size: xx-large;
+  transition: 0.1s;
+}
+
+button:active {
+  filter: brightness(1.5);
 }
 
 .container {
@@ -35,10 +56,59 @@ h1 {
 }
 
 .calculator {
+  display: flex;
   align-self: center;
+  justify-content: flex-end;
+  flex-direction: column;
   margin: auto;
   background: var(--calculator-background-color);
   border-radius: var(--calculator-border-radius);
-  width: 500px;
-  height: 1000px;
+  width: var(--calculator-width);
+  height: var(--calculator-height);
+  box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
+}
+
+.result {
+  font-size: var(--result-number-size);
+  text-align: right;
+  margin: var(--default-gap);
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: var(--default-gap);
+  margin: var(--default-gap);
+}
+
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  width: inherit;
+  gap: var(--default-gap);
+}
+
+.numbers .zero {
+  grid-area: 5 / 1 / 6 / 3;
+  width: calc((var(--button-size) * 2) + var(--default-gap));
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  width: inherit;
+  gap: var(--default-gap);
+}
+
+.actions button {
+  font-size: xxx-large;
+  background-color: var(--highlight-color);
+}
+
+button.top {
+  background: var(--light-grey);
+  color: var(--foreground-dark-color);
 }
