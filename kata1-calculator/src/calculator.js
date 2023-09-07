@@ -1,7 +1,7 @@
 window.addEventListener(
   "keydown",
   (e) => {
-    if (!isNaN(e.key)) {
+    if (!isNaN(e.key) || isOperator(e.key)) {
       addCharacter(e.key);
     }
 
@@ -13,10 +13,6 @@ window.addEventListener(
       removeCharacter();
     }
 
-    if (e.key == "/" || e.key == "*" || e.key == "+" || e.key == "-") {
-      addCharacter(e.key);
-    }
-
     if (e.key == "Enter" || e.key == "=") {
       solve();
     }
@@ -24,6 +20,7 @@ window.addEventListener(
   true
 );
 
+let operatorPlacedPreviously = false;
 let lastEquationSolved = false;
 let commaAlreadyPlaced = false;
 const root = document.querySelector(":root");
@@ -32,6 +29,7 @@ const defaultResultSize = getComputedStyle(root).getPropertyValue("--result-numb
 /**
  *  Add provided char into the string equation
  * @param {string} char to add into the result innerText
+ * @returns when trying to place more operators next to eachother
  * @returns when trying to place already existing comma
  */
 const addCharacter = (char) => {
@@ -40,11 +38,13 @@ const addCharacter = (char) => {
     lastEquationSolved = false;
   }
 
+  if (isOperator(char) && operatorPlacedPreviously) return;
   if (char == "." && commaAlreadyPlaced) return;
 
   let resultString = getResultInnerText();
   setResultInnerText(resultString + char);
   commaAlreadyPlaced = isResultContainingComma();
+  operatorPlacedPreviously = isOperator(char);
   checkResultLength();
 };
 
@@ -112,6 +112,15 @@ const setResultInnerText = (text) => {
  */
 const isResultContainingComma = () => {
   return getResultInnerText().includes(".");
+};
+
+/**
+ * Check if the provided char is an operator
+ * @param {string} char
+ * @returns true when the char is an operator
+ */
+const isOperator = (char) => {
+  return char == "/" || char == "*" || char == "+" || char == "-";
 };
 
 /**
