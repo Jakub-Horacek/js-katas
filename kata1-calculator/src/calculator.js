@@ -59,6 +59,24 @@ const removeCharacter = () => {
 };
 
 /**
+ * Toggle the result innerText positive/negative value
+ * @returns when the result is empty
+ */
+const negativeToggle = () => {
+  if (isResultEmpty) return;
+  let resultString = getResultInnerText();
+  let negativeValue;
+
+  if (isFirstCharacterMinus(resultString)) {
+    negativeValue = resultString.slice(1);
+  } else {
+    negativeValue = "-" + resultString;
+  }
+
+  setResultInnerText(negativeValue);
+};
+
+/**
  * Clear the result innerText
  */
 const allClear = () => {
@@ -138,6 +156,16 @@ const isOperator = (char) => {
  */
 const notContainingAnyOperators = (equation) => {
   return !(equation.includes("/") || equation.includes("*") || equation.includes("+") || equation.includes("-"));
+};
+
+/**
+ * Check if the first character of the string is minus
+ * @param {*} string
+ * @returns true when first character of the string is "-"
+ */
+const isFirstCharacterMinus = (string) => {
+  let firstChar = Array.from(string)[0];
+  return firstChar == "-";
 };
 
 /**
