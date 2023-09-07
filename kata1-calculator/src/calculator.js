@@ -128,6 +128,8 @@ const setResultInnerText = (text) => {
  * @returns true when result is containg comma
  */
 const isResultContainingComma = () => {
+  // TODO: Currently it is checking the whole result. It should check each number separately.
+  // Split the whole result by operators as the separators and check each number separately.
   return getResultInnerText().includes(".");
 };
 
