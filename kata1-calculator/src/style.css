@@ -40,6 +40,7 @@ button {
   border: none;
   border-radius: var(--buttons-border-radius);
   font-size: xx-large;
+  cursor: pointer;
   transition: 0.1s;
 }
 
@@ -122,4 +123,11 @@ button:active {
 button.top {
   background: var(--light-grey);
   color: var(--foreground-dark-color);
+}
+
+.disabled,
+.disabled:active {
+  cursor: default !important;
+  filter: grayscale(100%) !important;
+  color: var(--dark-grey) !important;
 }
