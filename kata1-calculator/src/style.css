@@ -16,6 +16,8 @@
   --calculator-height: 844px;
   --calculator-border-radius: 25px;
   --calculator-background-color: var(--foreground-dark-color);
+
+  --default-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
 }
 
 body {
@@ -36,6 +38,7 @@ body {
 h1 {
   position: absolute;
   margin: var(--default-gap);
+  text-shadow: var(--default-shadow);
 }
 
 button {
@@ -73,7 +76,7 @@ button:active {
   border-radius: var(--calculator-border-radius);
   width: var(--calculator-width);
   height: var(--calculator-height);
-  box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
+  box-shadow: var(--default-shadow);
 }
 
 .result {
