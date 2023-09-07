@@ -83,6 +83,13 @@ button:active {
   flex-direction: row;
   gap: var(--default-gap);
   margin: var(--default-gap);
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .numbers {
