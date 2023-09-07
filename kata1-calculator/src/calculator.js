@@ -38,7 +38,7 @@ const addCharacter = (char) => {
     lastEquationSolved = false;
   }
 
-  if (isOperator(char) && operatorPlacedPreviously) return;
+  if (isOperator(char) && (operatorPlacedPreviously || isResultEmpty())) return;
   if (char == "." && commaAlreadyPlaced) return;
 
   let resultString = getResultInnerText();
@@ -115,6 +115,14 @@ const isResultContainingComma = () => {
 };
 
 /**
+ * CHeck if result innerText is empty
+ * @returns true when result innerText is empty
+ */
+const isResultEmpty = () => {
+  return getResultInnerText() == "";
+};
+
+/**
  * Check if the provided char is an operator
  * @param {string} char
  * @returns true when the char is an operator
@@ -133,12 +141,22 @@ const notContainingAnyOperators = (equation) => {
 };
 
 /**
+ * Check whether the string ends with a number
+ * @param {string} string
+ * @returns true when the string ends with a char that is not a number
+ */
+const lastCharacterNotNumber = (string) => {
+  let lastChar = string.slice(-1);
+  return isOperator(lastChar) || isNaN(lastChar);
+};
+
+/**
  *  Check if the equation is valid
  * @param {string} equation
  * @returns true when the equation is not valid
  */
 const notValidEquation = (equation) => {
-  return equation == "" || notContainingAnyOperators(equation);
+  return equation == "" || notContainingAnyOperators(equation) || lastCharacterNotNumber(equation);
 };
 
 /**
@@ -149,11 +167,12 @@ const solve = () => {
   let resultString = getResultInnerText();
 
   if (notValidEquation(resultString)) {
-    console.log("not valid");
+    // console.warn(`resultString (${resultString}) is not valid math equation`);
     return;
   }
 
   let solvedEquation = eval(resultString);
   setResultInnerText(solvedEquation);
   lastEquationSolved = true;
+  checkResultLength();
 };
