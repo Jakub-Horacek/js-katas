@@ -47,6 +47,7 @@ button {
   border-radius: var(--buttons-border-radius);
   font-size: xx-large;
   cursor: pointer;
+  text-align: center;
   transition: 0.1s;
 }
 
@@ -132,9 +133,23 @@ button.top {
   color: var(--foreground-dark-color);
 }
 
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  object-fit: scale-down;
+  margin: auto;
+  width: 38px;
+  height: 38px;
+}
+
 .disabled,
 .disabled:active {
   cursor: default !important;
   filter: grayscale(100%) !important;
   color: var(--dark-grey) !important;
+}
+
+.disabled img {
+  filter: invert(40%);
 }

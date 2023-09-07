@@ -21,7 +21,7 @@ window.addEventListener(
 );
 
 let operatorPlacedPreviously = false;
-let lastEquationSolved = false;
+let previousEquationSolved = false;
 let commaAlreadyPlaced = false;
 const root = document.querySelector(":root");
 const defaultResultSize = getComputedStyle(root).getPropertyValue("--result-number-size");
@@ -33,9 +33,11 @@ const defaultResultSize = getComputedStyle(root).getPropertyValue("--result-numb
  * @returns when trying to place already existing comma
  */
 const addCharacter = (char) => {
-  if (lastEquationSolved) {
-    allClear();
-    lastEquationSolved = false;
+  if (previousEquationSolved) {
+    previousEquationSolved = false;
+    if (!isOperator(char)) {
+      allClear();
+    }
   }
 
   if (isOperator(char) && (operatorPlacedPreviously || isResultEmpty())) return;
@@ -198,5 +200,5 @@ const solve = () => {
 
   let solvedEquation = eval(resultString);
   setResultInnerText(solvedEquation);
-  lastEquationSolved = true;
+  previousEquationSolved = true;
 };

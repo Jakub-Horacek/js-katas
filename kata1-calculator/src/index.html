@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JS Kata #1 - The Calculator</title>
-    <link rel="icon" type="image/x-icon" href="assets/images/calculator.ico" />
+    <link rel="icon" type="image/x-icon" href="assets/icons/calculator.ico" />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="scrollbar.css" />
     <script src="calculator.js"></script>
@@ -18,7 +18,9 @@
           <div class="numbers">
             <button class="top" onclick="allClear()">AC</button>
             <button class="top" onclick="negativeToggle()">+/-</button>
-            <button class="top disabled" title="Not yet implemented">%</button>
+            <button class="top disabled" title="Not yet implemented">
+              <img class="icon" src="assets/icons/history.png" alt="equation log" />
+            </button>
             <button onclick="addCharacter(7)">7</button>
             <button onclick="addCharacter(8)">8</button>
             <button onclick="addCharacter(9)">9</button>
