@@ -1,0 +1,158 @@
+:root {
+  --site-background-color: var(--dark-grey);
+  --highlight-color: rgb(237, 158, 43);
+  --foreground-light-color: white;
+  --foreground-dark-color: black;
+
+  --dark-grey: rgb(49, 49, 49);
+  --light-grey: rgb(150, 150, 150);
+
+  --buttons-border-radius: 45px;
+  --button-size: 85px;
+  --default-gap: 10px;
+  --result-number-size: 110px;
+
+  --calculator-width: 390px;
+  --calculator-height: 844px;
+  --calculator-border-radius: 25px;
+  --calculator-background-color: var(--foreground-dark-color);
+
+  --default-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
+}
+
+body {
+  font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  color: var(--foreground-light-color);
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+
+  /* background: var(--site-background-color); */
+  background: url("/kata1-calculator/src/assets/images/macos-ventura-wallpaper.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+h1 {
+  position: absolute;
+  margin: var(--default-gap);
+  text-shadow: var(--default-shadow);
+}
+
+button {
+  width: var(--button-size);
+  height: var(--button-size);
+  background: var(--dark-grey);
+  color: var(--foreground-light-color);
+  border: none;
+  border-radius: var(--buttons-border-radius);
+  font-size: xx-large;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.1s;
+}
+
+button:active {
+  filter: brightness(1.5);
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.calculator {
+  display: flex;
+  align-self: center;
+  justify-content: flex-end;
+  flex-direction: column;
+  margin: auto;
+  background: var(--calculator-background-color);
+  border-radius: var(--calculator-border-radius);
+  width: var(--calculator-width);
+  height: var(--calculator-height);
+  box-shadow: var(--default-shadow);
+}
+
+.result {
+  font-size: var(--result-number-size);
+  text-align: right;
+  margin: var(--default-gap);
+  max-width: var(--calculator-width);
+  overflow-x: auto;
+  overflow-y: none !important;
+  font-weight: lighter;
+  transition: 0.5s;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: var(--default-gap);
+  margin: var(--default-gap);
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  width: inherit;
+  gap: var(--default-gap);
+}
+
+.numbers .zero {
+  grid-area: 5 / 1 / 6 / 3;
+  width: calc((var(--button-size) * 2) + var(--default-gap));
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  width: inherit;
+  gap: var(--default-gap);
+}
+
+.actions button {
+  font-size: xxx-large;
+  background-color: var(--highlight-color);
+}
+
+button.top {
+  background: var(--light-grey);
+  color: var(--foreground-dark-color);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  object-fit: scale-down;
+  margin: auto;
+  width: 38px;
+  height: 38px;
+}
+
+.disabled,
+.disabled:active {
+  cursor: default !important;
+  filter: grayscale(100%) !important;
+  color: var(--dark-grey) !important;
+}
+
+.disabled img {
+  filter: invert(40%);
+}
