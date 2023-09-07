@@ -45,7 +45,6 @@ const addCharacter = (char) => {
   setResultInnerText(resultString + char);
   commaAlreadyPlaced = isResultContainingComma();
   operatorPlacedPreviously = isOperator(char);
-  checkResultLength();
 };
 
 /**
@@ -55,15 +54,12 @@ const removeCharacter = () => {
   let resultString = getResultInnerText();
   setResultInnerText(resultString.slice(0, -1));
   commaAlreadyPlaced = isResultContainingComma();
-  checkResultLength();
 };
 
 /**
  * Toggle the result innerText positive/negative value
- * @returns when the result is empty
  */
 const negativeToggle = () => {
-  if (isResultEmpty) return;
   let resultString = getResultInnerText();
   let negativeValue;
 
@@ -122,6 +118,7 @@ const getResultInnerText = () => {
  */
 const setResultInnerText = (text) => {
   document.getElementById("result").innerText = text;
+  checkResultLength();
 };
 
 /**
@@ -202,5 +199,4 @@ const solve = () => {
   let solvedEquation = eval(resultString);
   setResultInnerText(solvedEquation);
   lastEquationSolved = true;
-  checkResultLength();
 };

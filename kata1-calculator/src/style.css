@@ -83,6 +83,7 @@ button:active {
   overflow-x: auto;
   overflow-y: none !important;
   font-weight: lighter;
+  transition: 0.5s;
 }
 
 .buttons {
