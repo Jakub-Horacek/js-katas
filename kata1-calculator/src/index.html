@@ -6,36 +6,37 @@
     <title>JS Kata #1 - The Calculator</title>
     <link rel="icon" type="image/x-icon" href="assets/images/calculator.ico" />
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="scrollbar.css" />
     <script src="calculator.js"></script>
   </head>
   <body>
     <h1>The Calculator</h1>
     <div class="container">
       <div class="calculator">
-        <div class="result">0</div>
+        <div class="result" id="result"></div>
         <div class="buttons">
           <div class="numbers">
-            <button class="top">AC</button>
+            <button class="top" onclick="allClear()">AC</button>
             <button class="top">+/-</button>
             <button class="top">%</button>
-            <button>7</button>
-            <button>8</button>
-            <button>9</button>
-            <button>4</button>
-            <button>5</button>
-            <button>6</button>
-            <button>1</button>
-            <button>2</button>
-            <button>3</button>
-            <button class="zero">0</button>
-            <button>.</button>
+            <button onclick="addCharacter(7)">7</button>
+            <button onclick="addCharacter(8)">8</button>
+            <button onclick="addCharacter(9)">9</button>
+            <button onclick="addCharacter(4)">4</button>
+            <button onclick="addCharacter(5)">5</button>
+            <button onclick="addCharacter(6)">6</button>
+            <button onclick="addCharacter(1)">1</button>
+            <button onclick="addCharacter(2)">2</button>
+            <button onclick="addCharacter(3)">3</button>
+            <button class="zero" onclick="addCharacter(0)">0</button>
+            <button onclick="addCharacter('.')">.</button>
           </div>
           <div class="actions">
-            <button>÷</button>
-            <button>×</button>
-            <button>-</button>
-            <button>+</button>
-            <button>=</button>
+            <button onclick="addCharacter('/')">÷</button>
+            <button onclick="addCharacter('*')">×</button>
+            <button onclick="addCharacter('-')">-</button>
+            <button onclick="addCharacter('+')">+</button>
+            <button onclick="solve()">=</button>
           </div>
         </div>
       </div>

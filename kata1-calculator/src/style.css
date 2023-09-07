@@ -72,6 +72,10 @@ button:active {
   font-size: var(--result-number-size);
   text-align: right;
   margin: var(--default-gap);
+  max-width: var(--calculator-width);
+  overflow-x: auto;
+  overflow-y: none !important;
+  font-weight: lighter;
 }
 
 .buttons {

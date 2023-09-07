@@ -1,0 +1,10 @@
+@import "style.css";
+
+::-webkit-scrollbar {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--dark-grey);
+  border-radius: var(--buttons-border-radius);
+}
