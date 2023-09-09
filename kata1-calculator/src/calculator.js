@@ -20,6 +20,7 @@ window.addEventListener(
   true
 );
 
+let showEquationLog = false;
 let operatorPlacedPreviously = false;
 let previousEquationSolved = false;
 let commaAlreadyPlaced = false;
@@ -72,6 +73,24 @@ const negativeToggle = () => {
   }
 
   setResultInnerText(negativeValue);
+};
+
+/**
+ * Toggle the showEquationLog true/false
+ */
+const equationLogToggle = () => {
+  const equationLogElement = document.getElementById("calculator-equation-log");
+  const buttonsElement = document.getElementById("calculator-buttons");
+
+  showEquationLog = !showEquationLog;
+
+  if (showEquationLog) {
+    equationLogElement.classList.remove("hidden");
+    buttonsElement.classList.add("hidden");
+  } else {
+    equationLogElement.classList.add("hidden");
+    buttonsElement.classList.remove("hidden");
+  }
 };
 
 /**
@@ -161,7 +180,7 @@ const notContainingAnyOperators = (equation) => {
 
 /**
  * Check if the first character of the string is minus
- * @param {*} string
+ * @param {string} string
  * @returns true when first character of the string is "-"
  */
 const isFirstCharacterMinus = (string) => {
