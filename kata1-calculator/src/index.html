@@ -12,10 +12,12 @@
   <body>
     <h1>The Calculator</h1>
     <div class="container">
-      <div class="calculator">
+      <div class="calculator" id="calculator">
         <div class="history hidden" id="calculator-equation-log">
           <div class="history__buttons">
-            <button class="text-only" onclick="equationLogToggle()">< Back to calculator</button>
+            <button class="text-only" onclick="equationLogToggle()">
+              <img class="history__icon" src="assets/icons/chevron-left.png" alt="back to calculator" /> Calculator
+            </button>
             <button class="text-only disabled">Clear the history</button>
           </div>
         </div>

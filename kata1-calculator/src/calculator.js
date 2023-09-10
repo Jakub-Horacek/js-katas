@@ -79,18 +79,44 @@ const negativeToggle = () => {
  * Toggle the showEquationLog true/false
  */
 const equationLogToggle = () => {
+  const calculatorElement = document.getElementById("calculator");
   const equationLogElement = document.getElementById("calculator-equation-log");
   const buttonsElement = document.getElementById("calculator-buttons");
+  const resultElement = document.getElementById("result");
 
   showEquationLog = !showEquationLog;
 
   if (showEquationLog) {
     equationLogElement.classList.remove("hidden");
     buttonsElement.classList.add("hidden");
+    resultElement.classList.add("hidden");
+    calculatorElement.style.justifyContent = "start";
+
+    waitAndDisableElement([buttonsElement, resultElement], 500, true);
+    waitAndDisableElement([equationLogElement], 0, false);
   } else {
     equationLogElement.classList.add("hidden");
     buttonsElement.classList.remove("hidden");
+    resultElement.classList.remove("hidden");
+    calculatorElement.style.justifyContent = "end";
+
+    waitAndDisableElement([buttonsElement, resultElement], 0, false);
+    waitAndDisableElement([equationLogElement], 500, true);
   }
+};
+
+/**
+ * Apply or remove "visibility: hidden" css atribute for the provided elements to stop user from interacting with the disabled elements
+ * @param {Array} elements to be disabled/enabled
+ * @param {Number} delay (in ms) set to the same delay as the element's transition in the CSS (elements should be disabled after the CSS animation is complete)
+ * @param {Boolean} disabled / enabled
+ */
+const waitAndDisableElement = (elements, delay, disabled) => {
+  setTimeout(() => {
+    elements.forEach((element) => {
+      element.style.visibility = disabled ? "hidden" : "visible";
+    });
+  }, delay);
 };
 
 /**

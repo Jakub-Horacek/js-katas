@@ -63,7 +63,7 @@ button.text-only {
   border-radius: unset;
   height: unset;
   width: unset;
-  font-size: larger;
+  font-size: medium;
   font-weight: lighter;
 }
 
@@ -78,7 +78,7 @@ button.text-only {
 .calculator {
   display: flex;
   align-self: center;
-  justify-content: space-between;
+  justify-content: end;
   flex-direction: column;
   margin: auto;
   background: var(--calculator-background-color);
@@ -87,19 +87,26 @@ button.text-only {
   height: var(--calculator-height);
   box-shadow: var(--default-shadow);
   overflow: hidden;
+  transition: 0.5s all;
 }
 
 .history {
   display: flex;
   flex-direction: column;
   gap: var(--default-gap);
-  margin: var(--default-gap);
+  margin: calc(var(--default-gap) * 1.5);
 }
 
 .history__buttons {
   display: flex;
   flex-direction: row;
   gap: var(--default-gap);
+  justify-content: space-between;
+}
+
+.history__icon {
+  filter: invert(100%);
+  width: 13px;
 }
 
 .result {
@@ -181,8 +188,15 @@ button.top {
 }
 
 .hidden {
-  height: 0;
   opacity: 0;
+  transform-origin: top;
+  transition: 0.5s;
+}
+
+.hidden > * {
+  cursor: default !important;
+  opacity: 0;
+  pointer-events: none;
   transform-origin: top;
   transition: 0.5s;
 }
