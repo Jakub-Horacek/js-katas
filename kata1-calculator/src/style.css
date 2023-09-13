@@ -58,6 +58,15 @@ button:active {
   filter: brightness(1.5);
 }
 
+button.text-only {
+  background: transparent;
+  border-radius: unset;
+  height: unset;
+  width: unset;
+  font-size: medium;
+  font-weight: lighter;
+}
+
 .container {
   display: flex;
   width: 100%;
@@ -69,7 +78,7 @@ button:active {
 .calculator {
   display: flex;
   align-self: center;
-  justify-content: flex-end;
+  justify-content: end;
   flex-direction: column;
   margin: auto;
   background: var(--calculator-background-color);
@@ -77,6 +86,69 @@ button:active {
   width: var(--calculator-width);
   height: var(--calculator-height);
   box-shadow: var(--default-shadow);
+  overflow: hidden;
+  transition: 0.5s all;
+}
+
+.history {
+  display: flex;
+  flex-direction: column;
+}
+
+.history__buttons {
+  display: flex;
+  flex-direction: row;
+  gap: var(--default-gap);
+  justify-content: space-between;
+  margin: calc(var(--default-gap) * 1.5);
+}
+
+.history__icon {
+  filter: invert(100%);
+  width: 13px;
+}
+
+.history__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--default-gap);
+  align-items: flex-end;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--default-gap) 0;
+  overflow: auto;
+  max-height: 760px;
+  width: 100%;
+}
+
+.history__item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--default-gap);
+  justify-content: space-between;
+  font-weight: lighter;
+  width: 100%;
+}
+
+.history__time {
+  opacity: 0.5;
+  font-size: large;
+  padding-left: var(--default-gap);
+}
+
+.history__value {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: larger;
+  padding-right: var(--default-gap);
+}
+
+.history__result {
+  margin-left: calc(var(--default-gap) / 2);
+  font-weight: bold;
+  font-size: x-large;
 }
 
 .result {
@@ -85,7 +157,7 @@ button:active {
   margin: var(--default-gap);
   max-width: var(--calculator-width);
   overflow-x: auto;
-  overflow-y: none !important;
+  /* overflow-y: none !important; */
   font-weight: lighter;
   transition: 0.5s;
 }
@@ -155,4 +227,18 @@ button.top {
 
 .disabled img {
   filter: invert(40%);
+}
+
+.hidden {
+  opacity: 0;
+  transform-origin: top;
+  transition: 0.5s;
+}
+
+.hidden > * {
+  cursor: default !important;
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: top;
+  transition: 0.5s;
 }

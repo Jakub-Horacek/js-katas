@@ -12,13 +12,23 @@
   <body>
     <h1>The Calculator</h1>
     <div class="container">
-      <div class="calculator">
+      <div class="calculator" id="calculator">
+        <div class="history hidden" id="calculator-equation-log">
+          <div class="history__buttons">
+            <button class="text-only" onclick="equationLogToggle()">
+              <img class="history__icon" src="assets/icons/chevron-left.png" alt="back to calculator" /> Calculator
+            </button>
+            <button class="text-only" onclick="clearTheEquationLog()">Clear the history</button>
+          </div>
+
+          <ul class="history__list" id="equation-list"></ul>
+        </div>
         <div class="result" id="result"></div>
-        <div class="buttons">
+        <div class="buttons" id="calculator-buttons">
           <div class="numbers">
             <button class="top" onclick="allClear()">AC</button>
             <button class="top" onclick="negativeToggle()">+/-</button>
-            <button class="top disabled" title="Not yet implemented">
+            <button class="top" onclick="equationLogToggle()">
               <img class="icon" src="assets/icons/history.png" alt="equation log" />
             </button>
             <button onclick="addCharacter(7)">7</button>
