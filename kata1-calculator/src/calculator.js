@@ -1,6 +1,8 @@
 window.addEventListener(
   "keydown",
   (e) => {
+    if (showEquationLog) return;
+
     if (!isNaN(e.key) || isOperator(e.key)) {
       addCharacter(e.key);
     }
@@ -275,6 +277,16 @@ const parseEquationLogToHTML = () => {
     // quick fix is in the equationLogToggle() method (with the HACK comment)
     document.getElementById("equation-list").innerHTML += equationListItem;
   });
+};
+
+/**
+ * Clear the whole equation log from the localStorage when confirmed
+ */
+const clearTheEquationLog = () => {
+  if (confirm("Do you really want to delete the whole equation log?")) {
+    localStorage.setItem("equationLog", JSON.stringify(null));
+    document.getElementById("equation-list").innerHTML = "";
+  }
 };
 
 /**
