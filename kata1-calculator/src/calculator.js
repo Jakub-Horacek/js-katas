@@ -268,8 +268,11 @@ const parseEquationLogToHTML = () => {
   if (equationLog == null) return;
 
   equationLog.forEach((element) => {
-    const equationListItem = `<li class="history__item">
-    <div class="history__time">${new Date(element.date).getHours()}:${new Date(element.date).getMinutes()}</div>
+    const equationListItem = `<li class="history__item" 
+    title="Solved: ${new Date(element.date).getDay()}.${new Date(element.date).getMonth()}. ${new Date(element.date).getFullYear()} - ${new Date(
+      element.date
+    ).getHours()}:${new Date(element.date).getMinutes()}"
+    >
     <div class="history__value">${element.equation} = <div class="history__result">${element.result}</div></div>
     </li>`;
 
