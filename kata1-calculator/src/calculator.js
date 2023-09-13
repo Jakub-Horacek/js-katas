@@ -94,6 +94,8 @@ const equationLogToggle = () => {
 
     waitAndDisableElement([buttonsElement, resultElement], 500, true);
     waitAndDisableElement([equationLogElement], 0, false);
+
+    parseEquationLogToHTML();
   } else {
     equationLogElement.classList.add("hidden");
     buttonsElement.classList.remove("hidden");
@@ -102,6 +104,9 @@ const equationLogToggle = () => {
 
     waitAndDisableElement([buttonsElement, resultElement], 0, false);
     waitAndDisableElement([equationLogElement], 500, true);
+
+    // HACK: This line below somehow fixes the weird bug in the parseEquationLogToHTML() method
+    document.getElementById("equation-list").innerHTML = "";
   }
 };
 
@@ -234,6 +239,45 @@ const notValidEquation = (equation) => {
 };
 
 /**
+ * Save the solved equation into the localStorage
+ * @param {string} equation - resultString
+ * @param {number} result - solvedEquation
+ */
+const saveToEquationLog = (equation, result) => {
+  let equationLog = JSON.parse(localStorage.getItem("equationLog"));
+  if (equationLog == null) equationLog = [];
+
+  let valueToSave = {
+    date: new Date(),
+    equation: equation,
+    result: result,
+  };
+
+  equationLog.push(valueToSave);
+  localStorage.setItem("equationLog", JSON.stringify(equationLog));
+};
+
+/**
+ * Displays the equationLog from the localStorage in the styled HTML code
+ * @returns when the equationLog is null
+ */
+const parseEquationLogToHTML = () => {
+  let equationLog = JSON.parse(localStorage.getItem("equationLog"));
+  if (equationLog == null) return;
+
+  equationLog.forEach((element) => {
+    const equationListItem = `<li class="history__item">
+    <div class="history__time">${new Date(element.date).getHours()}:${new Date(element.date).getMinutes()}</div>
+    <div class="history__value">${element.equation} = <div class="history__result">${element.result}</div></div>
+    </li>`;
+
+    // NOTE: this code below is somehow causing troubles with the calculator functionality
+    // quick fix is in the equationLogToggle() method (with the HACK comment)
+    document.getElementById("equation-list").innerHTML += equationListItem;
+  });
+};
+
+/**
  * Transform the resultString into a math equation and solve the equation
  * @returns when the equation is not valid
  */
@@ -247,5 +291,7 @@ const solve = () => {
 
   let solvedEquation = eval(resultString);
   setResultInnerText(solvedEquation);
+  saveToEquationLog(resultString, solvedEquation);
+
   previousEquationSolved = true;
 };

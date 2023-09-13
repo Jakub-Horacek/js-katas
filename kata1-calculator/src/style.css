@@ -93,8 +93,6 @@ button.text-only {
 .history {
   display: flex;
   flex-direction: column;
-  gap: var(--default-gap);
-  margin: calc(var(--default-gap) * 1.5);
 }
 
 .history__buttons {
@@ -102,11 +100,55 @@ button.text-only {
   flex-direction: row;
   gap: var(--default-gap);
   justify-content: space-between;
+  margin: calc(var(--default-gap) * 1.5);
 }
 
 .history__icon {
   filter: invert(100%);
   width: 13px;
+}
+
+.history__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--default-gap);
+  align-items: flex-end;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--default-gap) 0;
+  overflow: auto;
+  max-height: 760px;
+  width: 100%;
+}
+
+.history__item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--default-gap);
+  justify-content: space-between;
+  font-weight: lighter;
+  width: 100%;
+}
+
+.history__time {
+  opacity: 0.5;
+  font-size: large;
+  padding-left: var(--default-gap);
+}
+
+.history__value {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: larger;
+  padding-right: var(--default-gap);
+}
+
+.history__result {
+  margin-left: calc(var(--default-gap) / 2);
+  font-weight: bold;
+  font-size: x-large;
 }
 
 .result {
@@ -115,7 +157,7 @@ button.text-only {
   margin: var(--default-gap);
   max-width: var(--calculator-width);
   overflow-x: auto;
-  overflow-y: none !important;
+  /* overflow-y: none !important; */
   font-weight: lighter;
   transition: 0.5s;
 }
