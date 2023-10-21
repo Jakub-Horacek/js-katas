@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS Kata #2 - The Task Manager</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="alert hidden" id="alert">
+      <div class="alert__box">
+        <div class="alert__title">New task</div>
+        <form id="form">
+          <label for="title">Title</label>
+          <input type="text" name="title" />
+          <label for="description">Description</label>
+          <textarea name="description"></textarea>
+          <div class="alert__actions">
+            <button class="cancel" onclick="closeAlert()">Cancel</button>
+            <input type="submit" value="Add" class="confirm" id="submit" />
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <h1>Task Manager</h1>
+    <div class="container">
+      <ul class="tasks" id="tasks">
+        <li class="task add" onclick="openAlert()">+ new task</li>
+      </ul>
+    </div>
+    <script src="task-manager.js"></script>
+  </body>
+</html>
