@@ -1,0 +1,24 @@
+.playcard {
+  position: relative;
+  width: 200px;
+  height: 400px;
+}
+
+.playcard__side {
+  position: absolute;
+  width: inherit;
+  height: inherit;
+  visibility: hidden;
+}
+
+.playcard__side--visible {
+  visibility: visible;
+}
+
+.playcard__side-a {
+  background: blue;
+}
+
+.playcard__side-b {
+  background: red;
+}
