@@ -1,7 +1,27 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  background: #232323;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.playgrid {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  gap: 25px;
+  height: 90vh;
+  width: 90vw;
+}
+
 .playcard {
+  box-sizing: border-box;
+  cursor: pointer;
   position: relative;
-  width: 200px;
-  height: 400px;
+  width: 100%;
+  height: 100%;
 }
 
 .playcard__side {
@@ -9,6 +29,10 @@
   width: inherit;
   height: inherit;
   visibility: hidden;
+  border-radius: 20px;
+  box-shadow:
+    5px 5px 10px #161616,
+    -5px -5px 10px #303030;
 }
 
 .playcard__side--visible {
@@ -16,7 +40,7 @@
 }
 
 .playcard__side-a {
-  background: blue;
+  background: #232323;
 }
 
 .playcard__side-b {
