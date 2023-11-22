@@ -109,7 +109,7 @@ const renderPlaycard = (identifier) => {
   return card;
 };
 
-const renderPlayercards = (count) => {
+const renderPlaycards = (count) => {
   for (let card = 0; card < count; card += 2) {
     // Render two cards with same identifier
     gamegrid.appendChild(renderPlaycard(identifiers[card]));
@@ -127,4 +127,4 @@ const shuffleCards = () => {
   }
 };
 
-renderPlayercards(playcardsCount);
+renderPlaycards(playcardsCount);
