@@ -1,8 +1,11 @@
 import { identifiers } from "./utilities.js";
 const maximumPlaycardsCount = identifiers.length / 2;
+let flippedCards = [];
+const cardDelayMS = 1000;
+let cannotClick = false;
 
 // NOTE: Number of cards the player plays with (this number needs to be even)
-let playcardsCount = 8;
+let playcardsCount = 12;
 
 const gamegrid = document.querySelector("#playgrid");
 
@@ -21,12 +24,61 @@ const getUniqueId = () => {
 };
 
 const flipCard = (cardId) => {
+  if (cannotClick) {
+    return;
+  }
+
+  const card = document.getElementById(cardId);
+  const sideA = card.querySelector(".playcard__side-a");
+  const sideB = card.querySelector(".playcard__side-b");
+  const cardIdentifier = sideB.style.background;
+
+  flippedCards.push({ cardId, cardIdentifier });
+
+  let notFlipped = sideA.classList.contains("playcard__side--visible");
+
+  if (notFlipped) {
+    sideA.classList.toggle("playcard__side--visible");
+    sideB.classList.toggle("playcard__side--visible");
+
+    if (flippedCards.length >= 2) {
+      if (flippedCards[0].cardIdentifier === flippedCards[1].cardIdentifier) {
+        console.log("SUCCESS");
+        flippedCards.forEach((card) => {
+          removeCard(card.cardId);
+        });
+      } else {
+        console.log("FAIL");
+        flippedCards.forEach((card) => {
+          hideCard(card.cardId);
+        });
+      }
+      flippedCards = [];
+    }
+  }
+};
+
+const hideCard = (cardId) => {
+  cannotClick = true;
   const card = document.getElementById(cardId);
   const sideA = card.querySelector(".playcard__side-a");
   const sideB = card.querySelector(".playcard__side-b");
 
-  sideA.classList.toggle("playcard__side--visible");
-  sideB.classList.toggle("playcard__side--visible");
+  setTimeout(() => {
+    sideA.classList.add("playcard__side--visible");
+    sideB.classList.remove("playcard__side--visible");
+    cannotClick = false;
+  }, cardDelayMS);
+};
+
+const removeCard = (cardId) => {
+  cannotClick = true;
+  const card = document.getElementById(cardId);
+
+  setTimeout(() => {
+    gamegrid.removeChild(card);
+    cannotClick = false;
+  }, cardDelayMS);
 };
 
 const renderPlaycard = (identifier) => {
@@ -49,7 +101,7 @@ const renderPlaycard = (identifier) => {
 
 const renderPlayercards = (count) => {
   for (let card = 0; card < count; card += 2) {
-    // Render 2 cards with same identifier
+    // Render two cards with same identifier
     gamegrid.appendChild(renderPlaycard(identifiers[card]));
     gamegrid.appendChild(renderPlaycard(identifiers[card]));
   }
@@ -60,7 +112,7 @@ const shuffleCards = () => {
   const cards = Array.from(gamegrid.children);
 
   while (cards.length) {
-    let card = cards.splice(Math.floor(Math.random() * cards.length), 1)[0];
+    const card = cards.splice(Math.floor(Math.random() * cards.length), 1)[0];
     gamegrid.append(card);
   }
 };
