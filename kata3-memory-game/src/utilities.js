@@ -22,3 +22,10 @@ export const identifiers = [
   "#ffffff",
   "#000000",
 ];
+
+export const schuffledIdentifiers = identifiers
+  .map((value) => ({ value, sort: Math.random() }))
+  .sort((a, b) => a.sort - b.sort)
+  .map(({ value }) => value);
+
+export default schuffledIdentifiers;

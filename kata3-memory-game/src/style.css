@@ -1,4 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Figtree&display=swap");
+
 body {
+  font-family: "Figtree", sans-serif;
   width: 100vw;
   height: 100vh;
   margin: 0;
@@ -6,6 +9,21 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#counter {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  font-size: xx-large;
+  z-index: 1;
+  text-align: right;
+  padding: 15px;
+  border-bottom-left-radius: 15px;
+  opacity: 0;
+  transition: 0.5s all;
 }
 
 .playgrid {

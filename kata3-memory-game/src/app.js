@@ -1,13 +1,15 @@
-import { identifiers } from "./utilities.js";
+import identifiers from "./utilities.js";
 const maximumPlaycardsCount = identifiers.length / 2;
 let flippedCards = [];
 const cardDelayMS = 1000;
 let cannotClick = false;
+let attempts = 0;
 
 // NOTE: Number of cards the player plays with (this number needs to be even)
 let playcardsCount = 12;
 
 const gamegrid = document.querySelector("#playgrid");
+const counter = document.querySelector("#counter");
 
 // Round the playcardsCount to the nearest even number if the number is odd
 if ((playcardsCount | 1) === playcardsCount) {
@@ -53,6 +55,14 @@ const flipCard = (cardId) => {
           hideCard(card.cardId);
         });
       }
+
+      attempts++;
+
+      if (attempts === 1) {
+        counter.style.opacity = 1;
+      }
+
+      counter.innerText = "Attempts: " + attempts;
       flippedCards = [];
     }
   }
