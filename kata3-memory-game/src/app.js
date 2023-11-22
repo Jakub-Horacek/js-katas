@@ -1,6 +1,8 @@
+import { identifiers } from "./utilities.js";
+const maximumPlaycardsCount = identifiers.length;
+
 // NOTE: Number of cards the player plays with (this number needs to be even)
 let playcardsCount = 8;
-const maximumPlaycardsCount = 20;
 
 const gamegrid = document.querySelector("#playgrid");
 
@@ -39,6 +41,7 @@ const renderPlaycard = () => {
 
   const sideB = document.createElement("div");
   sideB.className = "playcard__side playcard__side-b";
+  sideB.style.background = identifiers[1];
   card.appendChild(sideB);
 
   return card;
