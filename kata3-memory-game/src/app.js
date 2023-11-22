@@ -1,5 +1,5 @@
 import { identifiers } from "./utilities.js";
-const maximumPlaycardsCount = identifiers.length;
+const maximumPlaycardsCount = identifiers.length / 2;
 
 // NOTE: Number of cards the player plays with (this number needs to be even)
 let playcardsCount = 8;
@@ -29,7 +29,7 @@ const flipCard = (cardId) => {
   sideB.classList.toggle("playcard__side--visible");
 };
 
-const renderPlaycard = () => {
+const renderPlaycard = (identifier) => {
   const card = document.createElement("div");
   card.id = getUniqueId();
   card.className = "playcard";
@@ -41,15 +41,27 @@ const renderPlaycard = () => {
 
   const sideB = document.createElement("div");
   sideB.className = "playcard__side playcard__side-b";
-  sideB.style.background = identifiers[1];
+  sideB.style.background = identifier;
   card.appendChild(sideB);
 
   return card;
 };
 
 const renderPlayercards = (count) => {
-  for (let i = 0; i < count; i++) {
-    gamegrid.appendChild(renderPlaycard());
+  for (let card = 0; card < count; card += 2) {
+    // Render 2 cards with same identifier
+    gamegrid.appendChild(renderPlaycard(identifiers[card]));
+    gamegrid.appendChild(renderPlaycard(identifiers[card]));
+  }
+  shuffleCards();
+};
+
+const shuffleCards = () => {
+  const cards = Array.from(gamegrid.children);
+
+  while (cards.length) {
+    let card = cards.splice(Math.floor(Math.random() * cards.length), 1)[0];
+    gamegrid.append(card);
   }
 };
 
