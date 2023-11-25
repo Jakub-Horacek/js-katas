@@ -47,7 +47,8 @@ const flipCard = (cardId) => {
       if (flippedCards[0].cardIdentifier === flippedCards[1].cardIdentifier) {
         console.log("SUCCESS");
         flippedCards.forEach((card) => {
-          removeCard(card.cardId);
+          // Disabled for the final version
+          // removeCard(card.cardId);
         });
       } else {
         console.log("FAIL");
