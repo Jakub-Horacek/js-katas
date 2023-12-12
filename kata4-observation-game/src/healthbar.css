@@ -1,0 +1,12 @@
+#healthbar {
+  height: 30px;
+  width: 500px;
+  border: 1px solid white;
+  background: transparent;
+}
+
+#healthbar #fill {
+  height: inherit;
+  width: 50%;
+  background: green;
+}
