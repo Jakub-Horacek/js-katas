@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Merriweather&display=swap");
 
+:root {
+  --cookie-size: 30px;
+}
+
 body {
   margin: 0;
   width: 100%;
@@ -18,4 +22,14 @@ h1 {
 #game {
   width: inherit;
   height: inherit;
+}
+
+.cookie {
+  user-select: none;
+  -user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+  width: var(--cookie-size);
+  height: var(--cookie-size);
+  font-size: var(--cookie-size);
 }

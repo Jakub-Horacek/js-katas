@@ -1,12 +1,21 @@
 #healthbar {
+  position: absolute;
+  right: 25px;
+  top: 25px;
   height: 30px;
   width: 500px;
   border: 1px solid white;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.25);
 }
 
-#healthbar #fill {
+#healthbar .hp--title {
+  position: absolute;
+  top: 4px;
+  left: 3px;
+  text-transform: uppercase;
+  color: white;
+}
+
+#healthbar .hp--fill {
   height: inherit;
-  width: 50%;
-  background: green;
 }
