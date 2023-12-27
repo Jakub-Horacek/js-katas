@@ -1,11 +1,17 @@
 /**
- * Player health
- * TODO: I should put this health object into some kind of Player.prototype or something
+ * Player
  */
-let health = {
-  current: 50,
-  dmg: 15,
-  gain: 5,
+let Player = {
+  score: {
+    current: 0,
+    cookie: 150,
+    bomb: 200,
+  },
+  health: {
+    current: 50,
+    dmg: 15,
+    gain: 5,
+  },
 };
 
 /**
@@ -22,11 +28,14 @@ const CookieType = {
  * @constructor
  * @param {CookieType} type
  */
-function Cookie(icons, type = CookieType.COOKIE, updateHealthpoints) {
+function Cookie(icons, type, updateHealthpoints) {
   this.icons = icons;
   this.type = type;
   this.handleCookieClick = null;
   this.updateHealthpoints = updateHealthpoints;
+  this.getRandomPosition = function (min, max) {
+    return Math.random() * (max - min) + min;
+  };
 }
 
 /**
@@ -43,7 +52,7 @@ Cookie.prototype.spawn = function () {
       this.element.innerHTML = cookie;
       this.handleCookieClick = () => {
         console.log(cookie);
-        this.updateHealthpoints(health.current + health.gain);
+        this.updateHealthpoints(Player.health.current + Player.health.gain);
       };
       break;
     case CookieType.BOMB:
@@ -51,10 +60,19 @@ Cookie.prototype.spawn = function () {
       this.element.innerHTML = bomb;
       this.handleCookieClick = () => {
         console.log(bomb);
-        this.updateHealthpoints(health.current - health.dmg);
+        this.updateHealthpoints(Player.health.current - Player.health.dmg);
       };
       break;
   }
+
+  this.element.style.left = `${this.getRandomPosition(
+    0,
+    window.innerWidth - 35,
+  )}px`;
+  this.element.style.top = `${this.getRandomPosition(
+    0,
+    window.innerHeight - 35,
+  )}px`;
 
   this.element.addEventListener("click", this.handleCookieClick);
   return this.element;
@@ -70,15 +88,15 @@ function ObservationGame() {
     cookie: String.fromCodePoint(0x1f36a),
     bomb: String.fromCodePoint(0x1f4a3),
   };
+  this.bombChance = 15; // percentage (maximum is 100)
 }
 
 /**
  * Start spawning
  */
 ObservationGame.prototype.start = function () {
-  this.updateHealthpoints(health.current, true);
-  this.spawnCookie();
-  this.spawnBomb();
+  this.updateHealthpoints(Player.health.current, true);
+  this.spawning();
 };
 
 /**
@@ -129,13 +147,13 @@ ObservationGame.prototype.updateHealthpoints = function (hp, isNew = false) {
     this.gameElement.appendChild(healthbar);
   }
 
-  health.current = hp;
+  Player.health.current = hp;
 };
 
 /**
  * Spawn Cookie
  */
-ObservationGame.prototype.spawnCookie = function () {
+ObservationGame.prototype.spawnCookie = function (lifespan) {
   const cookie = new Cookie(
     this.icons,
     CookieType.COOKIE,
@@ -144,16 +162,34 @@ ObservationGame.prototype.spawnCookie = function () {
   const spawnedCookie = cookie.spawn();
 
   this.gameElement.appendChild(spawnedCookie);
+  setTimeout(() => {
+    this.gameElement.removeChild(spawnedCookie);
+  }, lifespan);
 };
 
 /**
  * Spawn Bomb
  */
-ObservationGame.prototype.spawnBomb = function () {
+ObservationGame.prototype.spawnBomb = function (lifespan) {
   const bomb = new Cookie(this.icons, CookieType.BOMB, this.updateHealthpoints);
   const spawnedBomb = bomb.spawn();
 
   this.gameElement.appendChild(spawnedBomb);
+  setTimeout(() => {
+    this.gameElement.removeChild(spawnedBomb);
+  }, lifespan);
+};
+
+ObservationGame.prototype.spawning = function () {
+  setInterval(() => {
+    const number = Math.random() * (100 - 0);
+
+    if (number <= this.bombChance) {
+      this.spawnBomb(6000);
+    } else {
+      this.spawnCookie(5000);
+    }
+  }, 2000);
 };
 
 // DOMContentLoaded event

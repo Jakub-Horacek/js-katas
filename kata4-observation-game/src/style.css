@@ -32,4 +32,5 @@ h1 {
   width: var(--cookie-size);
   height: var(--cookie-size);
   font-size: var(--cookie-size);
+  position: absolute;
 }
