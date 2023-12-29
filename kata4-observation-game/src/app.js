@@ -212,7 +212,7 @@ ObservationGame.prototype.spawnBomb = function (lifespan) {
   });
   const spawnedBomb = bomb.spawn();
 
-  console.log(spawnedCookie.clicked);
+  console.log(spawnedBomb.clicked);
   // remove element if clicked
 
   this.gameElement.appendChild(spawnedBomb.element);
