@@ -19,6 +19,12 @@ h1 {
   color: white;
 }
 
+#cookie-counter {
+  color: white;
+  font-size: x-large;
+  font-weight: bold;
+}
+
 #game {
   width: inherit;
   height: inherit;

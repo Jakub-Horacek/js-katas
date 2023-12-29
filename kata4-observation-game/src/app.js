@@ -2,10 +2,10 @@
  * Player
  */
 let Player = {
-  score: {
-    current: 0,
-    cookie: 150,
-    bomb: 200,
+  cookies: {
+    spawned: 0,
+    collected: 0,
+    missed: 0,
   },
   health: {
     current: 50,
@@ -28,11 +28,11 @@ const CookieType = {
  * @constructor
  * @param {CookieType} type
  */
-function Cookie(icons, type, updateHealthpoints) {
+function Cookie(icons, type, functions) {
   this.icons = icons;
   this.type = type;
   this.handleCookieClick = null;
-  this.updateHealthpoints = updateHealthpoints;
+  this.functions = functions;
   this.getRandomPosition = function (min, max) {
     return Math.random() * (max - min) + min;
   };
@@ -41,7 +41,8 @@ function Cookie(icons, type, updateHealthpoints) {
 /**
  * Spawn cookie
  */
-Cookie.prototype.spawn = function () {
+Cookie.prototype.spawn = function (clicked = false) {
+  // remove clicked function param
   this.element = document.createElement("div");
   this.element.className = "cookie";
   const { cookie, bomb } = this.icons;
@@ -51,16 +52,29 @@ Cookie.prototype.spawn = function () {
       this.element.classList.add("cookie--cookie");
       this.element.innerHTML = cookie;
       this.handleCookieClick = () => {
-        console.log(cookie);
-        this.updateHealthpoints(Player.health.current + Player.health.gain);
+        if (!clicked) {
+          console.log(cookie);
+          this.functions.updateCookieCount(Player.cookies.collected++);
+          this.functions.updateHealthpoints(
+            Player.health.current + Player.health.gain,
+          );
+          clicked = true;
+          // return here
+        }
       };
       break;
     case CookieType.BOMB:
       this.element.classList.add("cookie--bomb");
       this.element.innerHTML = bomb;
       this.handleCookieClick = () => {
-        console.log(bomb);
-        this.updateHealthpoints(Player.health.current - Player.health.dmg);
+        if (!clicked) {
+          console.log(bomb);
+          this.functions.updateHealthpoints(
+            Player.health.current - Player.health.dmg,
+          );
+          clicked = true;
+          // return here
+        }
       };
       break;
   }
@@ -75,7 +89,8 @@ Cookie.prototype.spawn = function () {
   )}px`;
 
   this.element.addEventListener("click", this.handleCookieClick);
-  return this.element;
+
+  return { element: this.element, clicked: clicked };
 };
 
 /**
@@ -96,6 +111,7 @@ function ObservationGame() {
  */
 ObservationGame.prototype.start = function () {
   this.updateHealthpoints(Player.health.current, true);
+  this.updateCookieCount(Player.cookies.collected, true);
   this.spawning();
 };
 
@@ -150,20 +166,39 @@ ObservationGame.prototype.updateHealthpoints = function (hp, isNew = false) {
   Player.health.current = hp;
 };
 
+ObservationGame.prototype.updateCookieCount = function (count, isNew = false) {
+  const cookieCounter = document.getElementById("cookie-counter");
+  const cookieCount = isNew
+    ? document.createElement("div")
+    : document.getElementById("cookie-count");
+
+  cookieCount.innerText = `Cookies: ${count}`;
+
+  if (isNew) {
+    cookieCount.id = "cookie-count";
+    cookieCounter.appendChild(cookieCount);
+  }
+};
+
 /**
  * Spawn Cookie
  */
 ObservationGame.prototype.spawnCookie = function (lifespan) {
-  const cookie = new Cookie(
-    this.icons,
-    CookieType.COOKIE,
-    this.updateHealthpoints,
-  );
+  const cookie = new Cookie(this.icons, CookieType.COOKIE, {
+    updateHealthpoints: this.updateHealthpoints,
+    updateCookieCount: this.updateCookieCount,
+  });
   const spawnedCookie = cookie.spawn();
 
-  this.gameElement.appendChild(spawnedCookie);
+  console.log(spawnedCookie.clicked);
+  // remove element if clicked
+
+  this.gameElement.appendChild(spawnedCookie.element);
+  Player.cookies.spawned++;
+
   setTimeout(() => {
-    this.gameElement.removeChild(spawnedCookie);
+    this.gameElement.removeChild(spawnedCookie.element);
+    Player.cookies.missed++;
   }, lifespan);
 };
 
@@ -171,12 +206,19 @@ ObservationGame.prototype.spawnCookie = function (lifespan) {
  * Spawn Bomb
  */
 ObservationGame.prototype.spawnBomb = function (lifespan) {
-  const bomb = new Cookie(this.icons, CookieType.BOMB, this.updateHealthpoints);
+  const bomb = new Cookie(this.icons, CookieType.BOMB, {
+    updateHealthpoints: this.updateHealthpoints,
+    updateCookieCount: this.updateCookieCount,
+  });
   const spawnedBomb = bomb.spawn();
 
-  this.gameElement.appendChild(spawnedBomb);
+  console.log(spawnedCookie.clicked);
+  // remove element if clicked
+
+  this.gameElement.appendChild(spawnedBomb.element);
+
   setTimeout(() => {
-    this.gameElement.removeChild(spawnedBomb);
+    this.gameElement.removeChild(spawnedBomb.element);
   }, lifespan);
 };
 
