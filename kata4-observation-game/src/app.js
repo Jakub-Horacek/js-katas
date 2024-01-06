@@ -7,9 +7,16 @@ let Player = {
     collected: 0,
     missed: 0,
   },
+  bombs: {
+    clicked: 0,
+    spawned: 0,
+  },
   health: {
     current: 50,
-    dmg: 15,
+    dmg: {
+      explosion: 50,
+      miss: 25,
+    },
     gain: 5,
   },
 };
@@ -28,21 +35,37 @@ const CookieType = {
  * @constructor
  * @param {CookieType} type
  */
-function Cookie(icons, type, functions) {
+function Cookie(icons, type) {
   this.icons = icons;
   this.type = type;
   this.handleCookieClick = null;
-  this.functions = functions;
   this.getRandomPosition = function (min, max) {
     return Math.random() * (max - min) + min;
   };
 }
 
 /**
+ * On cookie click
+ * @param {function} callback
+ */
+Cookie.prototype.onClicked = function (callback) {
+  this.handleCookieClick = callback;
+  this.element.addEventListener("click", this.handleCookieClick);
+};
+
+/**
+ * Get cookie element
+ * @returns {HTMLElement}
+ */
+Cookie.prototype.getElement = function () {
+  return this.element;
+};
+
+/**
  * Spawn cookie
  */
-Cookie.prototype.spawn = function (clicked = false) {
-  // remove clicked function param
+Cookie.prototype.spawn = function () {
+  this.clicked = false;
   this.element = document.createElement("div");
   this.element.className = "cookie";
   const { cookie, bomb } = this.icons;
@@ -51,31 +74,10 @@ Cookie.prototype.spawn = function (clicked = false) {
     case CookieType.COOKIE:
       this.element.classList.add("cookie--cookie");
       this.element.innerHTML = cookie;
-      this.handleCookieClick = () => {
-        if (!clicked) {
-          console.log(cookie);
-          this.functions.updateCookieCount(Player.cookies.collected++);
-          this.functions.updateHealthpoints(
-            Player.health.current + Player.health.gain,
-          );
-          clicked = true;
-          // return here
-        }
-      };
       break;
     case CookieType.BOMB:
       this.element.classList.add("cookie--bomb");
       this.element.innerHTML = bomb;
-      this.handleCookieClick = () => {
-        if (!clicked) {
-          console.log(bomb);
-          this.functions.updateHealthpoints(
-            Player.health.current - Player.health.dmg,
-          );
-          clicked = true;
-          // return here
-        }
-      };
       break;
   }
 
@@ -87,10 +89,6 @@ Cookie.prototype.spawn = function (clicked = false) {
     0,
     window.innerHeight - 35,
   )}px`;
-
-  this.element.addEventListener("click", this.handleCookieClick);
-
-  return { element: this.element, clicked: clicked };
 };
 
 /**
@@ -103,8 +101,22 @@ function ObservationGame() {
     cookie: String.fromCodePoint(0x1f36a),
     bomb: String.fromCodePoint(0x1f4a3),
   };
-  this.bombChance = 15; // percentage (maximum is 100)
+  this.bombChance = 10; // percentage (maximum is 100)
 }
+
+ObservationGame.prototype.updateCookieCount = function (count, isNew = false) {
+  const cookieCounter = document.getElementById("cookie-counter");
+  const cookieCount = isNew
+    ? document.createElement("div")
+    : document.getElementById("cookie-count");
+
+  cookieCount.innerText = `Cookies: ${count}`;
+
+  if (isNew) {
+    cookieCount.id = "cookie-count";
+    cookieCounter.appendChild(cookieCount);
+  }
+};
 
 /**
  * Start spawning
@@ -113,6 +125,20 @@ ObservationGame.prototype.start = function () {
   this.updateHealthpoints(Player.health.current, true);
   this.updateCookieCount(Player.cookies.collected, true);
   this.spawning();
+};
+
+ObservationGame.prototype.handleCookieClick = function (cookie) {
+  if (cookie.type === CookieType.COOKIE) {
+    this.updateCookieCount(Player.cookies.collected++);
+    this.updateHealthpoints(Player.health.current + Player.health.gain);
+  } else {
+    Player.bombs.clicked++;
+    this.updateHealthpoints(
+      Player.health.current - Player.health.dmg.explosion,
+    );
+  }
+
+  this.gameElement.removeChild(cookie.getElement());
 };
 
 /**
@@ -125,7 +151,7 @@ ObservationGame.prototype.updateHealthpoints = function (hp, isNew = false) {
 
   if (hp <= 0) {
     hp = 0;
-    console.warn("GAME OVER");
+    this.over();
   } else if (hp >= 100) {
     hp = 100;
   }
@@ -166,72 +192,60 @@ ObservationGame.prototype.updateHealthpoints = function (hp, isNew = false) {
   Player.health.current = hp;
 };
 
-ObservationGame.prototype.updateCookieCount = function (count, isNew = false) {
-  const cookieCounter = document.getElementById("cookie-counter");
-  const cookieCount = isNew
-    ? document.createElement("div")
-    : document.getElementById("cookie-count");
-
-  cookieCount.innerText = `Cookies: ${count}`;
-
-  if (isNew) {
-    cookieCount.id = "cookie-count";
-    cookieCounter.appendChild(cookieCount);
-  }
-};
-
 /**
  * Spawn Cookie
  */
-ObservationGame.prototype.spawnCookie = function (lifespan) {
-  const cookie = new Cookie(this.icons, CookieType.COOKIE, {
-    updateHealthpoints: this.updateHealthpoints,
-    updateCookieCount: this.updateCookieCount,
-  });
-  const spawnedCookie = cookie.spawn();
+ObservationGame.prototype.spawnElement = function (elementType, lifespan) {
+  const cookie = new Cookie(this.icons, elementType);
+  const isNotBomb = elementType !== CookieType.BOMB;
+  cookie.spawn();
+  const cookieElement = cookie.getElement();
 
-  console.log(spawnedCookie.clicked);
-  // remove element if clicked
+  this.gameElement.appendChild(cookieElement);
+  if (isNotBomb) {
+    Player.cookies.spawned++;
+  } else {
+    Player.bombs.spawned++;
+  }
 
-  this.gameElement.appendChild(spawnedCookie.element);
-  Player.cookies.spawned++;
-
-  setTimeout(() => {
-    this.gameElement.removeChild(spawnedCookie.element);
-    Player.cookies.missed++;
-  }, lifespan);
-};
-
-/**
- * Spawn Bomb
- */
-ObservationGame.prototype.spawnBomb = function (lifespan) {
-  const bomb = new Cookie(this.icons, CookieType.BOMB, {
-    updateHealthpoints: this.updateHealthpoints,
-    updateCookieCount: this.updateCookieCount,
-  });
-  const spawnedBomb = bomb.spawn();
-
-  console.log(spawnedBomb.clicked);
-  // remove element if clicked
-
-  this.gameElement.appendChild(spawnedBomb.element);
+  cookie.onClicked(this.handleCookieClick.bind(this, cookie));
 
   setTimeout(() => {
-    this.gameElement.removeChild(spawnedBomb.element);
+    if (this.gameElement.contains(cookieElement)) {
+      this.gameElement.removeChild(cookieElement);
+
+      if (isNotBomb) {
+        Player.cookies.missed++;
+        this.updateHealthpoints(Player.health.current - Player.health.dmg.miss);
+      }
+    }
   }, lifespan);
 };
 
 ObservationGame.prototype.spawning = function () {
-  setInterval(() => {
+  this.spawnElement(CookieType.COOKIE, 5000);
+
+  this.gameInterval = setInterval(() => {
     const number = Math.random() * (100 - 0);
 
     if (number <= this.bombChance) {
-      this.spawnBomb(6000);
+      this.spawnElement(CookieType.BOMB, 8000);
     } else {
-      this.spawnCookie(5000);
+      this.spawnElement(CookieType.COOKIE, 6000);
     }
-  }, 2000);
+  }, 500);
+};
+
+/**
+ * Game over
+ */
+ObservationGame.prototype.over = function () {
+  clearInterval(this.gameInterval);
+  console.warn("GAME OVER");
+  location.reload();
+  window.alert(
+    `⚠️ GAME OVER \n Here are your stats: \n\n 🍪 COOKIES \n Cookies collected: ${Player.cookies.collected} (score) \n Cookies missed: ${Player.cookies.missed} \n Cookies spawned: ${Player.cookies.spawned} \n\n 💣 BOMBS \n Bombs clicked: ${Player.bombs.clicked} \n Bombs spawned: ${Player.bombs.spawned} \n\n ℹ️ NOTE \n After closing this dialog the game automaticaly restarts.`,
+  );
 };
 
 // DOMContentLoaded event
