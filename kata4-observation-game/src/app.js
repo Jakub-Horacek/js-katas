@@ -1,5 +1,5 @@
 /**
- * Player
+ * Player numbers
  */
 let Player = {
   cookies: {
@@ -33,6 +33,7 @@ const CookieType = {
 /**
  * Cookie class
  * @constructor
+ * @param {object} icons
  * @param {CookieType} type
  */
 function Cookie(icons, type) {
@@ -104,6 +105,11 @@ function ObservationGame() {
   this.bombChance = 10; // percentage (maximum is 100)
 }
 
+/**
+ * Update cookie count
+ * @param {number} count
+ * @param {boolean} isNew - only for cookie counter creation at the start of the game
+ */
 ObservationGame.prototype.updateCookieCount = function (count, isNew = false) {
   const cookieCounter = document.getElementById("cookie-counter");
   const cookieCount = isNew
@@ -119,7 +125,7 @@ ObservationGame.prototype.updateCookieCount = function (count, isNew = false) {
 };
 
 /**
- * Start spawning
+ * Start the game
  */
 ObservationGame.prototype.start = function () {
   this.updateHealthpoints(Player.health.current, true);
@@ -127,6 +133,10 @@ ObservationGame.prototype.start = function () {
   this.spawning();
 };
 
+/**
+ * Handle cookie click
+ * @param {Cookie} cookie
+ */
 ObservationGame.prototype.handleCookieClick = function (cookie) {
   if (cookie.type === CookieType.COOKIE) {
     this.updateCookieCount(Player.cookies.collected++);
@@ -144,7 +154,7 @@ ObservationGame.prototype.handleCookieClick = function (cookie) {
 /**
  * Update the healthbar
  * @param {number} hp
- * @param {boolean} isNew
+ * @param {boolean} isNew - only for healthbar creation at the start of the game
  */
 ObservationGame.prototype.updateHealthpoints = function (hp, isNew = false) {
   const healthbar = document.getElementById("healthbar");
@@ -193,15 +203,18 @@ ObservationGame.prototype.updateHealthpoints = function (hp, isNew = false) {
 };
 
 /**
- * Spawn Cookie
+ * Spawn Cookie element
+ * @param {CookieType} elementType - bomb / cookie
+ * @param {number} lifespan - how long does the element live
  */
 ObservationGame.prototype.spawnElement = function (elementType, lifespan) {
   const cookie = new Cookie(this.icons, elementType);
   const isNotBomb = elementType !== CookieType.BOMB;
+
   cookie.spawn();
   const cookieElement = cookie.getElement();
-
   this.gameElement.appendChild(cookieElement);
+
   if (isNotBomb) {
     Player.cookies.spawned++;
   } else {
@@ -222,6 +235,9 @@ ObservationGame.prototype.spawnElement = function (elementType, lifespan) {
   }, lifespan);
 };
 
+/**
+ * Start spawning game elements
+ */
 ObservationGame.prototype.spawning = function () {
   this.spawnElement(CookieType.COOKIE, 5000);
 
@@ -237,19 +253,39 @@ ObservationGame.prototype.spawning = function () {
 };
 
 /**
+ * Update and return the highscore
+ * @param {number} score
+ * @returns {number} highscore
+ */
+ObservationGame.prototype.setAndReturnHighscore = function (score) {
+  let highscore = JSON.parse(localStorage.getItem("highscore")) ?? 0;
+
+  if (score > highscore) {
+    highscore = score;
+  }
+
+  localStorage.setItem("highscore", JSON.stringify(highscore));
+  return highscore;
+};
+
+/**
  * Game over
  */
 ObservationGame.prototype.over = function () {
+  const score = Player.cookies.collected;
+  const highscore = this.setAndReturnHighscore(score);
+
   clearInterval(this.gameInterval);
   console.warn("GAME OVER");
+
   location.reload();
   window.alert(
-    `⚠️ GAME OVER \n Here are your stats: \n\n 🍪 COOKIES \n Cookies collected: ${Player.cookies.collected} (score) \n Cookies missed: ${Player.cookies.missed} \n Cookies spawned: ${Player.cookies.spawned} \n\n 💣 BOMBS \n Bombs clicked: ${Player.bombs.clicked} \n Bombs spawned: ${Player.bombs.spawned} \n\n ℹ️ NOTE \n After closing this dialog the game automaticaly restarts.`,
+    `⚠️ GAME OVER \n Here are your stats: \n\n 🍪 COOKIES \n Cookies collected (HIGHSCORE): ${highscore} \n Cookies collected (current score): ${score} \n Cookies missed: ${Player.cookies.missed} \n Cookies spawned: ${Player.cookies.spawned} \n\n 💣 BOMBS \n Bombs clicked: ${Player.bombs.clicked} \n Bombs spawned: ${Player.bombs.spawned} \n\n ℹ️ NOTE \n After closing this dialog the game automaticaly restarts.`,
   );
 };
 
 // DOMContentLoaded event
-document.addEventListener("DOMContentLoaded", function (event) {
+document.addEventListener("DOMContentLoaded", function () {
   let observationGame = new ObservationGame();
 
   observationGame.start();
