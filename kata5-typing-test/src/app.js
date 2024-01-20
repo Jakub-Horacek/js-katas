@@ -171,8 +171,26 @@ TypingTest.prototype.removeIntroScreen = function () {
   }
 };
 
+TypingTest.prototype.getRandomInt = function (min = 10, max = 50) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+
+  const randomInt = Math.floor(Math.random() * (max - min + 1)) + min;
+
+  if (this.isDebug) {
+    this.logger.log(
+      `Random integer in a range [${min}-${max}] is: ${randomInt}`,
+      "debug",
+    );
+  }
+
+  return randomInt;
+};
+
 TypingTest.prototype.getWords = function (count = 10) {
   const apiUrl = `https://random-word-api.herokuapp.com/word?number=${count}`;
+
+  this.logger.log(`Generating ${count} random words.`);
 
   if (this.isDebug) {
     this.logger.log(`HTTP Request ${apiUrl}`, "debug");
@@ -202,7 +220,7 @@ TypingTest.prototype.createSentence = function () {
   const sentenceElement = document.createElement("div");
   sentenceElement.id = "words";
 
-  this.getWords(10).then(function (data) {
+  this.getWords(this.getRandomInt()).then(function (data) {
     const words = data;
 
     words.forEach((word) => {
