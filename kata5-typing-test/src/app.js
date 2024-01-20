@@ -9,24 +9,27 @@ function Logger() {
 /**
  * Logs message to console
  * @param {string} message - Message to log
- * @param {string} type - Log type
+ * @param {string} type - Log type (info, warn, error, debug, log)
  */
-Logger.prototype.log = function (message, type = "info") {
+Logger.prototype.log = function (message, type = "log") {
   switch (type) {
     case "info":
-      console.info(`${this.prefix} [INFO]: ${message}`);
+      console.info(`%c${this.prefix} [INFO]: ${message}`, "color: lightblue;");
       break;
     case "warn":
-      console.warn(`${this.prefix} [WARN]: ${message}`);
+      console.warn(`%c${this.prefix} [WARN]: ${message}`, "color: orange;");
       break;
     case "error":
-      console.error(`${this.prefix} [ERROR]: ${message}`);
+      console.error(`%c${this.prefix} [ERROR]: ${message}`, "color: red;");
       break;
     case "debug":
-      console.debug(`${this.prefix} [DEBUG]: ${message}`);
+      console.debug(`%c${this.prefix} [DEBUG]: ${message}`, "color: grey;");
       break;
     default:
-      console.log(`${this.prefix} [${type.toUpperCase()}]: ${message}`);
+      console.log(
+        `%c${this.prefix} [${type.toUpperCase()}]: ${message}`,
+        "color: white;",
+      );
   }
 };
 
@@ -98,8 +101,9 @@ TestViewRestartButton.create = function (onClick) {
 };
 
 /**
- * TypingTest test
+ * TypingTest
  * @constructor
+ * @param {{ debug: boolean; logger: Logger; viewScreen: typeof TestViewScreen; viewRestartButton: typeof TestViewRestartButton; }} [options]
  */
 function TypingTest(
   options = {
@@ -171,6 +175,12 @@ TypingTest.prototype.removeIntroScreen = function () {
   }
 };
 
+/**
+ * Generates a random integer in a given range
+ * @param {number} min
+ * @param {number} max
+ * @returns the generated random integer.
+ */
 TypingTest.prototype.getRandomInt = function (min = 10, max = 50) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -187,10 +197,15 @@ TypingTest.prototype.getRandomInt = function (min = 10, max = 50) {
   return randomInt;
 };
 
+/**
+ * Gets random words from the API
+ * @param {number} count of words to get from the API.
+ * @returns {Promise} The promise object with response
+ */
 TypingTest.prototype.getWords = function (count = 10) {
   const apiUrl = `https://random-word-api.herokuapp.com/word?number=${count}`;
 
-  this.logger.log(`Generating ${count} random words.`);
+  this.logger.log(`Generating ${count} random words.`, "info");
 
   if (this.isDebug) {
     this.logger.log(`HTTP Request ${apiUrl}`, "debug");
@@ -214,6 +229,10 @@ TypingTest.prototype.getWords = function (count = 10) {
   });
 };
 
+/**
+ * Creates a sentece of a random words.
+ * @returns {DocumentFragment} The sentece.
+ */
 TypingTest.prototype.createSentence = function () {
   const fragment = document.createDocumentFragment();
 
@@ -236,6 +255,34 @@ TypingTest.prototype.createSentence = function () {
   return fragment;
 };
 
+TypingTest.prototype.createInput = function () {
+  const fragment = document.createDocumentFragment();
+
+  const inputElement = document.createElement("input");
+  inputElement.type = "text";
+  inputElement.focus();
+
+  inputElement.addEventListener(
+    "keydown",
+    function (event) {
+      if (event.code === "Enter" || event.code === "Space") {
+        event.preventDefault();
+
+        if (this.isDebug) {
+          this.logger.log(`word [${inputElement.value}] submitted`, "debug");
+        }
+
+        inputElement.value = "";
+      }
+    }.bind(this),
+    false,
+  );
+
+  fragment.appendChild(inputElement);
+
+  return fragment;
+};
+
 /**
  * Creates the test screen.
  * @returns {DocumentFragment} The test screen.
@@ -245,6 +292,9 @@ TypingTest.prototype.createTestScreen = function () {
 
   const sentence = this.createSentence();
   screen.screenElement.appendChild(sentence);
+
+  const input = this.createInput();
+  screen.screenElement.appendChild(input);
 
   const restartButton = this.viewRestartButton.create(() => {
     this.logger.log("Restarted", "info");

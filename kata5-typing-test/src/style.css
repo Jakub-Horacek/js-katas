@@ -9,6 +9,8 @@
 
   --border-radius: 8px;
   --gap: 5px;
+
+  --input-width: 500px;
 }
 
 body {
@@ -72,4 +74,19 @@ button,
   -ms-user-select: none;
   user-select: none;
   cursor: default;
+}
+
+input,
+.input {
+  font-family: "Roboto", sans-serif;
+  background: var(--accent-color);
+  border: none;
+  box-shadow: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: large;
+
+  padding: calc(var(--gap) * 2);
+  margin: calc(var(--gap) * 4) auto;
+  width: var(--input-width);
 }
