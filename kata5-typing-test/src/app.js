@@ -255,6 +255,10 @@ TypingTest.prototype.createSentence = function () {
   return fragment;
 };
 
+/**
+ * Creates an input element with a keydown event listener
+ * @returns {DocumentFragment} input element
+ */
 TypingTest.prototype.createInput = function () {
   const fragment = document.createDocumentFragment();
 
@@ -269,7 +273,7 @@ TypingTest.prototype.createInput = function () {
         event.preventDefault();
 
         if (this.isDebug) {
-          this.logger.log(`word [${inputElement.value}] submitted`, "debug");
+          this.logger.log(`word "${inputElement.value}" submitted`, "debug");
         }
 
         inputElement.value = "";
