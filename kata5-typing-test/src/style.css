@@ -1,0 +1,75 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Mono&display=swap");
+
+:root {
+  --background-color: #323437;
+  --accent-color: #d1d0c5;
+
+  --words-gap: 1rem;
+  --words-size: 1.5rem;
+
+  --border-radius: 8px;
+  --gap: 5px;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  background: var(--background-color);
+  margin: 0;
+}
+
+.screen {
+  margin: auto;
+  text-align: center;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+button,
+.button {
+  font-family: "Roboto", sans-serif;
+  background: var(--accent-color);
+  border: none;
+  box-shadow: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: large;
+
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--gap);
+  padding: calc(var(--gap) * 2);
+  margin: calc(var(--gap) * 4) auto;
+}
+
+.button__child {
+  display: flex;
+}
+
+#words {
+  font-family: "Roboto Mono", monospace;
+  align-content: flex-start;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  height: fit-content;
+  height: -moz-fit-content;
+  width: 100%;
+  gap: var(--words-gap);
+  margin: calc(var(--gap) * 4) auto;
+
+  font-size: var(--words-size);
+  transition: 0.25s;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}

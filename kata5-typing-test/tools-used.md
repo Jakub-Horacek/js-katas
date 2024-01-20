@@ -1,3 +1,3 @@
 # Tools used
 
-https://www.wordsapi.com
+http://random-word-api.herokuapp.com/home
