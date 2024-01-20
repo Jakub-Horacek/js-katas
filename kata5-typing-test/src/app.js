@@ -230,6 +230,16 @@ TypingTest.prototype.getWords = function (count = 10) {
 };
 
 /**
+ * Gets all the children elements of the sentence
+ * @returns {HTMLCollection}
+ */
+TypingTest.prototype.getSentenceChildren = function () {
+  return document.querySelector("#words").children;
+  // TODO - What if the player breaches the words limit???
+  // TODO - Generate new sentence when the player reaches the end
+};
+
+/**
  * Creates a sentece of a random words.
  * @returns {DocumentFragment} The sentece.
  */
@@ -256,30 +266,64 @@ TypingTest.prototype.createSentence = function () {
 };
 
 /**
+ * Checks if the provided word matches the current one
+ * @param {string} inputWord The provided word
+ */
+TypingTest.prototype.checkWordMatch = function (inputWord) {
+  const currentWordElement = this.sentenceWords.item(this.wordIndex);
+  const currentWord = currentWordElement.innerText;
+
+  if (currentWord === inputWord) {
+    this.logger.log("CORRECT");
+    currentWordElement.classList.add("word--correct");
+  } else {
+    this.logger.log("WRONG");
+    currentWordElement.classList.add("word--wrong");
+  }
+
+  if (this.isDebug) {
+    this.logger.log(
+      `\nCorrect word: ${currentWord}\nYour input: ${inputWord}`,
+      "debug",
+    );
+  }
+};
+
+/**
+ * <input> element's keydown handler
+ * @param {event} event
+ * @param {HTMLElement} inputElement
+ */
+TypingTest.prototype.handleInputEvent = function (event, inputElement) {
+  if (event.code === "Enter" || event.code === "Space") {
+    event.preventDefault();
+    const inputWord = inputElement.value.toLowerCase();
+
+    if (this.isDebug) {
+      this.logger.log(`word "${inputWord}" submitted`, "debug");
+    }
+
+    this.checkWordMatch(inputWord);
+    this.wordIndex++;
+
+    inputElement.value = "";
+  }
+};
+
+/**
  * Creates an input element with a keydown event listener
  * @returns {DocumentFragment} input element
  */
 TypingTest.prototype.createInput = function () {
   const fragment = document.createDocumentFragment();
+  this.wordIndex = 0;
 
   const inputElement = document.createElement("input");
   inputElement.type = "text";
-  inputElement.focus();
+  inputElement.id = "input";
 
-  inputElement.addEventListener(
-    "keydown",
-    function (event) {
-      if (event.code === "Enter" || event.code === "Space") {
-        event.preventDefault();
-
-        if (this.isDebug) {
-          this.logger.log(`word "${inputElement.value}" submitted`, "debug");
-        }
-
-        inputElement.value = "";
-      }
-    }.bind(this),
-    false,
+  inputElement.addEventListener("keydown", (e) =>
+    this.handleInputEvent(e, inputElement),
   );
 
   fragment.appendChild(inputElement);
@@ -301,6 +345,7 @@ TypingTest.prototype.createTestScreen = function () {
   screen.screenElement.appendChild(input);
 
   const restartButton = this.viewRestartButton.create(() => {
+    console.clear();
     this.logger.log("Restarted", "info");
     this.removeTestScreen();
     this.showIntroScreen();
@@ -318,6 +363,8 @@ TypingTest.prototype.showTestScreen = function () {
   const fragment = this.createTestScreen();
 
   this.options.renderElement.appendChild(fragment);
+  this.sentenceWords = this.getSentenceChildren();
+  document.querySelector("#input").focus();
 
   this.runTest();
 };
@@ -333,10 +380,18 @@ TypingTest.prototype.removeTestScreen = function () {
   }
 };
 
+/**
+ * Runs the Typing Test.
+ */
 TypingTest.prototype.runTest = function () {
   this.logger.log("Started", "info");
+  // TODO - Start the timer and show the end screen when the timer stops
 };
 
+/**
+ * Initailization of the whole App.
+ * @param {options} options
+ */
 TypingTest.prototype.init = function (
   options = {
     renderElement: null,
@@ -349,6 +404,9 @@ TypingTest.prototype.init = function (
   }
 };
 
+/**
+ * Handles DOMContentLoaded.
+ */
 document.addEventListener("DOMContentLoaded", () => {
   const logger = new Logger();
   const test = new TypingTest({

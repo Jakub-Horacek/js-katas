@@ -3,6 +3,8 @@
 :root {
   --background-color: #323437;
   --accent-color: #d1d0c5;
+  --correct-color: green;
+  --wrong-color: red;
 
   --words-gap: 1rem;
   --words-size: 1.5rem;
@@ -11,6 +13,7 @@
   --gap: 5px;
 
   --input-width: 500px;
+  --transition: all 0.25s;
 }
 
 body {
@@ -19,15 +22,22 @@ body {
   margin: 0;
 }
 
+h1 {
+  color: var(--accent-color);
+  transition: var(--transition);
+}
+
 .screen {
   margin: auto;
   text-align: center;
+  transition: var(--transition);
 }
 
 footer {
   position: fixed;
   bottom: 0;
   width: 100%;
+  transition: var(--transition);
 }
 
 button,
@@ -74,6 +84,7 @@ button,
   -ms-user-select: none;
   user-select: none;
   cursor: default;
+  transition: var(--transition);
 }
 
 input,
@@ -89,4 +100,19 @@ input,
   padding: calc(var(--gap) * 2);
   margin: calc(var(--gap) * 4) auto;
   width: var(--input-width);
+  text-transform: lowercase;
+  transition: var(--transition);
+}
+
+.word {
+  transition: var(--transition);
+}
+
+.word--correct {
+  color: var(--correct-color);
+}
+
+.word--wrong {
+  color: var(--wrong-color);
+  text-decoration: line-through;
 }
