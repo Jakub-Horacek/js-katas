@@ -124,7 +124,7 @@ input,
   flex-direction: row;
   justify-content: center;
   align-items: baseline;
-  width: 75px;
+  width: 100px;
   padding: calc(var(--gap) * 2);
   margin: calc(var(--gap) * 4) auto;
   gap: calc(var(--gap) / 2);

@@ -235,8 +235,6 @@ TypingTest.prototype.getWords = function (count = 10) {
  */
 TypingTest.prototype.getSentenceChildren = function () {
   return document.querySelector("#words").children;
-  // TODO - What if the player breaches the words limit???
-  // TODO - Generate new sentence when the player reaches the end
 };
 
 /**
@@ -270,8 +268,19 @@ TypingTest.prototype.createSentence = function () {
  * @param {string} inputWord The provided word
  */
 TypingTest.prototype.checkWordMatch = function (inputWord) {
+  if (this.wordIndex >= this.sentenceWords.length) {
+    if (this.isDebug) {
+      this.logger.log(
+        "Player has reached the end of the current sentence.",
+        "debug",
+      );
+    }
+    // TODO - Generate next sentence
+    return;
+  }
+
   const currentWordElement = this.sentenceWords.item(this.wordIndex);
-  const currentWord = currentWordElement.innerText;
+  const currentWord = currentWordElement?.innerText;
 
   if (currentWord === inputWord) {
     this.logger.log("CORRECT");
@@ -282,6 +291,7 @@ TypingTest.prototype.checkWordMatch = function (inputWord) {
   }
 
   if (this.isDebug) {
+    this.logger.log(`Current word index is: ${this.wordIndex}`, "debug");
     this.logger.log(
       `\nCorrect word: ${currentWord}\nYour input: ${inputWord}`,
       "debug",
@@ -343,6 +353,7 @@ TypingTest.prototype.createTimer = function (separator = ":") {
   timerElement.appendChild(iconElement);
 
   const minutesElement = document.createElement("div");
+  minutesElement.id = "time-minutes";
   minutesElement.classList.add("time");
   minutesElement.classList.add("time--minutes");
   minutesElement.innerText = 0;
@@ -355,6 +366,7 @@ TypingTest.prototype.createTimer = function (separator = ":") {
   timerElement.appendChild(separatorElement);
 
   const secondsElement = document.createElement("div");
+  secondsElement.id = "time-seconds";
   secondsElement.classList.add("time");
   secondsElement.classList.add("time--seconds");
   secondsElement.innerText = 0;
@@ -401,7 +413,7 @@ TypingTest.prototype.showTestScreen = function () {
 
   this.options.renderElement.appendChild(fragment);
   this.sentenceWords = this.getSentenceChildren();
-  document.querySelector("#input").focus();
+  document.querySelector("#input")?.focus();
 
   this.runTest();
 };
@@ -417,12 +429,39 @@ TypingTest.prototype.removeTestScreen = function () {
   }
 };
 
+TypingTest.prototype.startTimer = function (totalSeconds) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  document.querySelector("#time-minutes").innerText = minutes;
+  document.querySelector("#time-seconds").innerText = seconds;
+
+  if (totalSeconds === 0) {
+    this.logger.log("TIME OUT!");
+
+    document.querySelector("#timer-icon").innerText = "🟥";
+
+    // TODO - display end screen
+    return;
+  }
+
+  return setTimeout(() => {
+    this.startTimer(--totalSeconds);
+  }, 1000);
+};
+
 /**
  * Runs the Typing Test.
  */
 TypingTest.prototype.runTest = function () {
   this.logger.log("Started", "info");
-  // TODO - Start the timer and show the end screen when the timer stops
+
+  const timerSecondsDuration = 20;
+  this.startTimer(timerSecondsDuration);
+
+  if (this.isDebug) {
+    this.logger.log(`${timerSecondsDuration} seconds timer started`, "debug");
+  }
 };
 
 /**
