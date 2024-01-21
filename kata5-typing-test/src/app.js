@@ -341,6 +341,11 @@ TypingTest.prototype.createInput = function () {
   return fragment;
 };
 
+/**
+ * Creates the timer.
+ * @param {string} separator - default is ":"
+ * @returns {DocumentFragment} timer
+ */
 TypingTest.prototype.createTimer = function (separator = ":") {
   const fragment = document.createDocumentFragment();
 
@@ -429,8 +434,14 @@ TypingTest.prototype.removeTestScreen = function () {
   }
 };
 
+/**
+ * Starts the timer.
+ * @param {number} totalSeconds
+ * @returns
+ */
 TypingTest.prototype.startTimer = function (totalSeconds) {
-  const minutes = Math.floor(totalSeconds / 60);
+  // NOTE: "~~" is a shortcut for "Math.floor"
+  const minutes = ~~(totalSeconds / 60);
   const seconds = totalSeconds % 60;
 
   document.querySelector("#time-minutes").innerText = minutes;
