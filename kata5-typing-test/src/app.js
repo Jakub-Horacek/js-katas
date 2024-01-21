@@ -331,6 +331,40 @@ TypingTest.prototype.createInput = function () {
   return fragment;
 };
 
+TypingTest.prototype.createTimer = function (separator = ":") {
+  const fragment = document.createDocumentFragment();
+
+  const timerElement = document.createElement("div");
+  timerElement.id = "timer";
+
+  const iconElement = document.createElement("div");
+  iconElement.id = "timer-icon";
+  iconElement.innerText = "⏰";
+  timerElement.appendChild(iconElement);
+
+  const minutesElement = document.createElement("div");
+  minutesElement.classList.add("time");
+  minutesElement.classList.add("time--minutes");
+  minutesElement.innerText = 0;
+  timerElement.appendChild(minutesElement);
+
+  const separatorElement = document.createElement("div");
+  separatorElement.classList.add("time");
+  separatorElement.classList.add("time--separator");
+  separatorElement.innerText = separator;
+  timerElement.appendChild(separatorElement);
+
+  const secondsElement = document.createElement("div");
+  secondsElement.classList.add("time");
+  secondsElement.classList.add("time--seconds");
+  secondsElement.innerText = 0;
+  timerElement.appendChild(secondsElement);
+
+  fragment.appendChild(timerElement);
+
+  return fragment;
+};
+
 /**
  * Creates the test screen.
  * @returns {DocumentFragment} The test screen.
@@ -343,6 +377,9 @@ TypingTest.prototype.createTestScreen = function () {
 
   const input = this.createInput();
   screen.screenElement.appendChild(input);
+
+  const timer = this.createTimer();
+  screen.screenElement.appendChild(timer);
 
   const restartButton = this.viewRestartButton.create(() => {
     console.clear();
