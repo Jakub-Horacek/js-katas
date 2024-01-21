@@ -444,6 +444,7 @@ TypingTest.prototype.startTimer = function (totalSeconds) {
   const minutes = ~~(totalSeconds / 60);
   const seconds = totalSeconds % 60;
 
+  // TODO - provide the element itself instead of getting it by the querySelector
   document.querySelector("#time-minutes").innerText = minutes;
   document.querySelector("#time-seconds").innerText = seconds;
 
