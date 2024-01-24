@@ -34,6 +34,26 @@ Logger.prototype.log = function (message, type = "log") {
 };
 
 /**
+ * The sentence lengths.
+ * @enum {object}
+ * @readonly
+ */
+const SentenceLengths = {
+  SHORT: {
+    min: 0,
+    max: 15,
+  },
+  NORMAL: {
+    min: 15,
+    max: 50,
+  },
+  LONG: {
+    min: 50,
+    max: 100,
+  },
+};
+
+/**
  * Test view screen
  * @constructor
  */
@@ -119,12 +139,83 @@ function TypingTest(
   this.viewRestartButton = options.viewRestartButton;
 }
 
+TypingTest.prototype.createTestOptions = function () {
+  const fragment = document.createDocumentFragment();
+
+  const optionsDiv = document.createElement("div");
+  optionsDiv.classList.add("wrapper");
+
+  const title = document.createElement("h2");
+  title.textContent = "Options";
+  optionsDiv.appendChild(title);
+
+  const sentenceLengthWrapper = document.createElement("div");
+  sentenceLengthWrapper.classList.add("field-wrapper");
+  optionsDiv.appendChild(sentenceLengthWrapper);
+
+  const sentenceLengthLabel = document.createElement("label");
+  sentenceLengthLabel.for = "sentences-length";
+  sentenceLengthLabel.textContent = "Length of the generated sentences:";
+  sentenceLengthWrapper.appendChild(sentenceLengthLabel);
+
+  const sentenceLength = document.createElement("select");
+  sentenceLength.id = "sentences-length";
+  sentenceLength.name = "sentences-length";
+  sentenceLengthWrapper.appendChild(sentenceLength);
+
+  for (const length in SentenceLengths) {
+    const lengthOption = document.createElement("option");
+    lengthOption.value = length;
+    lengthOption.textContent = `${length} (${SentenceLengths[length].min} - ${SentenceLengths[length].max})`;
+    sentenceLength.appendChild(lengthOption);
+  }
+
+  const timeLimitWrapper = document.createElement("div");
+  timeLimitWrapper.classList.add("field-wrapper");
+  optionsDiv.appendChild(timeLimitWrapper);
+
+  const timeLimitLabel = document.createElement("label");
+  timeLimitLabel.for = "time-limit";
+  timeLimitLabel.textContent = "Time limit:";
+  timeLimitWrapper.appendChild(timeLimitLabel);
+
+  const timeLimit = document.createElement("select");
+  timeLimit.type = "select";
+  timeLimit.id = "time-limit";
+  timeLimit.name = "time-limit";
+  timeLimitWrapper.appendChild(timeLimit);
+
+  const durations = this.isDebug ? [10, 30, 60] : [60, 120, 300];
+  durations.forEach((duration) => {
+    const durationOption = document.createElement("option");
+    durationOption.value = duration;
+    durationOption.textContent = `${duration} seconds`;
+    timeLimit.appendChild(durationOption);
+  });
+
+  fragment.appendChild(optionsDiv);
+  return fragment;
+};
+
+TypingTest.prototype.getTestOptions = function () {
+  const sentenceLengthSelect = document.querySelector("#sentences-length");
+  const timerDurationSelect = document.querySelector("#time-limit");
+
+  return {
+    sentenceLength: SentenceLengths[sentenceLengthSelect.value],
+    secondsDuration: timerDurationSelect.value,
+  };
+};
+
 /**
  * Creates the intro screen.
  * @returns {DocumentFragment} The intro screen.
  */
 TypingTest.prototype.createIntroScreen = function () {
   const screen = this.viewScreen.create("intro", "Welcome!");
+
+  const testOptions = this.createTestOptions();
+  screen.screenElement.appendChild(testOptions);
 
   const footerElement = document.createElement("footer");
 
@@ -145,6 +236,7 @@ TypingTest.prototype.createIntroScreen = function () {
   startButton.appendChild(startButtonText);
 
   startButton.addEventListener("click", () => {
+    this.options = { ...this.options, config: this.getTestOptions() };
     this.removeIntroScreen();
     this.showTestScreen();
   });
@@ -247,7 +339,10 @@ TypingTest.prototype.createSentence = function () {
   const sentenceElement = document.createElement("div");
   sentenceElement.id = "words";
 
-  this.getWords(this.getRandomInt()).then(function (data) {
+  const minLength = this.options.config.sentenceLength.min;
+  const maxLength = this.options.config.sentenceLength.max;
+
+  this.getWords(this.getRandomInt(minLength, maxLength)).then(function (data) {
     const words = data;
 
     words.forEach((word) => {
@@ -468,7 +563,7 @@ TypingTest.prototype.startTimer = function (totalSeconds) {
 TypingTest.prototype.runTest = function () {
   this.logger.log("Started", "info");
 
-  const timerSecondsDuration = 20;
+  const timerSecondsDuration = this.options.config.secondsDuration;
   this.startTimer(timerSecondsDuration);
 
   if (this.isDebug) {
