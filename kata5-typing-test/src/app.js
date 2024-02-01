@@ -370,8 +370,13 @@ TypingTest.prototype.checkWordMatch = function (inputWord) {
         "debug",
       );
     }
-    // TODO - Generate next sentence
-    return;
+
+    const screen = this.getTestScreen();
+    const newSentence = this.createSentence();
+    const oldSentence = screen.querySelector("#words");
+    screen.replaceChild(newSentence, oldSentence);
+    this.wordIndex = 0;
+    this.sentenceWords = this.getSentenceChildren();
   }
 
   const currentWordElement = this.sentenceWords.item(this.wordIndex);
@@ -478,11 +483,19 @@ TypingTest.prototype.createTimer = function (separator = ":") {
 };
 
 /**
+ * Gets the test screen element
+ * @returns test screen element
+ */
+TypingTest.prototype.getTestScreen = function () {
+  return document.querySelector("#screen-test");
+};
+
+/**
  * Creates the test screen.
  * @returns {DocumentFragment} The test screen.
  */
 TypingTest.prototype.createTestScreen = function () {
-  const screen = this.viewScreen.create("test", "Typing Test");
+  screen = this.viewScreen.create("test", "Typing Test");
 
   const sentence = this.createSentence();
   screen.screenElement.appendChild(sentence);
