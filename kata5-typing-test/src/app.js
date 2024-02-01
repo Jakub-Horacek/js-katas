@@ -189,7 +189,9 @@ TypingTest.prototype.createTestOptions = function () {
   durations.forEach((duration) => {
     const durationOption = document.createElement("option");
     durationOption.value = duration;
-    durationOption.textContent = `${duration} seconds`;
+    durationOption.textContent = `${duration} seconds ${
+      this.isDebug ? "[DEBUG]" : ""
+    }`;
     timeLimit.appendChild(durationOption);
   });
 
@@ -645,9 +647,12 @@ TypingTest.prototype.init = function (
  * Handles DOMContentLoaded.
  */
 document.addEventListener("DOMContentLoaded", () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const debug = urlParams.get("debug") == "true";
+
   const logger = new Logger();
   const test = new TypingTest({
-    debug: true,
+    debug: debug,
     logger: logger,
     viewScreen: TestViewScreen,
     viewRestartButton: TestViewRestartButton,
@@ -657,7 +662,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   test.init({ renderElement: appElement });
 
-  logger.log("DOMContentLoaded, Test initialized.", "info");
+  logger.log(
+    `\n- DOMContentLoaded, Test initialized with DEBUG mode ${
+      debug
+        ? "ON"
+        : 'OFF\n- To turn the DEBUG mode ON, add "?debug=true" parameter to the end of the URL'
+    }`,
+    "info",
+  );
 
   test.showIntroScreen();
 });
