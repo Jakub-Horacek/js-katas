@@ -543,6 +543,47 @@ TypingTest.prototype.removeTestScreen = function () {
 };
 
 /**
+ * Creates the end screen.
+ * @returns {DocumentFragment} The end screen.
+ */
+TypingTest.prototype.createEndScreen = function () {
+  screen = this.viewScreen.create("end", "Game Over");
+
+  // TODO - Show test statistics here (WPM, etc.)
+
+  const restartButton = this.viewRestartButton.create(() => {
+    console.clear();
+    this.logger.log("Restarted", "info");
+    this.removeEndScreen();
+    this.showIntroScreen();
+  });
+
+  screen.screenElement.appendChild(restartButton);
+
+  return screen.fragmentElement;
+};
+
+/**
+ * Shows the end screen.
+ */
+TypingTest.prototype.showEndScreen = function () {
+  const fragment = this.createEndScreen();
+
+  this.options.renderElement.appendChild(fragment);
+};
+
+/**
+ * Removes the end screen.
+ */
+TypingTest.prototype.removeEndScreen = function () {
+  const endScreen = document.querySelector("#screen-end");
+
+  if (endScreen) {
+    endScreen.remove();
+  }
+};
+
+/**
  * Starts the timer.
  * @param {number} totalSeconds
  * @returns
@@ -560,8 +601,8 @@ TypingTest.prototype.startTimer = function (totalSeconds) {
     this.logger.log("TIME OUT!");
 
     document.querySelector("#timer-icon").innerText = "🟥";
-
-    // TODO - display end screen
+    this.removeTestScreen();
+    this.showEndScreen();
     return;
   }
 
