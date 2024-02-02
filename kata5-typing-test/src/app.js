@@ -43,10 +43,27 @@ function Player() {}
  */
 Player.prototype.reset = function () {
   this.wpm = 0;
+  this.wpmHighScore = 0;
   this.accuracy = "100%";
   this.correctWords = 0;
   this.wrongWords = 0;
   this.wordsTotal = 0;
+
+  this.storageKey = "player.wpm.best";
+};
+
+/**
+ * Save the player's high score.
+ */
+Player.prototype.saveHighScore = function () {
+  localStorage.setItem(this.storageKey, this.wpm);
+};
+
+/**
+ * Loads the player's high score.
+ */
+Player.prototype.loadHighScore = function () {
+  this.wpmHighScore = JSON.parse(localStorage.getItem(this.storageKey)) ?? 0;
 };
 
 /**
@@ -186,6 +203,8 @@ TypingTest.prototype.createTestOptions = function () {
     sentenceLength.appendChild(lengthOption);
   }
 
+  sentenceLength.value = "NORMAL";
+
   const timeLimitWrapper = document.createElement("div");
   timeLimitWrapper.classList.add("field-wrapper");
   optionsDiv.appendChild(timeLimitWrapper);
@@ -201,15 +220,27 @@ TypingTest.prototype.createTestOptions = function () {
   timeLimit.name = "time-limit";
   timeLimitWrapper.appendChild(timeLimit);
 
-  const durations = this.isDebug ? [10, 30, 60] : [60, 120, 300];
+  const debugDurations = [10, 30];
+  const normalDurations = [60, 120, 300];
+  const durations = this.isDebug
+    ? [...debugDurations, ...normalDurations]
+    : normalDurations;
+
+  if (this.isDebug) {
+    this.logger.log(
+      `Time Limits:\n[${debugDurations}] = [DEBUG options]\n[${normalDurations}] = [STANDARD options]`,
+      "debug",
+    );
+  }
+
   durations.forEach((duration) => {
     const durationOption = document.createElement("option");
     durationOption.value = duration;
-    durationOption.textContent = `${duration} seconds ${
-      this.isDebug ? "[DEBUG]" : ""
-    }`;
+    durationOption.textContent = `${duration} seconds`;
     timeLimit.appendChild(durationOption);
   });
+
+  timeLimit.value = 60;
 
   fragment.appendChild(optionsDiv);
   return fragment;
@@ -584,6 +615,11 @@ TypingTest.prototype.createEndScreen = function () {
   wpmElement.title = "Words Per Minute";
   statsWrapper.appendChild(wpmElement);
 
+  const bestWpmElement = document.createElement("div");
+  bestWpmElement.textContent = `🏁 Best WPM: ${this.currentPlayer.wpmHighScore}`;
+  bestWpmElement.title = "Words Per Minute - Highscore";
+  statsWrapper.appendChild(bestWpmElement);
+
   const accuracyElement = document.createElement("div");
   accuracyElement.textContent = `🎯 Accuracy: ${this.currentPlayer.accuracy}`;
   statsWrapper.appendChild(accuracyElement);
@@ -672,6 +708,26 @@ TypingTest.prototype.getAccuracy = function () {
   return accuracy;
 };
 
+TypingTest.prototype.gameOver = function () {
+  this.currentPlayer.loadHighScore();
+
+  this.currentPlayer.wpm = this.getWpm(this.options.config.secondsDuration);
+  this.currentPlayer.accuracy = `${this.getAccuracy()}%`;
+
+  if (this.currentPlayer.wpm > this.currentPlayer.wpmHighScore) {
+    if (this.isDebug) {
+      this.logger.log(
+        `Saving new WPM highscore (${this.currentPlayer.wpm})`,
+        "debug",
+      );
+    }
+    this.currentPlayer.saveHighScore();
+  }
+
+  this.removeTestScreen();
+  this.showEndScreen();
+};
+
 /**
  * Starts the timer.
  * @param {number} totalSeconds
@@ -690,11 +746,7 @@ TypingTest.prototype.startTimer = function (totalSeconds) {
     this.logger.log("TIME OUT!");
     document.querySelector("#timer-icon").innerText = "🟥";
 
-    this.currentPlayer.wpm = this.getWpm(this.options.config.secondsDuration);
-    this.currentPlayer.accuracy = `${this.getAccuracy()}%`;
-
-    this.removeTestScreen();
-    this.showEndScreen();
+    this.gameOver();
     return;
   }
 
