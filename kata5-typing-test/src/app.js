@@ -34,13 +34,29 @@ Logger.prototype.log = function (message, type = "log") {
 };
 
 /**
+ * The player.
+ */
+function Player() {}
+
+/**
+ * Resets the player's score and stats.
+ */
+Player.prototype.reset = function () {
+  this.wpm = 0;
+  this.accuracy = "100%";
+  this.correctWords = 0;
+  this.wrongWords = 0;
+  this.wordsTotal = 0;
+};
+
+/**
  * The sentence lengths.
  * @enum {object}
  * @readonly
  */
 const SentenceLengths = {
   SHORT: {
-    min: 0,
+    min: 2,
     max: 15,
   },
   NORMAL: {
@@ -384,12 +400,16 @@ TypingTest.prototype.checkWordMatch = function (inputWord) {
   const currentWordElement = this.sentenceWords.item(this.wordIndex);
   const currentWord = currentWordElement?.innerText;
 
+  this.currentPlayer.wordsTotal++;
+
   if (currentWord === inputWord) {
     this.logger.log("CORRECT");
     currentWordElement.classList.add("word--correct");
+    this.currentPlayer.correctWords++;
   } else {
     this.logger.log("WRONG");
     currentWordElement.classList.add("word--wrong");
+    this.currentPlayer.wrongWords++;
   }
 
   if (this.isDebug) {
@@ -511,6 +531,7 @@ TypingTest.prototype.createTestScreen = function () {
   const restartButton = this.viewRestartButton.create(() => {
     console.clear();
     this.logger.log("Restarted", "info");
+    this.currentPlayer.reset();
     this.removeTestScreen();
     this.showIntroScreen();
   });
@@ -551,15 +572,39 @@ TypingTest.prototype.removeTestScreen = function () {
 TypingTest.prototype.createEndScreen = function () {
   screen = this.viewScreen.create("end", "Game Over");
 
-  // TODO - Show test statistics here (WPM, etc.)
+  const statsWrapper = document.createElement("div");
+  statsWrapper.classList.add("wrapper");
+
+  const statsTitle = document.createElement("h2");
+  statsTitle.textContent = "Your Statistics";
+  statsWrapper.appendChild(statsTitle);
+
+  const wpmElement = document.createElement("div");
+  wpmElement.textContent = `🕒 WPM: ${this.currentPlayer.wpm}`;
+  wpmElement.title = "Words Per Minute";
+  statsWrapper.appendChild(wpmElement);
+
+  const accuracyElement = document.createElement("div");
+  accuracyElement.textContent = `🎯 Accuracy: ${this.currentPlayer.accuracy}`;
+  statsWrapper.appendChild(accuracyElement);
+
+  const correctElement = document.createElement("div");
+  correctElement.textContent = `✅ Correct words: ${this.currentPlayer.correctWords}`;
+  statsWrapper.appendChild(correctElement);
+
+  const wrongElement = document.createElement("div");
+  wrongElement.textContent = `❌ Wrong words: ${this.currentPlayer.wrongWords}`;
+  statsWrapper.appendChild(wrongElement);
 
   const restartButton = this.viewRestartButton.create(() => {
     console.clear();
     this.logger.log("Restarted", "info");
+    this.currentPlayer.reset();
     this.removeEndScreen();
     this.showIntroScreen();
   });
 
+  screen.screenElement.appendChild(statsWrapper);
   screen.screenElement.appendChild(restartButton);
 
   return screen.fragmentElement;
@@ -586,6 +631,48 @@ TypingTest.prototype.removeEndScreen = function () {
 };
 
 /**
+ * Calculates and returns the Words Per Minute (WPM).
+ * @param {number} seconds The duration of the whole Typing Test
+ * @returns WPM
+ */
+TypingTest.prototype.getWpm = function (seconds) {
+  const wpm = Math.round((this.currentPlayer.correctWords / seconds) * 60);
+
+  if (this.isDebug) {
+    this.logger.log(
+      `\nWPM Calculation:\nMath.floor(${this.currentPlayer.correctWords} / ${seconds} * 60) = ${wpm}`,
+      "debug",
+    );
+  }
+
+  return wpm;
+};
+
+/**
+ * Calculates and returns the Player Accuracy.
+ * @returns {number} 0 when the Accuracy is Not A Number
+ * @returns {string} accuracy percentage
+ */
+TypingTest.prototype.getAccuracy = function () {
+  const accuracy = Math.round(
+    (this.currentPlayer.correctWords / this.currentPlayer.wordsTotal) * 100,
+  );
+
+  if (this.isDebug) {
+    this.logger.log(
+      `\nAccuracy Calculation:\nMath.round((${this.currentPlayer.correctWords} / ${this.currentPlayer.wordsTotal}) * 100) = ${accuracy}`,
+      "debug",
+    );
+  }
+
+  if (isNaN(accuracy) || accuracy == null) {
+    return 0;
+  }
+
+  return accuracy;
+};
+
+/**
  * Starts the timer.
  * @param {number} totalSeconds
  * @returns
@@ -601,8 +688,11 @@ TypingTest.prototype.startTimer = function (totalSeconds) {
 
   if (totalSeconds === 0) {
     this.logger.log("TIME OUT!");
-
     document.querySelector("#timer-icon").innerText = "🟥";
+
+    this.currentPlayer.wpm = this.getWpm(this.options.config.secondsDuration);
+    this.currentPlayer.accuracy = `${this.getAccuracy()}%`;
+
     this.removeTestScreen();
     this.showEndScreen();
     return;
@@ -641,6 +731,9 @@ TypingTest.prototype.init = function (
   if (!this.options.renderElement) {
     this.logger.log("init - No render element provided", "warn");
   }
+
+  this.currentPlayer = new Player();
+  this.currentPlayer.reset();
 };
 
 /**
