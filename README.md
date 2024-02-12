@@ -12,5 +12,6 @@ The primary goal of this series is to sharpen my Vanilla JS skills. As part of E
 - **Private Repository:** This repository is not open for public contribution. It is shared exclusively among members of the Elixeum Katas program, and contributions are not allowed.
 - Each Kata has its own ```instructions.md``` file with instructions for the specific JS kata.
 
+
 > [!NOTE]  
 > Unfortunately JS modules only work via HTTP(s), so for some Katas which are using JS modules you'll need to use a local web server.
