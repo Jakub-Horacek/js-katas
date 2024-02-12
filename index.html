@@ -15,38 +15,58 @@
         class="kata-button"
         onclick="location.href='./kata1-calculator/src/index.html'"
       >
+        <img
+          class="kata-button__preview"
+          src="./assets/previews/kata1.png"
+          alt="Calculator"
+        />
         <div class="kata-button__text">Kata #1 - Calculator</div>
       </button>
       <button
         class="kata-button"
         onclick="location.href='./kata2-task-manager/src/index.html'"
       >
+        <img
+          class="kata-button__preview"
+          src="./assets/previews/kata2.png"
+          alt="Task Manager"
+        />
         <div class="kata-button__text">Kata #2 - Task Manager</div>
       </button>
       <button
         class="kata-button"
         onclick="location.href='./kata3-memory-game/src/index.html'"
       >
+        <img
+          class="kata-button__preview"
+          src="./assets/previews/kata3.png"
+          alt="Memory Game"
+        />
         <div class="kata-button__text">Kata #3 - Memory Game</div>
       </button>
       <button
         class="kata-button"
         onclick="location.href='./kata4-observation-game/src/index.html'"
       >
+        <img
+          class="kata-button__preview"
+          src="./assets/previews/kata4.png"
+          alt="Observation Game"
+        />
         <div class="kata-button__text">Kata #4 - Observation Game</div>
       </button>
       <button
         class="kata-button"
         onclick="location.href='./kata5-typing-test/src/index.html'"
       >
+        <img
+          class="kata-button__preview"
+          src="./assets/previews/kata5.png"
+          alt="Typing Test"
+        />
         <div class="kata-button__text">Kata #5 - Typing Test</div>
       </button>
-      <button
-        class="kata-button"
-        onclick="location.href='./kata6-music-player/src/index.html'"
-      >
-        <div class="kata-button__text">Kata #6 - Music Player</div>
-      </button>
+      <button class="kata-button kata-button--tbd">coming soon...</button>
     </div>
   </body>
 </html>
@@ -64,8 +84,65 @@
   }
 
   .katas {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
     gap: 12px;
+  }
+
+  .kata-button {
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    height: 250px;
+    width: 250px;
+    color: white;
+    transition: all 0.25s ease-in;
+  }
+
+  .kata-button--tbd {
+    letter-spacing: 1.25px;
+    background: rgba(0, 0, 0, 1);
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  .kata-button:hover .kata-button__preview {
+    scale: 1.15;
+  }
+
+  .kata-button:hover .kata-button__text {
+    background: rgba(0, 0, 0, 1);
+    color: white;
+    height: 20%;
+    letter-spacing: 1.8px;
+  }
+
+  .kata-button__preview {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    scale: 1;
+    transition: all 0.25s ease-in-out;
+  }
+
+  .kata-button__text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 15%;
+    background: rgba(0, 0, 0, 0.9);
+    position: sticky;
+    bottom: -1px;
+    z-index: 1;
+    font-weight: normal;
+    letter-spacing: 1.5px;
+    color: #bdbdbe;
+    transition: all 0.25s ease-in;
   }
 </style>
