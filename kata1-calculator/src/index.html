@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JS Kata #1 - The Calculator</title>
-    <link rel="icon" type="image/x-icon" href="assets/icons/calculator.ico" />
+    <link rel="icon" type="image/x-icon" href="./assets/icons/calculator.ico" />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="scrollbar.css" />
     <script src="calculator.js"></script>
@@ -16,9 +16,16 @@
         <div class="history hidden" id="calculator-equation-log">
           <div class="history__buttons">
             <button class="text-only" onclick="equationLogToggle()">
-              <img class="history__icon" src="assets/icons/chevron-left.png" alt="back to calculator" /> Calculator
+              <img
+                class="history__icon"
+                src="./assets/icons/chevron-left.png"
+                alt="back to calculator"
+              />
+              Calculator
             </button>
-            <button class="text-only" onclick="clearTheEquationLog()">Clear the history</button>
+            <button class="text-only" onclick="clearTheEquationLog()">
+              Clear the history
+            </button>
           </div>
 
           <ul class="history__list" id="equation-list"></ul>
@@ -29,7 +36,11 @@
             <button class="top" onclick="allClear()">AC</button>
             <button class="top" onclick="negativeToggle()">+/-</button>
             <button class="top" onclick="equationLogToggle()">
-              <img class="icon" src="assets/icons/history.png" alt="equation log" />
+              <img
+                class="icon"
+                src="./assets/icons/history.png"
+                alt="equation log"
+              />
             </button>
             <button onclick="addCharacter(7)">7</button>
             <button onclick="addCharacter(8)">8</button>

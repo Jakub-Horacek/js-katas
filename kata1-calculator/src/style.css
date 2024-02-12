@@ -21,14 +21,20 @@
 }
 
 body {
-  font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  font-family:
+    "SF Pro Text",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Helvetica Neue",
+    sans-serif;
   color: var(--foreground-light-color);
   margin: 0;
   width: 100vw;
   height: 100vh;
 
   /* background: var(--site-background-color); */
-  background: url("/kata1-calculator/src/assets/images/macos-ventura-wallpaper.jpg") no-repeat center center fixed;
+  background: url("./assets/images/macos-ventura-wallpaper.jpg") no-repeat
+    center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
