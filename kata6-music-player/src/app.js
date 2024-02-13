@@ -64,6 +64,7 @@ class Library {
       listItem.classList.add("library__song");
 
       const leftSide = document.createElement("div");
+      leftSide.classList.add("song--left");
 
       const playButton = document.createElement("button");
       playButton.textContent = "▶️";
@@ -90,6 +91,7 @@ class Library {
 
       listItem.appendChild(leftSide);
       const rightSide = document.createElement("div");
+      rightSide.classList.add("song--right");
 
       const soundWave = this.createSoundWaveElement();
       rightSide.appendChild(soundWave);
