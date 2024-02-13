@@ -169,18 +169,118 @@ class Library {
   }
 }
 
+class Controls {
+  constructor(library, logger) {
+    this.library = library;
+    this.logger = logger;
+    this.playPauseButton = null;
+    this.prevButton = null;
+    this.nextButton = null;
+    this.controlsContainer = null;
+  }
+
+  createControlsFragment() {
+    const fragment = document.createDocumentFragment();
+
+    this.playPauseButton = document.createElement("button");
+    this.playPauseButton.textContent = "▶️";
+    this.playPauseButton.addEventListener(
+      "click",
+      this.togglePlayPause.bind(this),
+    );
+    fragment.appendChild(this.playPauseButton);
+
+    this.prevButton = document.createElement("button");
+    this.prevButton.textContent = "⏮️";
+    this.prevButton.addEventListener("click", this.playPrevious.bind(this));
+    fragment.appendChild(this.prevButton);
+
+    this.nextButton = document.createElement("button");
+    this.nextButton.textContent = "⏭️";
+    this.nextButton.addEventListener("click", this.playNext.bind(this));
+    fragment.appendChild(this.nextButton);
+
+    return fragment;
+  }
+
+  showControlsFragment() {
+    this.controlsContainer = document.getElementById("controlsContainer");
+
+    // If controlsContainer doesn't exist, create it dynamically
+    if (!this.controlsContainer) {
+      this.controlsContainer = document.createElement("div");
+      this.controlsContainer.id = "controlsContainer";
+      document.body.appendChild(this.controlsContainer);
+    }
+
+    const container = this.createControlsFragment();
+    this.controlsContainer.appendChild(container);
+  }
+
+  togglePlayPause() {
+    if (this.library.currentlyPlaying) {
+      if (this.library.currentlyPlaying.audioElement.paused) {
+        this.play();
+      } else {
+        this.pause();
+      }
+    }
+  }
+
+  play() {
+    if (this.library.currentlyPlaying) {
+      this.library.currentlyPlaying.audioElement.play();
+      this.playPauseButton.textContent = "⏸️";
+      this.logger.log(`Resumed ${this.library.currentlyPlaying.name}`, "log");
+    }
+  }
+
+  pause() {
+    if (this.library.currentlyPlaying) {
+      this.library.currentlyPlaying.audioElement.pause();
+      this.playPauseButton.textContent = "▶️";
+      this.logger.log(`Paused ${this.library.currentlyPlaying.name}`, "log");
+    }
+  }
+
+  playPrevious() {
+    if (this.library.currentlyPlaying) {
+      const currentIndex = this.library.libraryData.indexOf(
+        this.library.currentlyPlaying,
+      );
+      const prevIndex =
+        (currentIndex - 1 + this.library.libraryData.length) %
+        this.library.libraryData.length;
+      const prevSong = this.library.libraryData[prevIndex];
+
+      this.library.handlePlayButtonClick(prevSong);
+    }
+  }
+
+  playNext() {
+    if (this.library.currentlyPlaying) {
+      const currentIndex = this.library.libraryData.indexOf(
+        this.library.currentlyPlaying,
+      );
+      const nextIndex = (currentIndex + 1) % this.library.libraryData.length;
+      const nextSong = this.library.libraryData[nextIndex];
+
+      this.library.handlePlayButtonClick(nextSong);
+    }
+  }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const logger = new Logger();
-
-    logger.log("DOMContentLoaded, Hilldal initialized", "info");
-
     const response = await fetch("./library.json");
     const libraryData = await response.json();
-
     const musicLibrary = new Library(libraryData, logger);
 
     musicLibrary.showLibraryFragment();
+
+    const controls = new Controls(musicLibrary, logger);
+    controls.showControlsFragment();
   } catch (error) {
     console.error(error);
   }
