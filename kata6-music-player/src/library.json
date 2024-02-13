@@ -1,0 +1,26 @@
+[
+  {
+    "id": "at-ziji-duchove",
+    "path": "./../public/assets/music/at_ziji_duchove__stepan_krikava.mp3",
+    "name": "Ať žijí duchové (Drum n' Bass bootleg)",
+    "artists": ["Štěpán Křikava"]
+  },
+  {
+    "id": "mr-bombastic",
+    "path": "./../public/assets/music/mr_bombastic__rapbrobeats.mp3",
+    "name": "Mr. Bombastic (Bomba Fantastic)",
+    "artists": ["Rapbrobeats"]
+  },
+  {
+    "id": "sound-of-the-police",
+    "path": "./../public/assets/music/sound_of_the_police__stepan_krikava.mp3",
+    "name": "Sound of the Police [REMIX]",
+    "artists": ["Štěpán Křikava"]
+  },
+  {
+    "id": "vysoky-jalovec",
+    "path": "./../public/assets/music/vysoky_jalovec__stepan_krikava.mp3",
+    "name": "Vysoký jalovec (heavy metal remix)",
+    "artists": ["Štěpán Křikava"]
+  }
+]
