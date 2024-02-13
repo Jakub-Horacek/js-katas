@@ -1,9 +1,9 @@
 [
   {
     "id": "at-ziji-duchove",
-    "path": "./../public/assets/music/at_ziji_duchove__stepan_krikava.mp3",
+    "path": "./../public/assets/music/at_ziji_duchove__mc_spyda.mp3",
     "name": "Ať žijí duchové (Drum n' Bass bootleg)",
-    "artists": ["Štěpán Křikava"]
+    "artists": ["Mc SPYDA"]
   },
   {
     "id": "mr-bombastic",
@@ -22,5 +22,17 @@
     "path": "./../public/assets/music/vysoky_jalovec__stepan_krikava.mp3",
     "name": "Vysoký jalovec (heavy metal remix)",
     "artists": ["Štěpán Křikava"]
+  },
+  {
+    "id": "remember-the-name",
+    "path": "./../public/assets/music/remember_the_name__fort_minor.mp3",
+    "name": "Remember The Name",
+    "artists": ["Fort Minor", "Styles Of Beyond"]
+  },
+  {
+    "id": "killing-in-the-name",
+    "path": "./../public/assets/music/killing_in_the_name__ratm.mp3",
+    "name": "Killing In The Name",
+    "artists": ["Rage Against The Machine"]
   }
 ]
