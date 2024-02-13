@@ -63,18 +63,20 @@ class Library {
       const listItem = document.createElement("li");
       listItem.classList.add("library__song");
 
+      const leftSide = document.createElement("div");
+
       const playButton = document.createElement("button");
-      playButton.textContent = "Play";
+      playButton.textContent = "▶️";
       playButton.classList.add("song__button");
       playButton.addEventListener("click", () => {
         this.handlePlayButtonClick(music);
       });
-      listItem.appendChild(playButton);
+      leftSide.appendChild(playButton);
 
       const songName = document.createElement("div");
       songName.classList.add("song__name");
       songName.textContent = music.name;
-      listItem.appendChild(songName);
+      leftSide.appendChild(songName);
 
       const artistNames = document.createElement("div");
       artistNames.classList.add("song__artists");
@@ -84,14 +86,19 @@ class Library {
         artistName.textContent = artist;
         artistNames.appendChild(artistName);
       });
-      listItem.appendChild(artistNames);
+      leftSide.appendChild(artistNames);
+
+      listItem.appendChild(leftSide);
+      const rightSide = document.createElement("div");
 
       const soundWave = this.createSoundWaveElement();
-      listItem.appendChild(soundWave);
+      rightSide.appendChild(soundWave);
 
+      listItem.appendChild(rightSide);
       ulElement.appendChild(listItem);
 
       // Attach the playButton, audioElement, and soundWave to the music object for reference
+      music.listItem = listItem;
       music.playButton = playButton;
       music.audioElement = new Audio(music.path);
       music.soundWave = soundWave;
@@ -114,9 +121,10 @@ class Library {
     } else {
       // Play the clicked song
       music.audioElement.play();
-      music.playButton.textContent = "Stop";
+      music.playButton.textContent = "⏸️";
+      music.listItem.classList.add("library__song--playing");
       this.currentlyPlaying = music;
-      this.logger.log(`Playing ${music.name}`, "info");
+      this.logger.log(`Playing ${music.name}`, "log");
 
       // Show soundWave only on the currently playing song
       this.libraryData.forEach((song) => {
@@ -132,7 +140,10 @@ class Library {
 
   stopSong(music) {
     if (music.playButton) {
-      music.playButton.textContent = "Play";
+      music.playButton.textContent = "▶️";
+    }
+    if (music.listItem) {
+      music.listItem.classList.remove("library__song--playing");
     }
     if (this.currentlyPlaying === music) {
       this.currentlyPlaying = null;
@@ -140,7 +151,7 @@ class Library {
     if (music.audioElement) {
       music.audioElement.pause();
       music.audioElement.currentTime = 0;
-      this.logger.log(`Stopped ${music.name}`, "info");
+      this.logger.log(`Stopped ${music.name}`, "log");
 
       // Hide soundWave when the song stops
       if (music.soundWave) {
@@ -160,7 +171,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     const logger = new Logger();
 
-    logger.log("DOMContentLoaded, Hilldal initialized");
+    logger.log("DOMContentLoaded, Hilldal initialized", "info");
 
     const response = await fetch("./library.json");
     const libraryData = await response.json();

@@ -5,14 +5,36 @@
   --transparent-black: rgba(0, 0, 0, 0.5);
   --gap: 8px;
 
+  --border-radius: 8px;
+
+  --song-height: 30px;
   --text-primary: #e9e6e5;
   --text-secondary: #89888d;
+  --transition: all 0.25s ease;
 }
 
 body {
   font-family: "Roboto", sans-serif;
   background: var(--main-grey);
   margin: 0;
+}
+
+.brand {
+  padding: var(--gap);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.brand__logo {
+  width: 300px;
+}
+
+.brand__title {
+  margin: 0;
+  font-size: large;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
 }
 
 .library {
@@ -23,14 +45,41 @@ body {
   background: var(--transparent-black);
   width: 60%;
   padding: var(--gap);
+  border-radius: var(--border-radius);
+  gap: var(--gap);
 }
 
 .library__song {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   gap: var(--gap);
   padding: var(--gap);
+  height: var(--song-height);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.library__song--playing,
+.library__song:hover {
+  background: var(--main-grey);
+}
+
+.library__song div:not(:last-child) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--gap);
+}
+
+.song__button {
+  border-radius: var(--border-radius);
+  border: none;
+  background: transparent;
+  width: var(--song-height);
+  height: var(--song-height);
+  cursor: pointer;
 }
 
 .song__name {
@@ -45,6 +94,10 @@ body {
 
 .song__artist {
   color: var(--text-secondary);
+}
+
+.song__artist:first-child::before {
+  content: "- ";
 }
 
 .song__artist:not(:last-child)::after {
