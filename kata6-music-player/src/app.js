@@ -37,6 +37,22 @@ class Library {
     this.logger = logger;
   }
 
+  createSoundWaveElement() {
+    const bars = document.createElement("div");
+    bars.classList.add("bars");
+
+    for (let i = 0; i < 5; i++) {
+      const bar = document.createElement("div");
+      bar.classList.add("bars__bar");
+      bar.classList.add(`bar__${i}`);
+      bars.appendChild(bar);
+    }
+
+    bars.style.display = "none";
+
+    return bars;
+  }
+
   createLibraryFragment() {
     const fragment = document.createDocumentFragment();
 
@@ -49,7 +65,7 @@ class Library {
 
       const playButton = document.createElement("button");
       playButton.textContent = "Play";
-      playButton.classList.add("play-button");
+      playButton.classList.add("song__button");
       playButton.addEventListener("click", () => {
         this.handlePlayButtonClick(music);
       });
@@ -70,11 +86,15 @@ class Library {
       });
       listItem.appendChild(artistNames);
 
+      const soundWave = this.createSoundWaveElement();
+      listItem.appendChild(soundWave);
+
       ulElement.appendChild(listItem);
 
-      // Attach the playButton and audioElement to the music object for reference
+      // Attach the playButton, audioElement, and soundWave to the music object for reference
       music.playButton = playButton;
       music.audioElement = new Audio(music.path);
+      music.soundWave = soundWave;
     });
 
     fragment.appendChild(ulElement);
@@ -98,6 +118,11 @@ class Library {
       this.currentlyPlaying = music;
       this.logger.log(`Playing ${music.name}`, "info");
 
+      // Show soundWave only on the currently playing song
+      this.libraryData.forEach((song) => {
+        song.soundWave.style.display = song === music ? "flex" : "none";
+      });
+
       // Event listener for handling the end of audio playback
       music.audioElement.addEventListener("ended", () => {
         this.stopSong(music);
@@ -116,6 +141,11 @@ class Library {
       music.audioElement.pause();
       music.audioElement.currentTime = 0;
       this.logger.log(`Stopped ${music.name}`, "info");
+
+      // Hide soundWave when the song stops
+      if (music.soundWave) {
+        music.soundWave.style.display = "none";
+      }
     }
   }
 

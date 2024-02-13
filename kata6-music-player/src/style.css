@@ -1,3 +1,52 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Mono&display=swap");
+
+:root {
+  --main-grey: #242529;
+  --transparent-black: rgba(0, 0, 0, 0.5);
+  --gap: 8px;
+
+  --text-primary: #e9e6e5;
+  --text-secondary: #89888d;
+}
+
 body {
-  background: #242529;
+  font-family: "Roboto", sans-serif;
+  background: var(--main-grey);
+  margin: 0;
+}
+
+.library {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  list-style: none;
+  background: var(--transparent-black);
+  width: 60%;
+  padding: var(--gap);
+}
+
+.library__song {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--gap);
+  padding: var(--gap);
+}
+
+.song__name {
+  color: var(--text-primary);
+}
+
+.song__artists {
+  display: flex;
+  flex-direction: row;
+  gap: calc(var(--gap) / 2);
+}
+
+.song__artist {
+  color: var(--text-secondary);
+}
+
+.song__artist:not(:last-child)::after {
+  content: ",";
 }

@@ -1,0 +1,74 @@
+@keyframes quiet {
+  25% {
+    transform: scaleY(0.6);
+  }
+  50% {
+    transform: scaleY(0.4);
+  }
+  75% {
+    transform: scaleY(0.8);
+  }
+}
+
+@keyframes normal {
+  25% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.4);
+  }
+  75% {
+    transform: scaleY(0.6);
+  }
+}
+@keyframes loud {
+  25% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.4);
+  }
+  75% {
+    transform: scaleY(1.2);
+  }
+}
+
+.bars {
+  display: flex;
+  justify-content: space-between;
+  height: 30px;
+  --boxSize: 4px;
+  --gutter: 4px;
+  width: calc((var(--boxSize) + var(--gutter)) * 5);
+}
+
+.bars__bar {
+  transform: scaleY(0.4);
+  height: 100%;
+  width: var(--boxSize);
+  background: var(--text-primary);
+  animation-duration: 1.6s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  border-radius: 8px;
+}
+
+.bar__1 {
+  animation-name: quiet;
+}
+
+.bar__2 {
+  animation-name: normal;
+}
+
+.bar__3 {
+  animation-name: quiet;
+}
+
+.bar__4 {
+  animation-name: loud;
+}
+
+.bar__5 {
+  animation-name: quiet;
+}
