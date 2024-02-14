@@ -83,6 +83,7 @@ body {
 }
 
 .song__image {
+  border-radius: var(--border-radius);
   width: var(--song-height);
   height: var(--song-height);
 }

@@ -61,5 +61,12 @@
     "imageFile": "ymtcta.png",
     "name": "I Believe",
     "artists": ["planetboom"]
+  },
+  {
+    "id": 10,
+    "audioFile": "dean_town__vulfpeck.mp3",
+    "imageFile": "the_beautiful_game.png",
+    "name": "Dean Town",
+    "artists": ["Vulfpeck"]
   }
 ]
