@@ -2,14 +2,14 @@
   {
     "id": 1,
     "audioFile": "at_ziji_duchove__mc_spyda.mp3",
-    "imageFile": "at_ziji_duchove.png",
+    "imageFile": "at_ziji_duchove.jpg",
     "name": "Ať žijí duchové (Drum n' Bass bootleg)",
     "artists": ["Mc SPYDA"]
   },
   {
     "id": 2,
     "audioFile": "mr_bombastic__rapbrobeats.mp3",
-    "imageFile": "mr_bombastic.png",
+    "imageFile": "mr_bombastic.jpeg",
     "name": "Mr. Bombastic (Bomba Fantastic)",
     "artists": ["Rapbrobeats"]
   },
@@ -30,7 +30,7 @@
   {
     "id": 5,
     "audioFile": "remember_the_name__fort_minor.mp3",
-    "imageFile": "the_rising_tied.png",
+    "imageFile": "the_rising_tied.jpg",
     "name": "Remember The Name",
     "artists": ["Fort Minor", "Styles Of Beyond"]
   },
@@ -44,35 +44,35 @@
   {
     "id": 7,
     "audioFile": "aerials__soad.mp3",
-    "imageFile": "toxicity.png",
+    "imageFile": "toxicity.jpg",
     "name": "Aerials",
     "artists": ["System of a Down"]
   },
   {
     "id": 8,
     "audioFile": "beuk_my_stride__arenci.mp3",
-    "imageFile": "beuk_my_stride.png",
+    "imageFile": "beuk_my_stride.jpg",
     "name": "Beuk My Stride",
     "artists": ["ARENCI"]
   },
   {
     "id": 9,
     "audioFile": "i_believe__planetboom.mp3",
-    "imageFile": "ymtcta.png",
+    "imageFile": "ymtcta.jpg",
     "name": "I Believe",
     "artists": ["planetboom"]
   },
   {
     "id": 10,
     "audioFile": "dean_town__vulfpeck.mp3",
-    "imageFile": "the_beautiful_game.png",
+    "imageFile": "the_beautiful_game.jpeg",
     "name": "Dean Town",
     "artists": ["Vulfpeck"]
   },
   {
     "id": 11,
     "audioFile": "til_the_day_i_die__toby_mac.mp3",
-    "imageFile": "this_is_not_a_test.png",
+    "imageFile": "this_is_not_a_test.jpeg",
     "name": "Til The Day I Die",
     "artists": ["TobyMac", "NF"]
   }
