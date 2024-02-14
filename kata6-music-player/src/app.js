@@ -7,10 +7,7 @@ class Logger {
   log(message, type = "log") {
     switch (type) {
       case "info":
-        console.info(
-          `%c${this.prefix} [INFO]: ${message}`,
-          "color: lightblue;",
-        );
+        console.info(`%c${this.prefix} [INFO]: ${message}`, "color: lightblue;");
         break;
       case "warn":
         console.warn(`%c${this.prefix} [WARN]: ${message}`, "color: orange;");
@@ -22,10 +19,7 @@ class Logger {
         console.debug(`%c${this.prefix} [DEBUG]: ${message}`, "color: grey;");
         break;
       default:
-        console.log(
-          `%c${this.prefix} [${type.toUpperCase()}]: ${message}`,
-          "color: white;",
-        );
+        console.log(`%c${this.prefix} [${type.toUpperCase()}]: ${message}`, "color: white;");
     }
   }
 }
@@ -75,8 +69,7 @@ class Library {
       });
       leftSide.appendChild(playButton);
 
-      const imageFile =
-        music?.imageFile != null ? music.imageFile : "blank.png";
+      const imageFile = music?.imageFile != null ? music.imageFile : "blank.png";
 
       const songImage = document.createElement("img");
       songImage.src = `${this.path}/images/albums/${imageFile}`;
@@ -187,27 +180,28 @@ class Controls {
     this.prevButton = null;
     this.nextButton = null;
     this.controlsContainer = null;
+    this.appElement = document.getElementById("app");
   }
 
   createControlsFragment() {
     const fragment = document.createDocumentFragment();
 
-    this.playPauseButton = document.createElement("button");
-    this.playPauseButton.textContent = "▶️";
-    this.playPauseButton.addEventListener(
-      "click",
-      this.togglePlayPause.bind(this),
-    );
-    fragment.appendChild(this.playPauseButton);
-
     this.prevButton = document.createElement("button");
     this.prevButton.textContent = "⏮️";
     this.prevButton.addEventListener("click", this.playPrevious.bind(this));
+    this.prevButton.classList.add("controls__button");
     fragment.appendChild(this.prevButton);
+
+    this.playPauseButton = document.createElement("button");
+    this.playPauseButton.textContent = "▶️";
+    this.playPauseButton.addEventListener("click", this.togglePlayPause.bind(this));
+    this.playPauseButton.classList.add("controls__button");
+    fragment.appendChild(this.playPauseButton);
 
     this.nextButton = document.createElement("button");
     this.nextButton.textContent = "⏭️";
     this.nextButton.addEventListener("click", this.playNext.bind(this));
+    this.nextButton.classList.add("controls__button");
     fragment.appendChild(this.nextButton);
 
     return fragment;
@@ -220,7 +214,7 @@ class Controls {
     if (!this.controlsContainer) {
       this.controlsContainer = document.createElement("div");
       this.controlsContainer.id = "controlsContainer";
-      document.body.appendChild(this.controlsContainer);
+      this.appElement.appendChild(this.controlsContainer);
     }
 
     const container = this.createControlsFragment();
@@ -255,12 +249,8 @@ class Controls {
 
   playPrevious() {
     if (this.library.currentlyPlaying) {
-      const currentIndex = this.library.libraryData.indexOf(
-        this.library.currentlyPlaying,
-      );
-      const prevIndex =
-        (currentIndex - 1 + this.library.libraryData.length) %
-        this.library.libraryData.length;
+      const currentIndex = this.library.libraryData.indexOf(this.library.currentlyPlaying);
+      const prevIndex = (currentIndex - 1 + this.library.libraryData.length) % this.library.libraryData.length;
       const prevSong = this.library.libraryData[prevIndex];
 
       this.library.handlePlayButtonClick(prevSong);
@@ -269,9 +259,7 @@ class Controls {
 
   playNext() {
     if (this.library.currentlyPlaying) {
-      const currentIndex = this.library.libraryData.indexOf(
-        this.library.currentlyPlaying,
-      );
+      const currentIndex = this.library.libraryData.indexOf(this.library.currentlyPlaying);
       const nextIndex = (currentIndex + 1) % this.library.libraryData.length;
       const nextSong = this.library.libraryData[nextIndex];
 
