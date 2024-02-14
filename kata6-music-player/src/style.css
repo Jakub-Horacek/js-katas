@@ -7,7 +7,7 @@
 
   --border-radius: 8px;
 
-  --song-height: 30px;
+  --song-height: 40px;
   --text-primary: #e9e6e5;
   --text-secondary: #89888d;
   --transition: all 0.25s ease;
@@ -38,10 +38,12 @@ body {
 }
 
 #app {
-  display: grid;
-  grid-template-rows: minmax(100px, 500px) 1fr;
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap);
   padding: var(--gap);
   width: 60%;
+  height: 60%;
   margin: auto;
   border-radius: var(--border-radius);
   background: var(--transparent-black);
@@ -49,7 +51,6 @@ body {
 }
 
 .library {
-  grid-row: 1;
   display: flex;
   flex-direction: column;
   list-style: none;
@@ -122,16 +123,19 @@ body {
 }
 
 #controlsContainer {
-  grid-row: 2;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: var(--gap);
   padding: 0;
   padding-top: var(--gap);
-  width: 100%;
-  border-top: 1px solid var(--main-grey);
+}
+
+.controls__buttons {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap);
 }
 
 .controls__button {
