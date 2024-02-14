@@ -35,6 +35,7 @@ class Library {
     this.libraryData = libraryData;
     this.appElement = document.getElementById("app");
     this.logger = logger;
+    this.path = "./../public/assets";
   }
 
   createSoundWaveElement() {
@@ -74,6 +75,15 @@ class Library {
       });
       leftSide.appendChild(playButton);
 
+      const imageFile =
+        music?.imageFile != null ? music.imageFile : "blank.png";
+
+      const songImage = document.createElement("img");
+      songImage.src = `${this.path}/images/albums/${imageFile}`;
+      songImage.alt = music.name;
+      songImage.classList.add("song__image");
+      leftSide.appendChild(songImage);
+
       const songName = document.createElement("div");
       songName.classList.add("song__name");
       songName.textContent = music.name;
@@ -88,8 +98,8 @@ class Library {
         artistNames.appendChild(artistName);
       });
       leftSide.appendChild(artistNames);
-
       listItem.appendChild(leftSide);
+
       const rightSide = document.createElement("div");
       rightSide.classList.add("song--right");
 
@@ -102,7 +112,7 @@ class Library {
       // Attach the playButton, audioElement, and soundWave to the music object for reference
       music.listItem = listItem;
       music.playButton = playButton;
-      music.audioElement = new Audio(music.path);
+      music.audioElement = new Audio(`${this.path}/music/${music.audioFile}`);
       music.soundWave = soundWave;
     });
 

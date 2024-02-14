@@ -1,38 +1,65 @@
 [
   {
-    "id": "at-ziji-duchove",
-    "path": "./../public/assets/music/at_ziji_duchove__mc_spyda.mp3",
+    "id": 1,
+    "audioFile": "at_ziji_duchove__mc_spyda.mp3",
+    "imageFile": "at_ziji_duchove.png",
     "name": "Ať žijí duchové (Drum n' Bass bootleg)",
     "artists": ["Mc SPYDA"]
   },
   {
-    "id": "mr-bombastic",
-    "path": "./../public/assets/music/mr_bombastic__rapbrobeats.mp3",
+    "id": 2,
+    "audioFile": "mr_bombastic__rapbrobeats.mp3",
+    "imageFile": "mr_bombastic.png",
     "name": "Mr. Bombastic (Bomba Fantastic)",
     "artists": ["Rapbrobeats"]
   },
   {
-    "id": "sound-of-the-police",
-    "path": "./../public/assets/music/sound_of_the_police__stepan_krikava.mp3",
+    "id": 3,
+    "audioFile": "sound_of_the_police__stepan_krikava.mp3",
+    "imageFile": null,
     "name": "Sound of the Police [REMIX]",
     "artists": ["Štěpán Křikava"]
   },
   {
-    "id": "vysoky-jalovec",
-    "path": "./../public/assets/music/vysoky_jalovec__stepan_krikava.mp3",
+    "id": 4,
+    "audioFile": "vysoky_jalovec__stepan_krikava.mp3",
+    "imageFile": null,
     "name": "Vysoký jalovec (heavy metal remix)",
     "artists": ["Štěpán Křikava"]
   },
   {
-    "id": "remember-the-name",
-    "path": "./../public/assets/music/remember_the_name__fort_minor.mp3",
+    "id": 5,
+    "audioFile": "remember_the_name__fort_minor.mp3",
+    "imageFile": "the_rising_tied.png",
     "name": "Remember The Name",
     "artists": ["Fort Minor", "Styles Of Beyond"]
   },
   {
-    "id": "killing-in-the-name",
-    "path": "./../public/assets/music/killing_in_the_name__ratm.mp3",
+    "id": 6,
+    "audioFile": "killing_in_the_name__ratm.mp3",
+    "imageFile": "ratm.png",
     "name": "Killing In The Name",
     "artists": ["Rage Against The Machine"]
+  },
+  {
+    "id": 7,
+    "audioFile": "aerials__soad.mp3",
+    "imageFile": "toxicity.png",
+    "name": "Aerials",
+    "artists": ["System of a Down"]
+  },
+  {
+    "id": 8,
+    "audioFile": "beuk_my_stride__arenci.mp3",
+    "imageFile": "beuk_my_stride.png",
+    "name": "Beuk My Stride",
+    "artists": ["ARENCI"]
+  },
+  {
+    "id": 9,
+    "audioFile": "i_believe__planetboom.mp3",
+    "imageFile": "ymtcta.png",
+    "name": "I Believe",
+    "artists": ["planetboom"]
   }
 ]

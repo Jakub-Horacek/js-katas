@@ -82,6 +82,11 @@ body {
   cursor: pointer;
 }
 
+.song__image {
+  width: var(--song-height);
+  height: var(--song-height);
+}
+
 .song__name {
   color: var(--text-primary);
 }
