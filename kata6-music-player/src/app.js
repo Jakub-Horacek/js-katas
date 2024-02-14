@@ -31,12 +31,11 @@ class Logger {
 }
 
 class Library {
-  constructor(libraryData, logger, controls) {
+  constructor(libraryData, logger) {
     this.libraryData = libraryData;
     this.appElement = document.getElementById("app");
     this.logger = logger;
     this.path = "./../public/assets";
-    this.controls = controls;
   }
 
   createSoundWaveElement() {
@@ -108,9 +107,20 @@ class Library {
       rightSide.appendChild(soundWave);
 
       listItem.appendChild(rightSide);
+
+      const songPreview = document.createElement("div");
+      songPreview.classList.add("song__preview");
+
+      const songImageBig = document.createElement("img");
+      songImageBig.src = `${this.path}/images/albums/${imageFile}`;
+      songImageBig.alt = music.name;
+      songImageBig.classList.add("song__image__big");
+      songPreview.appendChild(songImageBig);
+
+      listItem.appendChild(songPreview);
       ulElement.appendChild(listItem);
 
-      // Attach the playButton, audioElement, and soundWave to the music object for reference
+      music.songPreview = songPreview;
       music.listItem = listItem;
       music.playButton = playButton;
       music.audioElement = new Audio(`${this.path}/music/${music.audioFile}`);
@@ -128,6 +138,8 @@ class Library {
       this.stopSong(this.currentlyPlaying);
     }
 
+    console.log(music);
+
     // Check if the clicked song is already playing
     if (this.currentlyPlaying === music) {
       this.stopSong(music);
@@ -136,6 +148,7 @@ class Library {
       music.audioElement.play();
       music.playButton.textContent = "⏸️";
       music.listItem.classList.add("library__song--playing");
+      music.songPreview.classList.add("song__preview--visible");
       this.currentlyPlaying = music;
       this.logger.log(`Playing ${music.name}`, "log");
 
@@ -149,7 +162,6 @@ class Library {
         this.stopSong(music);
       });
     }
-    this.controls.updatePlayPauseButtonText();
   }
 
   stopSong(music) {
@@ -158,6 +170,7 @@ class Library {
     }
     if (music.listItem) {
       music.listItem.classList.remove("library__song--playing");
+      music.songPreview.classList.remove("song__preview--visible");
     }
     if (this.currentlyPlaying === music) {
       this.currentlyPlaying = null;
@@ -181,139 +194,15 @@ class Library {
   }
 }
 
-class Controls {
-  constructor(library, logger) {
-    this.library = library;
-    this.logger = logger;
-    this.playPauseButton = null;
-    this.prevButton = null;
-    this.nextButton = null;
-    this.controlsContainer = null;
-    this.appElement = document.getElementById("app");
-  }
-
-  createControlsFragment() {
-    const fragment = document.createDocumentFragment();
-
-    const buttons = document.createElement("div");
-    buttons.classList.add("controls__buttons");
-
-    this.prevButton = document.createElement("button");
-    this.prevButton.textContent = "⏮️";
-    this.prevButton.addEventListener("click", this.playPrevious.bind(this));
-    this.prevButton.classList.add("controls__button");
-    buttons.appendChild(this.prevButton);
-
-    this.playPauseButton = document.createElement("button");
-    this.playPauseButton.textContent = "▶️";
-    this.playPauseButton.addEventListener(
-      "click",
-      this.togglePlayPause.bind(this),
-    );
-    this.playPauseButton.classList.add("controls__button");
-    buttons.appendChild(this.playPauseButton);
-
-    this.nextButton = document.createElement("button");
-    this.nextButton.textContent = "⏭️";
-    this.nextButton.addEventListener("click", this.playNext.bind(this));
-    this.nextButton.classList.add("controls__button");
-    buttons.appendChild(this.nextButton);
-
-    fragment.appendChild(buttons);
-
-    return fragment;
-  }
-
-  showControlsFragment() {
-    this.controlsContainer = document.getElementById("controlsContainer");
-
-    // If controlsContainer doesn't exist, create it dynamically
-    if (!this.controlsContainer) {
-      this.controlsContainer = document.createElement("div");
-      this.controlsContainer.id = "controlsContainer";
-      this.appElement.appendChild(this.controlsContainer);
-    }
-
-    const container = this.createControlsFragment();
-    this.controlsContainer.appendChild(container);
-  }
-
-  updatePlayPauseButtonText() {
-    if (this.library.currentlyPlaying) {
-      if (this.library.currentlyPlaying.audioElement.paused) {
-        this.playPauseButton.textContent = "▶️";
-      } else {
-        this.playPauseButton.textContent = "⏸️";
-      }
-    }
-  }
-
-  togglePlayPause() {
-    if (this.library.currentlyPlaying) {
-      if (this.library.currentlyPlaying.audioElement.paused) {
-        this.play();
-      } else {
-        this.pause();
-      }
-    }
-  }
-
-  play() {
-    if (this.library.currentlyPlaying) {
-      this.library.currentlyPlaying.audioElement.play();
-      this.playPauseButton.textContent = "⏸️";
-      this.logger.log(`Resumed ${this.library.currentlyPlaying.name}`, "log");
-    }
-  }
-
-  pause() {
-    if (this.library.currentlyPlaying) {
-      this.library.currentlyPlaying.audioElement.pause();
-      this.playPauseButton.textContent = "▶️";
-      this.logger.log(`Paused ${this.library.currentlyPlaying.name}`, "log");
-    }
-  }
-
-  playPrevious() {
-    if (this.library.currentlyPlaying) {
-      const currentIndex = this.library.libraryData.indexOf(
-        this.library.currentlyPlaying,
-      );
-      const prevIndex =
-        (currentIndex - 1 + this.library.libraryData.length) %
-        this.library.libraryData.length;
-      const prevSong = this.library.libraryData[prevIndex];
-
-      this.library.handlePlayButtonClick(prevSong);
-    }
-  }
-
-  playNext() {
-    if (this.library.currentlyPlaying) {
-      const currentIndex = this.library.libraryData.indexOf(
-        this.library.currentlyPlaying,
-      );
-      const nextIndex = (currentIndex + 1) % this.library.libraryData.length;
-      const nextSong = this.library.libraryData[nextIndex];
-
-      this.library.handlePlayButtonClick(nextSong);
-    }
-  }
-}
-
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const logger = new Logger();
     const response = await fetch("./library.json");
     const libraryData = await response.json();
 
-    const controls = new Controls(null, logger); // Pass null for library (will be set later)
-    const musicLibrary = new Library(libraryData, logger, controls);
-
-    controls.library = musicLibrary; // Set the library instance in Controls
+    const musicLibrary = new Library(libraryData, logger);
 
     musicLibrary.showLibraryFragment();
-    controls.showControlsFragment();
   } catch (error) {
     console.error(error);
   }

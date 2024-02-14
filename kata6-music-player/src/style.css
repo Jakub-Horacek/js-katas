@@ -122,6 +122,23 @@ body {
   content: ",";
 }
 
+.song__preview {
+  position: absolute;
+  top: 0;
+  right: 0;
+  visibility: hidden;
+}
+
+.song__preview--visible {
+  visibility: visible;
+}
+
+.song__image__big {
+  width: 300px;
+  height: 300px;
+}
+
+/* delete later */
 #controlsContainer {
   display: flex;
   flex-direction: column;
