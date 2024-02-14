@@ -117,11 +117,20 @@ class Library {
       songImageBig.classList.add("song__image__big");
       songPreview.appendChild(songImageBig);
 
+      const playButtonPreviw = document.createElement("button");
+      playButtonPreviw.textContent = "▶️";
+      playButtonPreviw.classList.add("song__button");
+      playButtonPreviw.addEventListener("click", () => {
+        this.handlePlayButtonClick(music);
+      });
+      songPreview.appendChild(playButtonPreviw);
+
       listItem.appendChild(songPreview);
       ulElement.appendChild(listItem);
 
       music.songPreview = songPreview;
       music.listItem = listItem;
+      music.playButtonPreviw = playButtonPreviw;
       music.playButton = playButton;
       music.audioElement = new Audio(`${this.path}/music/${music.audioFile}`);
       music.soundWave = soundWave;
@@ -138,8 +147,6 @@ class Library {
       this.stopSong(this.currentlyPlaying);
     }
 
-    console.log(music);
-
     // Check if the clicked song is already playing
     if (this.currentlyPlaying === music) {
       this.stopSong(music);
@@ -147,6 +154,7 @@ class Library {
       // Play the clicked song
       music.audioElement.play();
       music.playButton.textContent = "⏸️";
+      music.playButtonPreviw.textContent = "⏸️";
       music.listItem.classList.add("library__song--playing");
       music.songPreview.classList.add("song__preview--visible");
       this.currentlyPlaying = music;
@@ -167,6 +175,9 @@ class Library {
   stopSong(music) {
     if (music.playButton) {
       music.playButton.textContent = "▶️";
+    }
+    if (music.playButtonPreviw) {
+      music.playButtonPreviw.textContent = "▶️";
     }
     if (music.listItem) {
       music.listItem.classList.remove("library__song--playing");

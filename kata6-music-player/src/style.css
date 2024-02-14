@@ -126,6 +126,8 @@ body {
   position: absolute;
   top: 0;
   right: 0;
+  background: var(--transparent-black);
+  border-bottom-left-radius: var(--border-radius);
   visibility: hidden;
 }
 
@@ -134,6 +136,8 @@ body {
 }
 
 .song__image__big {
+  margin: var(--gap);
+  border-radius: var(--border-radius);
   width: 300px;
   height: 300px;
 }
