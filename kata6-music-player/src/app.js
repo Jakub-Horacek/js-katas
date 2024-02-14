@@ -31,11 +31,12 @@ class Logger {
 }
 
 class Library {
-  constructor(libraryData, logger) {
+  constructor(libraryData, logger, controls) {
     this.libraryData = libraryData;
     this.appElement = document.getElementById("app");
     this.logger = logger;
     this.path = "./../public/assets";
+    this.controls = controls;
   }
 
   createSoundWaveElement() {
@@ -148,6 +149,7 @@ class Library {
         this.stopSong(music);
       });
     }
+    this.controls.updatePlayPauseButtonText();
   }
 
   stopSong(music) {
@@ -236,6 +238,16 @@ class Controls {
     this.controlsContainer.appendChild(container);
   }
 
+  updatePlayPauseButtonText() {
+    if (this.library.currentlyPlaying) {
+      if (this.library.currentlyPlaying.audioElement.paused) {
+        this.playPauseButton.textContent = "▶️";
+      } else {
+        this.playPauseButton.textContent = "⏸️";
+      }
+    }
+  }
+
   togglePlayPause() {
     if (this.library.currentlyPlaying) {
       if (this.library.currentlyPlaying.audioElement.paused) {
@@ -294,11 +306,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const logger = new Logger();
     const response = await fetch("./library.json");
     const libraryData = await response.json();
-    const musicLibrary = new Library(libraryData, logger);
+
+    const controls = new Controls(null, logger); // Pass null for library (will be set later)
+    const musicLibrary = new Library(libraryData, logger, controls);
+
+    controls.library = musicLibrary; // Set the library instance in Controls
 
     musicLibrary.showLibraryFragment();
-
-    const controls = new Controls(musicLibrary, logger);
     controls.showControlsFragment();
   } catch (error) {
     console.error(error);
