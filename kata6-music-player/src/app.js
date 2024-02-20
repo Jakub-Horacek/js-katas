@@ -36,6 +36,7 @@ class Library {
     this.appElement = document.getElementById("app");
     this.logger = logger;
     this.path = "./../public/assets";
+    this.currentVolume = 0.5;
   }
 
   createSoundWaveElement() {
@@ -136,7 +137,31 @@ class Library {
       music.soundWave = soundWave;
     });
 
+    const volumeSliderContainer = document.createElement("div");
+    volumeSliderContainer.classList.add("volume-slider");
+
+    const volumeIcon = document.createElement("span");
+    volumeIcon.textContent = "🔊";
+    volumeIcon.classList.add("volume-icon");
+    volumeSliderContainer.appendChild(volumeIcon);
+
+    const volumeSlider = document.createElement("input");
+    volumeSlider.type = "range";
+    volumeSlider.min = 0;
+    volumeSlider.max = 1;
+    volumeSlider.step = 0.1;
+    volumeSlider.value = this.currentVolume;
+    volumeSlider.classList.add("volume-slider__input");
+
+    volumeSlider.addEventListener("input", () => {
+      this.handleVolumeChange(volumeSlider.value);
+    });
+
+    volumeSliderContainer.appendChild(volumeSlider);
+
+    fragment.appendChild(volumeSliderContainer);
     fragment.appendChild(ulElement);
+
     return fragment;
   }
 
@@ -153,6 +178,7 @@ class Library {
     } else {
       // Play the clicked song
       music.audioElement.play();
+      music.audioElement.volume = this.currentVolume;
       music.playButton.textContent = "⏸️";
       music.playButtonPreviw.textContent = "⏸️";
       music.listItem.classList.add("library__song--playing");
@@ -169,6 +195,16 @@ class Library {
       music.audioElement.addEventListener("ended", () => {
         this.stopSong(music);
       });
+    }
+  }
+
+  handleVolumeChange(volume) {
+    this.logger.log(`Volume changed to ${Math.round(volume * 100)}%`, "log");
+
+    // Set the volume for the currently playing song (if any)
+    if (this.currentlyPlaying) {
+      this.currentlyPlaying.audioElement.volume = parseFloat(volume);
+      this.currentVolume = volume;
     }
   }
 
@@ -200,6 +236,9 @@ class Library {
 
   showLibraryFragment() {
     const container = this.createLibraryFragment();
+
+    // Set initial volume value (you can adjust this as needed)
+    this.handleVolumeChange(1);
 
     this.appElement.appendChild(container);
   }
