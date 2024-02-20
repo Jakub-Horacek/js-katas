@@ -118,13 +118,34 @@ class Library {
       songImageBig.classList.add("song__image__big");
       songPreview.appendChild(songImageBig);
 
+      const controlButtons = document.createElement("div");
+      controlButtons.classList.add("control__buttons");
+
+      const prevButton = document.createElement("button");
+      prevButton.textContent = "⏮️";
+      prevButton.classList.add("control__button");
+      prevButton.addEventListener("click", () => {
+        this.playPreviousSong();
+      });
+      controlButtons.appendChild(prevButton);
+
       const playButtonPreviw = document.createElement("button");
       playButtonPreviw.textContent = "▶️";
-      playButtonPreviw.classList.add("song__button");
+      playButtonPreviw.classList.add("control__button");
       playButtonPreviw.addEventListener("click", () => {
         this.handlePlayButtonClick(music);
       });
-      songPreview.appendChild(playButtonPreviw);
+      controlButtons.appendChild(playButtonPreviw);
+
+      const nextButton = document.createElement("button");
+      nextButton.textContent = "⏭️";
+      nextButton.classList.add("control__button");
+      nextButton.addEventListener("click", () => {
+        this.playNextSong();
+      });
+      controlButtons.appendChild(nextButton);
+
+      songPreview.appendChild(controlButtons);
 
       listItem.appendChild(songPreview);
       ulElement.appendChild(listItem);
@@ -165,6 +186,19 @@ class Library {
     return fragment;
   }
 
+  playNextSong() {
+    const currentIndex = this.libraryData.indexOf(this.currentlyPlaying);
+    const nextIndex = (currentIndex + 1) % this.libraryData.length;
+    this.handlePlayButtonClick(this.libraryData[nextIndex]);
+  }
+
+  playPreviousSong() {
+    const currentIndex = this.libraryData.indexOf(this.currentlyPlaying);
+    const prevIndex =
+      (currentIndex - 1 + this.libraryData.length) % this.libraryData.length;
+    this.handlePlayButtonClick(this.libraryData[prevIndex]);
+  }
+
   handlePlayButtonClick(music) {
     // Check if a song is currently playing
     if (this.currentlyPlaying && this.currentlyPlaying !== music) {
@@ -193,7 +227,7 @@ class Library {
 
       // Event listener for handling the end of audio playback
       music.audioElement.addEventListener("ended", () => {
-        this.stopSong(music);
+        this.playNextSong();
       });
     }
   }

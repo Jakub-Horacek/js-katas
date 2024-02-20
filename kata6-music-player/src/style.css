@@ -28,9 +28,11 @@ body {
 
 .brand__logo {
   width: 300px;
+  filter: invert(1);
 }
 
 .brand__title {
+  color: var(--text-primary);
   margin: 0;
   font-size: large;
   letter-spacing: 2.2px;
@@ -126,8 +128,12 @@ body {
   position: absolute;
   top: 0;
   right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: var(--transparent-black);
   border-bottom-left-radius: var(--border-radius);
+  padding: var(--gap);
   visibility: hidden;
 }
 
@@ -140,6 +146,21 @@ body {
   border-radius: var(--border-radius);
   width: 300px;
   height: 300px;
+}
+
+.control__buttons {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap);
+}
+
+.control__button {
+  border-radius: 50%;
+  border: none;
+  background: var(--main-grey);
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
 }
 
 .volume-slider {
