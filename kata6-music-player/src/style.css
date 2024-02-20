@@ -131,6 +131,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: var(--gap);
   background: var(--transparent-black);
   border-bottom-left-radius: var(--border-radius);
   padding: var(--gap);
@@ -141,11 +142,22 @@ body {
   visibility: visible;
 }
 
-.song__image__big {
+.preview__image {
   margin: var(--gap);
   border-radius: var(--border-radius);
   width: 300px;
   height: 300px;
+}
+
+.preview__song {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--gap) / 2);
+}
+
+.preview__song .song__artist:first-child::before {
+  content: "";
 }
 
 .control__buttons {

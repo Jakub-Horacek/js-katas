@@ -115,8 +115,27 @@ class Library {
       const songImageBig = document.createElement("img");
       songImageBig.src = `${this.path}/images/albums/${imageFile}`;
       songImageBig.alt = music.name;
-      songImageBig.classList.add("song__image__big");
+      songImageBig.classList.add("preview__image");
       songPreview.appendChild(songImageBig);
+
+      const songInfo = document.createElement("div");
+      songInfo.classList.add("preview__song");
+
+      const previewSongName = document.createElement("div");
+      previewSongName.classList.add("song__name");
+      previewSongName.textContent = music.name;
+      songInfo.appendChild(previewSongName);
+
+      const previewArtistNames = document.createElement("div");
+      previewArtistNames.classList.add("song__artists");
+      music.artists.forEach((artist) => {
+        const previewArtistName = document.createElement("div");
+        previewArtistName.classList.add("song__artist");
+        previewArtistName.textContent = artist;
+        previewArtistNames.appendChild(previewArtistName);
+      });
+      songInfo.appendChild(previewArtistNames);
+      songPreview.appendChild(songInfo);
 
       const controlButtons = document.createElement("div");
       controlButtons.classList.add("control__buttons");
