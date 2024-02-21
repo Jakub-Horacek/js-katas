@@ -45,7 +45,8 @@ body {
   gap: var(--gap);
   padding: var(--gap);
   width: 60%;
-  height: 60%;
+  max-height: 705px;
+  height: 75vh;
   margin: auto;
   border-radius: var(--border-radius);
   background: var(--transparent-black);
@@ -183,6 +184,8 @@ body {
   background: var(--main-grey);
   padding: var(--gap);
   border-radius: var(--border-radius);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .volume-slider__input {
