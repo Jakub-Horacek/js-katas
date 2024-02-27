@@ -17,6 +17,10 @@ body {
   font-family: "Roboto", sans-serif;
   background: var(--main-grey);
   margin: 0;
+  padding: calc(var(--gap) * 2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
 }
 
 .brand {
@@ -47,7 +51,6 @@ body {
   width: 60%;
   max-height: 705px;
   height: 75vh;
-  margin: auto;
   border-radius: var(--border-radius);
   background: var(--transparent-black);
   overflow: hidden;
