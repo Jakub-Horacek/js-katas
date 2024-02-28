@@ -198,3 +198,68 @@ body {
   padding: 0 5px;
   cursor: pointer;
 }
+
+@media only screen and (max-width: 600px) {
+  :root {
+    --song-height: 30px;
+  }
+
+  body {
+    padding: 0;
+  }
+
+  .brand {
+    display: none;
+  }
+
+  #app {
+    height: 78.5vh;
+    width: 97vw;
+    border-radius: 0;
+    flex-direction: column;
+  }
+
+  .volume-slider {
+    flex-direction: row;
+  }
+
+  .volume-slider__input {
+    width: 100%;
+    height: 8px;
+    appearance: auto;
+  }
+
+  .library__song {
+    max-width: 100%;
+  }
+
+  .song__name {
+    font-size: x-small;
+    max-width: 100px;
+  }
+
+  .song__artists {
+    font-size: xx-small;
+    max-width: 100px;
+  }
+
+  .song__preview {
+    top: unset;
+    bottom: 0;
+    border-radius: 0;
+    flex-direction: row;
+    width: 100%;
+    padding: 0;
+  }
+
+  .preview__image {
+    width: 150px;
+    height: 150px;
+  }
+
+  .control__buttons {
+    position: absolute;
+    bottom: var(--gap);
+    right: var(--gap);
+  }
+}
