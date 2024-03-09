@@ -94,10 +94,15 @@ h2 {
   flex-wrap: wrap;
 }
 
-.game__grid div {
+.game__grid-cell {
   /* Width and height is set in the app.js */
   box-shadow: inset 0 0 1px #0f0;
   background-color: #330033;
+}
+
+.snake {
+  border-radius: 10px;
+  background-color: green;
 }
 
 .back-button {
