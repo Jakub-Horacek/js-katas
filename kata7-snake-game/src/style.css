@@ -19,7 +19,86 @@ body {
   border-radius: 50px;
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(2.5px);
+  -webkit-backdrop-filter: blur(2.5px);
   width: 70vw;
   height: 70vh;
   margin: auto;
+}
+
+h1 {
+  color: #fff;
+  font-size: 3rem;
+  text-align: center;
+  margin: 0;
+}
+
+h2 {
+  color: #fff;
+  font-size: 2rem;
+  text-align: center;
+  margin: 0;
+}
+
+.level-selector {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: auto;
+  height: 100%;
+  width: 60%;
+}
+
+.level-selector__buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.level-selector__buttons button {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  background-color: #fff;
+  color: #330033;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s;
+}
+
+.level-selector__buttons button:hover {
+  background-color: #330033;
+  color: #fff;
+}
+
+.game {
+  width: 60%;
+  height: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.back-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  border-radius: 50px;
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(2.5px);
+  -webkit-backdrop-filter: blur(2.5px);
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s;
 }
