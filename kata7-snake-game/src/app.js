@@ -4,9 +4,15 @@
  * @readonly
  */
 const LevelEnum = {
-  EASY: 1,
-  MEDIUM: 2,
-  HARD: 3,
+  SHORT: {
+    grid: { rows: 10, cols: 10 },
+  },
+  MEDIUM: {
+    grid: { rows: 15, cols: 15 },
+  },
+  LONG: {
+    grid: { rows: 30, cols: 30 },
+  },
 };
 
 /**
@@ -63,6 +69,32 @@ function Game(renderElement, level) {
   this.level = level;
 }
 
+Game.prototype.createGameGrid = function () {
+  const fragment = document.createDocumentFragment();
+  const gameGrid = document.createElement("div");
+  const gridWidth = 300;
+  const gridHeight = 300;
+  gameGrid.classList.add("game__grid");
+  gameGrid.style.width = `${gridWidth}px`;
+  gameGrid.style.height = `${gridHeight}px`;
+
+  for (let i = 0; i < this.level.grid.rows; i++) {
+    const row = document.createElement("div");
+    row.classList.add("game__grid-row");
+    for (let j = 0; j < this.level.grid.cols; j++) {
+      const cell = document.createElement("div");
+      cell.classList.add("game__grid-cell");
+      cell.style.width = `${gridWidth / this.level.grid.cols}px`;
+      cell.style.height = `${gridHeight / this.level.grid.rows}px`;
+      row.appendChild(cell);
+    }
+    gameGrid.appendChild(row);
+  }
+
+  fragment.appendChild(gameGrid);
+  return fragment;
+};
+
 Game.prototype.createGameScreen = function () {
   const fragment = document.createDocumentFragment();
   const gameElement = document.createElement("div");
@@ -71,6 +103,9 @@ Game.prototype.createGameScreen = function () {
   const gameTitle = document.createElement("h2");
   gameTitle.textContent = "Snake Game";
   gameElement.appendChild(gameTitle);
+
+  const gameGrid = this.createGameGrid();
+  gameElement.appendChild(gameGrid);
 
   fragment.appendChild(gameElement);
   return fragment;
