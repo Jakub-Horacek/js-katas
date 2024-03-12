@@ -67,8 +67,12 @@ App.prototype.startGame = function (level) {
 function Game(renderElement, level) {
   this.renderElement = renderElement;
   this.level = level;
-  this.snake = [{ x: 5, y: 5 }]; // Initial position of the snake
-  this.direction = "right"; // Initial direction of the snake
+  this.snake = [
+    { x: 5, y: 5 },
+    { x: 4, y: 5 },
+  ];
+  this.direction = "right";
+  this.snakeSpeed = 500; // 500
 }
 
 Game.prototype.createGameGrid = function () {
@@ -171,6 +175,12 @@ Game.prototype.moveSnake = function () {
       break;
   }
 
+  // Check if the new head position is outside the game grid
+  if (newHead.x < 0 || newHead.x >= this.level.grid.cols || newHead.y < 0 || newHead.y >= this.level.grid.rows) {
+    // TODO: Show a game over message
+    return; // Exit the function to stop the game
+  }
+
   this.snake.unshift(newHead);
   const tail = this.snake.pop();
   const gameGrid = this.renderElement.querySelector(".game__grid");
@@ -198,7 +208,7 @@ Game.prototype.setupKeyboardControls = function () {
 
   setInterval(() => {
     this.moveSnake();
-  }, 500); // Adjust the interval to control the speed of the snake
+  }, this.snakeSpeed); // Adjust the interval to control the speed of the snake
 };
 
 /**
