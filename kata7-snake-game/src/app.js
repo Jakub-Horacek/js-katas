@@ -67,6 +67,8 @@ App.prototype.startGame = function (level) {
 function Game(renderElement, level) {
   this.renderElement = renderElement;
   this.level = level;
+  this.snake = [{ x: 5, y: 5 }]; // Initial position of the snake
+  this.direction = "right"; // Initial direction of the snake
 }
 
 Game.prototype.createGameGrid = function () {
@@ -138,6 +140,65 @@ Game.prototype.showBackButton = function () {
 Game.prototype.start = function () {
   this.showGameScreen();
   this.showBackButton();
+  this.spawnSnake();
+  this.setupKeyboardControls();
+};
+
+Game.prototype.spawnSnake = function () {
+  const gameGrid = this.renderElement.querySelector(".game__grid");
+  this.snake.forEach((segment) => {
+    const cell = gameGrid.children[segment.y].children[segment.x];
+    cell.classList.add("snake");
+  });
+};
+
+Game.prototype.moveSnake = function () {
+  const head = this.snake[0];
+  let newHead = { x: head.x, y: head.y };
+
+  switch (this.direction) {
+    case "up":
+      newHead.y--;
+      break;
+    case "down":
+      newHead.y++;
+      break;
+    case "left":
+      newHead.x--;
+      break;
+    case "right":
+      newHead.x++;
+      break;
+  }
+
+  this.snake.unshift(newHead);
+  const tail = this.snake.pop();
+  const gameGrid = this.renderElement.querySelector(".game__grid");
+  gameGrid.children[tail.y].children[tail.x].classList.remove("snake");
+  gameGrid.children[newHead.y].children[newHead.x].classList.add("snake");
+};
+
+Game.prototype.setupKeyboardControls = function () {
+  document.addEventListener("keydown", (event) => {
+    switch (event.key) {
+      case "ArrowUp":
+        if (this.direction !== "down") this.direction = "up";
+        break;
+      case "ArrowDown":
+        if (this.direction !== "up") this.direction = "down";
+        break;
+      case "ArrowLeft":
+        if (this.direction !== "right") this.direction = "left";
+        break;
+      case "ArrowRight":
+        if (this.direction !== "left") this.direction = "right";
+        break;
+    }
+  });
+
+  setInterval(() => {
+    this.moveSnake();
+  }, 500); // Adjust the interval to control the speed of the snake
 };
 
 /**
