@@ -160,6 +160,7 @@ Game.prototype.moveSnake = function () {
   const head = this.snake[0];
   let newHead = { x: head.x, y: head.y };
 
+  // TODO: Fix buggy controls
   switch (this.direction) {
     case "up":
       newHead.y--;
