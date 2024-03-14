@@ -6,12 +6,37 @@
 const LevelEnum = {
   SHORT: {
     grid: { rows: 10, cols: 10 },
+    appleSpawnPoints: [
+      { x: 2, y: 2 },
+      { x: 2, y: 7 },
+      { x: 5, y: 2 },
+      { x: 7, y: 5 },
+    ],
   },
   MEDIUM: {
     grid: { rows: 15, cols: 15 },
+    appleSpawnPoints: [
+      { x: 2, y: 2 },
+      { x: 2, y: 10 },
+      { x: 1, y: 7 },
+      { x: 13, y: 4 },
+      { x: 12, y: 5 },
+      { x: 14, y: 12 },
+    ],
   },
   LONG: {
     grid: { rows: 30, cols: 30 },
+    appleSpawnPoints: [
+      { x: 2, y: 2 },
+      { x: 2, y: 27 },
+      { x: 20, y: 10 },
+      { x: 17, y: 22 },
+      { x: 25, y: 25 },
+      { x: 3, y: 4 },
+      { x: 28, y: 28 },
+      { x: 15, y: 15 },
+      { x: 10, y: 10 },
+    ],
   },
 };
 
