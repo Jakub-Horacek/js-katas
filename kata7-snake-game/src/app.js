@@ -94,7 +94,7 @@ function Game(renderElement, level) {
   this.level = level;
   this.snake = [
     { x: 5, y: 5 },
-    { x: 4, y: 5 },
+    { x: 5, y: 4 },
   ];
   this.direction = "right";
   this.snakeSpeed = 500; // 500
@@ -145,6 +145,10 @@ Game.prototype.createGameScreen = function () {
 
 Game.prototype.showGameScreen = function () {
   const fragment = this.createGameScreen();
+  this.pauseScreen = this.createPauseScreen();
+  this.gameOverScreen = this.createGameOverScreen();
+  this.renderElement.appendChild(this.pauseScreen);
+  this.renderElement.appendChild(this.gameOverScreen);
   this.renderElement.appendChild(fragment);
 };
 
@@ -162,17 +166,95 @@ Game.prototype.createBackButton = function () {
   return fragment;
 };
 
+Game.prototype.createPauseButton = function () {
+  const fragment = document.createDocumentFragment();
+  const button = document.createElement("button");
+  button.classList.add("pause-button");
+  button.textContent = "Pause";
+  button.addEventListener("click", () => {
+    this.showPauseScreen();
+    clearInterval(this.gameLoop); // Pause the game loop
+  });
+  fragment.appendChild(button);
+  return fragment;
+};
+
 Game.prototype.showBackButton = function () {
   const fragment = this.createBackButton();
   this.renderElement.appendChild(fragment);
 };
 
+Game.prototype.showPauseButton = function () {
+  const fragment = this.createPauseButton();
+  this.renderElement.appendChild(fragment);
+};
+
+Game.prototype.hidePauseButton = function () {
+  this.renderElement.removeChild(this.renderElement.querySelector(".pause-button"));
+};
+
+Game.prototype.createPauseScreen = function () {
+  const pauseScreen = document.createElement("div");
+  pauseScreen.classList.add("pause-screen", "hidden");
+
+  const pauseScreenTitle = document.createElement("h2");
+  pauseScreenTitle.textContent = "Game Paused";
+  pauseScreen.appendChild(pauseScreenTitle);
+
+  const playButton = document.createElement("button");
+  playButton.classList.add("play-button");
+  playButton.textContent = "Play";
+  playButton.addEventListener("click", () => {
+    this.hidePauseScreen();
+    this.setupGameLoop(); // Resume the game loop
+  });
+  pauseScreen.appendChild(playButton);
+
+  return pauseScreen;
+};
+
+Game.prototype.setupGameLoop = function () {
+  this.gameLoop = setInterval(() => {
+    this.moveSnake();
+  }, this.snakeSpeed);
+};
+
+Game.prototype.createGameOverScreen = function () {
+  const gameOverScreen = document.createElement("div");
+  gameOverScreen.classList.add("game-over-screen", "hidden");
+
+  const gameOverTitle = document.createElement("h2");
+  gameOverTitle.textContent = "Game Over";
+  gameOverScreen.appendChild(gameOverTitle);
+
+  return gameOverScreen;
+};
+
+Game.prototype.showPauseScreen = function () {
+  this.pauseScreen.classList.remove("hidden");
+};
+
+Game.prototype.hidePauseScreen = function () {
+  this.pauseScreen.classList.add("hidden");
+};
+
+Game.prototype.showGameOverScreen = function () {
+  this.hidePauseButton();
+  this.gameOverScreen.classList.remove("hidden");
+};
+
+Game.prototype.hideGameOverScreen = function () {
+  this.gameOverScreen.classList.add("hidden");
+};
+
 Game.prototype.start = function () {
   this.showGameScreen();
   this.showBackButton();
+  this.showPauseButton();
   this.spawnSnake();
   this.spawnApple();
   this.setupKeyboardControls();
+  this.createGameOverScreen();
 };
 
 Game.prototype.spawnSnake = function () {
@@ -221,8 +303,9 @@ Game.prototype.moveSnake = function () {
 
   // Check if the new head position is outside the game grid
   if (newHead.x < 0 || newHead.x >= this.level.grid.cols || newHead.y < 0 || newHead.y >= this.level.grid.rows) {
-    // TODO: Show a game over message
-    return; // Exit the function to stop the game
+    clearInterval(this.gameLoop);
+    this.showGameOverScreen();
+    return;
   }
 
   // Check if the new head position collides with an apple
@@ -253,8 +336,9 @@ Game.prototype.moveSnake = function () {
   const isSnakeCollided = this.snake.slice(1).some((segment) => segment.x === newHead.x && segment.y === newHead.y);
 
   if (isSnakeCollided) {
-    // TODO: Show a game over message
-    return; // Exit the function to stop the game
+    clearInterval(this.gameLoop);
+    this.showGameOverScreen();
+    return;
   }
 
   // Update the appearance of the snake on the game grid
@@ -279,9 +363,7 @@ Game.prototype.setupKeyboardControls = function () {
     }
   });
 
-  setInterval(() => {
-    this.moveSnake();
-  }, this.snakeSpeed); // Adjust the interval to control the speed of the snake
+  this.setupGameLoop();
 };
 
 /**
