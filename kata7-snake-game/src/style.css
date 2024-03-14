@@ -105,6 +105,11 @@ h2 {
   background-color: green;
 }
 
+.apple {
+  border-radius: 10px;
+  background-color: red;
+}
+
 .back-button {
   margin-top: 10px;
   padding: 10px 20px;

@@ -7,7 +7,7 @@ const LevelEnum = {
   SHORT: {
     grid: { rows: 10, cols: 10 },
     appleSpawnPoints: [
-      { x: 2, y: 2 },
+      { x: 5, y: 4 },
       { x: 2, y: 7 },
       { x: 5, y: 2 },
       { x: 7, y: 5 },
@@ -16,7 +16,7 @@ const LevelEnum = {
   MEDIUM: {
     grid: { rows: 15, cols: 15 },
     appleSpawnPoints: [
-      { x: 2, y: 2 },
+      { x: 3, y: 6 },
       { x: 2, y: 10 },
       { x: 1, y: 7 },
       { x: 13, y: 4 },
@@ -27,7 +27,7 @@ const LevelEnum = {
   LONG: {
     grid: { rows: 30, cols: 30 },
     appleSpawnPoints: [
-      { x: 2, y: 2 },
+      { x: 8, y: 14 },
       { x: 2, y: 27 },
       { x: 20, y: 10 },
       { x: 17, y: 22 },
@@ -98,6 +98,7 @@ function Game(renderElement, level) {
   ];
   this.direction = "right";
   this.snakeSpeed = 500; // 500
+  this.appleSpawnIndex = 0; // Initialize apple spawn point index
 }
 
 Game.prototype.createGameGrid = function () {
@@ -170,6 +171,7 @@ Game.prototype.start = function () {
   this.showGameScreen();
   this.showBackButton();
   this.spawnSnake();
+  this.spawnApple();
   this.setupKeyboardControls();
 };
 
@@ -181,11 +183,27 @@ Game.prototype.spawnSnake = function () {
   });
 };
 
+Game.prototype.spawnApple = function () {
+  const gameGrid = this.renderElement.querySelector(".game__grid");
+  const appleSpawnPoint = this.level.appleSpawnPoints[this.appleSpawnIndex];
+
+  // Check if the apple spawn point is not occupied by the snake
+  const isAppleSpawnPointValid = !this.snake.some((segment) => segment.x === appleSpawnPoint.x && segment.y === appleSpawnPoint.y);
+
+  if (isAppleSpawnPointValid) {
+    const cell = gameGrid.children[appleSpawnPoint.y].children[appleSpawnPoint.x];
+    cell.classList.add("apple");
+  } else {
+    // If the spawn point is occupied, move to the next spawn point
+    this.appleSpawnIndex = (this.appleSpawnIndex + 1) % this.level.appleSpawnPoints.length;
+    this.spawnApple(); // Recursively try to spawn the apple at the next spawn point
+  }
+};
+
 Game.prototype.moveSnake = function () {
   const head = this.snake[0];
   let newHead = { x: head.x, y: head.y };
 
-  // TODO: Fix buggy controls
   switch (this.direction) {
     case "up":
       newHead.x--;
@@ -207,10 +225,39 @@ Game.prototype.moveSnake = function () {
     return; // Exit the function to stop the game
   }
 
-  this.snake.unshift(newHead);
-  const tail = this.snake.pop();
+  // Check if the new head position collides with an apple
   const gameGrid = this.renderElement.querySelector(".game__grid");
-  gameGrid.children[tail.y].children[tail.x].classList.remove("snake");
+  const cell = gameGrid.children[newHead.y].children[newHead.x];
+  const hasApple = cell.classList.contains("apple");
+
+  if (hasApple) {
+    // Remove the apple
+    cell.classList.remove("apple");
+
+    // Increase the length of the snake
+    this.snake.unshift(newHead);
+
+    // Spawn a new apple at the next spawn point
+    this.appleSpawnIndex = (this.appleSpawnIndex + 1) % this.level.appleSpawnPoints.length;
+    this.spawnApple();
+  } else {
+    // Normal movement of the snake
+    this.snake.unshift(newHead);
+
+    // Remove the tail only if the snake doesn't eat an apple
+    const tail = this.snake.pop();
+    gameGrid.children[tail.y].children[tail.x].classList.remove("snake");
+  }
+
+  // Check for snake collision with itself
+  const isSnakeCollided = this.snake.slice(1).some((segment) => segment.x === newHead.x && segment.y === newHead.y);
+
+  if (isSnakeCollided) {
+    // TODO: Show a game over message
+    return; // Exit the function to stop the game
+  }
+
+  // Update the appearance of the snake on the game grid
   gameGrid.children[newHead.y].children[newHead.x].classList.add("snake");
 };
 
