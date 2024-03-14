@@ -12,6 +12,7 @@ const LevelEnum = {
       { x: 5, y: 2 },
       { x: 7, y: 5 },
     ],
+    snakeSpeed: 500,
   },
   MEDIUM: {
     grid: { rows: 15, cols: 15 },
@@ -23,6 +24,7 @@ const LevelEnum = {
       { x: 12, y: 5 },
       { x: 14, y: 12 },
     ],
+    snakeSpeed: 400,
   },
   LONG: {
     grid: { rows: 30, cols: 30 },
@@ -37,6 +39,7 @@ const LevelEnum = {
       { x: 15, y: 15 },
       { x: 10, y: 10 },
     ],
+    snakeSpeed: 200,
   },
 };
 
@@ -97,7 +100,7 @@ function Game(renderElement, level) {
     { x: 5, y: 4 },
   ];
   this.direction = "right";
-  this.snakeSpeed = 500; // 500
+  this.snakeSpeed = level.snakeSpeed;
   this.appleSpawnIndex = 0; // Initialize apple spawn point index
 }
 
