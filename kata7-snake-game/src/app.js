@@ -163,16 +163,16 @@ Game.prototype.moveSnake = function () {
   // TODO: Fix buggy controls
   switch (this.direction) {
     case "up":
-      newHead.y--;
-      break;
-    case "down":
-      newHead.y++;
-      break;
-    case "left":
       newHead.x--;
       break;
-    case "right":
+    case "down":
       newHead.x++;
+      break;
+    case "left":
+      newHead.y--;
+      break;
+    case "right":
+      newHead.y++;
       break;
   }
 
@@ -193,16 +193,16 @@ Game.prototype.setupKeyboardControls = function () {
   document.addEventListener("keydown", (event) => {
     switch (event.key) {
       case "ArrowUp":
-        if (this.direction !== "down") this.direction = "up";
+        this.direction = "up";
         break;
       case "ArrowDown":
-        if (this.direction !== "up") this.direction = "down";
+        this.direction = "down";
         break;
       case "ArrowLeft":
-        if (this.direction !== "right") this.direction = "left";
+        this.direction = "left";
         break;
       case "ArrowRight":
-        if (this.direction !== "left") this.direction = "right";
+        this.direction = "right";
         break;
     }
   });
