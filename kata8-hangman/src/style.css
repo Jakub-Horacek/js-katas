@@ -72,6 +72,11 @@ h2 {
 h3 {
   color: var(--text-third-color);
   text-wrap: balance;
+  margin: 0;
+}
+
+p {
+  margin: 0;
 }
 
 .container {
@@ -80,7 +85,7 @@ h3 {
   justify-content: center;
   align-items: center;
   border-radius: var(--radius);
-  gap: var(--gap);
+  gap: calc(var(--gap) * 2);
   height: var(--container-height);
   width: var(--container-width);
   background-color: var(--secondary-color);
@@ -108,4 +113,27 @@ h3 {
   color: var(--text-third-color);
   cursor: pointer;
   font-size: large;
+}
+
+.rule {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--gap);
+  background-color: transparent;
+  padding: var(--gap);
+  border-radius: var(--radius);
+  transition: all 0.4s ease;
+}
+
+body:has(#game-mode-1:hover) #rule-1 {
+  background-color: var(--primary-color);
+}
+
+body:has(#game-mode-2:hover) #rule-2 {
+  background-color: var(--primary-color);
+}
+
+#words-difficulty-selector-rules {
+  margin-bottom: calc(var(--gap) * 2);
 }

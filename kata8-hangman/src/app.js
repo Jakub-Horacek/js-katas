@@ -51,22 +51,28 @@ App.prototype.createGameModeSelector = function () {
     const button = document.createElement("button");
     button.textContent = GameModeEnum[gameMode].name;
     button.dataset.gameMode = GameModeEnum[gameMode].code;
+    button.id = `game-mode-${GameModeEnum[gameMode].code}`;
     button.addEventListener("click", this.handleGameModeSelection.bind(this));
     gameModeSelectorButtons.appendChild(button);
   }
   gameModeSelectorDiv.appendChild(gameModeSelectorButtons);
 
   const gameModeSelectorRules = document.createElement("div");
+  gameModeSelectorRules.classList.add("container__rules");
   const gameModeSelectorRulesTitle = document.createElement("h2");
   gameModeSelectorRulesTitle.textContent = "Rules";
   gameModeSelectorRules.appendChild(gameModeSelectorRulesTitle);
   for (const gameMode in GameModeEnum) {
+    const rule = document.createElement("div");
+    rule.classList.add("rule");
+    rule.id = `rule-${GameModeEnum[gameMode].code}`;
     const ruleName = document.createElement("h3");
     ruleName.textContent = GameModeEnum[gameMode].name;
+    rule.appendChild(ruleName);
     const ruleText = document.createElement("p");
     ruleText.textContent = GameModeEnum[gameMode].rules;
-    gameModeSelectorRules.appendChild(ruleName);
-    gameModeSelectorRules.appendChild(ruleText);
+    rule.appendChild(ruleText);
+    gameModeSelectorRules.appendChild(rule);
   }
   gameModeSelectorDiv.appendChild(gameModeSelectorRules);
 
@@ -127,16 +133,22 @@ App.prototype.createWordsDifficultySelector = function () {
   wordsDifficultySelectorDiv.appendChild(dropdowns);
 
   const wordsDifficultySelectorRules = document.createElement("div");
+  wordsDifficultySelectorRules.classList.add("container__rules");
+  wordsDifficultySelectorRules.id = "words-difficulty-selector-rules";
   const wordsDifficultySelectorRulesTitle = document.createElement("h2");
   wordsDifficultySelectorRulesTitle.textContent = "Rules";
   wordsDifficultySelectorRules.appendChild(wordsDifficultySelectorRulesTitle);
   for (const wordsDifficulty in WordsDifficultyEnum) {
+    const rule = document.createElement("div");
+    rule.classList.add("rule");
+    rule.id = `rule-${WordsDifficultyEnum[wordsDifficulty].code}`;
     const ruleName = document.createElement("h3");
     ruleName.textContent = WordsDifficultyEnum[wordsDifficulty].name;
+    rule.appendChild(ruleName);
     const ruleText = document.createElement("p");
     ruleText.textContent = WordsDifficultyEnum[wordsDifficulty].rules;
-    wordsDifficultySelectorRules.appendChild(ruleName);
-    wordsDifficultySelectorRules.appendChild(ruleText);
+    rule.appendChild(ruleText);
+    wordsDifficultySelectorRules.appendChild(rule);
   }
   wordsDifficultySelectorDiv.appendChild(wordsDifficultySelectorRules);
 
