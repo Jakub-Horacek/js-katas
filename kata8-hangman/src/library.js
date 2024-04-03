@@ -1,3 +1,11 @@
+/**
+ * Czech word list
+ * @type {Object}
+ * @property {string[]} easy - Easy words
+ * @property {string[]} medium - Medium words
+ * @property {string[]} hard - Hard words
+ * @readonly
+ */
 const czechWords = {
   easy: [
     "pes",
@@ -140,6 +148,14 @@ const czechWords = {
   ],
 };
 
+/**
+ * English word list
+ * @type {Object}
+ * @property {string[]} easy - Easy words
+ * @property {string[]} medium - Medium words
+ * @property {string[]} hard - Hard words
+ * @readonly
+ */
 const englishWords = {
   easy: [
     "cat",
@@ -305,6 +321,12 @@ const englishWords = {
   ],
 };
 
+/**
+ * Get random word
+ * @param {string} difficulty
+ * @param {string} language
+ * @returns {string}
+ */
 export const getRandomWord = (difficulty, language) => {
   const words = language === "czech" ? czechWords : englishWords;
   const wordsByDifficulty = words[difficulty];

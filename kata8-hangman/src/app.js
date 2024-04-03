@@ -1,6 +1,7 @@
 /**
  * Game mode enum
  * @enum {Object}
+ * @readonly
  */
 const GameModeEnum = {
   AGAINST_PC: { code: 1, name: "Player vs PC", rules: "You have to guess the word that the computer has chosen" },
@@ -10,6 +11,7 @@ const GameModeEnum = {
 /**
  * Words difficulty enum
  * @enum {Object}
+ * @readonly
  */
 const WordsDifficultyEnum = {
   EASY: { code: 1, name: "easy", rules: "Common nouns that are easy to guess and are not too long", emoji: "🥺" },
@@ -17,6 +19,11 @@ const WordsDifficultyEnum = {
   HARD: { code: 3, name: "hard", rules: "Common words that do not have to be nouns and are long and hard to guess", emoji: "😱" },
 };
 
+/**
+ * Words language enum
+ * @enum {Object}
+ * @readonly
+ */
 const WordsLanguageEnum = {
   CZECH: { code: "cs", name: "czech", emoji: "🇨🇿" },
   ENGLISH: { code: "en", name: "english", emoji: "🇺🇸" },
@@ -31,10 +38,19 @@ function App(renderElement) {
   this.renderElement = renderElement;
 }
 
+/**
+ * Clear render element
+ * @method
+ */
 App.prototype.clearRenderElement = function () {
   this.renderElement.innerHTML = "";
 };
 
+/**
+ * Create game mode selector
+ * @method
+ * @returns {DocumentFragment}
+ */
 App.prototype.createGameModeSelector = function () {
   const fragment = document.createDocumentFragment();
   const gameModeSelectorDiv = document.createElement("div");
@@ -80,12 +96,21 @@ App.prototype.createGameModeSelector = function () {
   return fragment;
 };
 
+/**
+ * Show game mode selector
+ * @method
+ */
 App.prototype.showGameModeSelector = function () {
   this.clearRenderElement();
   const fragment = this.createGameModeSelector();
   this.renderElement.appendChild(fragment);
 };
 
+/**
+ * Handle game mode selection
+ * @method
+ * @param {Event} event
+ */
 App.prototype.handleGameModeSelection = function (event) {
   if (event.target.dataset.gameMode == GameModeEnum.AGAINST_PC.code) {
     this.showWordsDifficultySelector();
@@ -95,6 +120,11 @@ App.prototype.handleGameModeSelection = function (event) {
   }
 };
 
+/**
+ * Create words difficulty selector
+ * @method
+ * @returns {DocumentFragment}
+ */
 App.prototype.createWordsDifficultySelector = function () {
   const fragment = document.createDocumentFragment();
   const wordsDifficultySelectorDiv = document.createElement("div");
@@ -171,12 +201,21 @@ App.prototype.createWordsDifficultySelector = function () {
   return fragment;
 };
 
+/**
+ * Show words difficulty selector
+ * @method
+ */
 App.prototype.showWordsDifficultySelector = function () {
   this.clearRenderElement();
   const fragment = this.createWordsDifficultySelector();
   this.renderElement.appendChild(fragment);
 };
 
+/**
+ * Handle words difficulty selection
+ * @method
+ * @param {Event} event
+ */
 App.prototype.handleWordsDifficultySelection = function (event) {
   this.selectedLanguage = document.getElementById("words-language-dropdown").value;
   this.selectedDifficulty = document.getElementById("words-difficulty-dropdown").value;
