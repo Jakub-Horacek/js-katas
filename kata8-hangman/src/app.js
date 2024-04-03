@@ -12,14 +12,14 @@ const GameModeEnum = {
  * @enum {Object}
  */
 const WordsDifficultyEnum = {
-  EASY: { code: 1, name: "easy", rules: "Common nouns that are easy to guess and are not too long" },
-  MEDIUM: { code: 2, name: "medium", rules: "Common nouns that are a bit longer and harder to guess" },
-  HARD: { code: 3, name: "hard", rules: "Common words that do not have to be nouns and are long and hard to guess" },
+  EASY: { code: 1, name: "easy", rules: "Common nouns that are easy to guess and are not too long", emoji: "🥺" },
+  MEDIUM: { code: 2, name: "medium", rules: "Common nouns that are a bit longer and harder to guess", emoji: "😎" },
+  HARD: { code: 3, name: "hard", rules: "Common words that do not have to be nouns and are long and hard to guess", emoji: "😱" },
 };
 
 const WordsLanguageEnum = {
-  CZECH: 1,
-  ENGLISH: 2,
+  CZECH: { code: "cs", name: "czech", emoji: "🇨🇿" },
+  ENGLISH: { code: "en", name: "english", emoji: "🇺🇸" },
 };
 
 /**
@@ -114,7 +114,7 @@ App.prototype.createWordsDifficultySelector = function () {
   for (const wordsDifficulty in WordsDifficultyEnum) {
     const option = document.createElement("option");
     option.value = WordsDifficultyEnum[wordsDifficulty].code;
-    option.textContent = WordsDifficultyEnum[wordsDifficulty].name;
+    option.textContent = `${WordsDifficultyEnum[wordsDifficulty].name} ${WordsDifficultyEnum[wordsDifficulty].emoji}`;
     wordsDifficultyDropdown.appendChild(option);
   }
   dropdowns.appendChild(wordsDifficultyDropdown);
@@ -124,8 +124,8 @@ App.prototype.createWordsDifficultySelector = function () {
   wordsLanguageDropdown.classList.add("container__dropdown");
   for (const wordsLanguage in WordsLanguageEnum) {
     const option = document.createElement("option");
-    option.value = WordsLanguageEnum[wordsLanguage];
-    option.textContent = wordsLanguage.toLowerCase();
+    option.value = WordsLanguageEnum[wordsLanguage].code;
+    option.textContent = `${WordsLanguageEnum[wordsLanguage].name} ${WordsLanguageEnum[wordsLanguage].emoji}`;
     wordsLanguageDropdown.appendChild(option);
   }
   dropdowns.appendChild(wordsLanguageDropdown);
@@ -136,14 +136,14 @@ App.prototype.createWordsDifficultySelector = function () {
   wordsDifficultySelectorRules.classList.add("container__rules");
   wordsDifficultySelectorRules.id = "words-difficulty-selector-rules";
   const wordsDifficultySelectorRulesTitle = document.createElement("h2");
-  wordsDifficultySelectorRulesTitle.textContent = "Rules";
+  wordsDifficultySelectorRulesTitle.textContent = "Difficulties";
   wordsDifficultySelectorRules.appendChild(wordsDifficultySelectorRulesTitle);
   for (const wordsDifficulty in WordsDifficultyEnum) {
     const rule = document.createElement("div");
     rule.classList.add("rule");
     rule.id = `rule-${WordsDifficultyEnum[wordsDifficulty].code}`;
     const ruleName = document.createElement("h3");
-    ruleName.textContent = WordsDifficultyEnum[wordsDifficulty].name;
+    ruleName.textContent = `${WordsDifficultyEnum[wordsDifficulty].name} ${WordsDifficultyEnum[wordsDifficulty].emoji}`;
     rule.appendChild(ruleName);
     const ruleText = document.createElement("p");
     ruleText.textContent = WordsDifficultyEnum[wordsDifficulty].rules;
