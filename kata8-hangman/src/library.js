@@ -328,8 +328,26 @@ const englishWords = {
  * @returns {string}
  */
 export const getRandomWord = (difficulty, language) => {
-  const words = language === "czech" ? czechWords : englishWords;
-  const wordsByDifficulty = words[difficulty];
-  const randomIndex = Math.floor(Math.random() * wordsByDifficulty.length);
-  return wordsByDifficulty[randomIndex];
+  let wordList;
+  if (language === "cs") {
+    wordList = czechWords;
+  } else if (language === "en") {
+    wordList = englishWords;
+  } else {
+    throw new Error("Invalid language");
+  }
+
+  let words;
+  if (difficulty == 1) {
+    words = wordList.easy;
+  } else if (difficulty == 2) {
+    words = wordList.medium;
+  } else if (difficulty == 3) {
+    words = wordList.hard;
+  } else {
+    throw new Error("Invalid difficulty");
+  }
+
+  const randomIndex = Math.floor(Math.random() * words.length);
+  return words[randomIndex];
 };

@@ -11,6 +11,7 @@
 
   --gap: 10px;
   --radius: 0.6em;
+  --radius-sharp: 5px;
 }
 
 body {
@@ -115,6 +116,20 @@ p {
   font-size: large;
 }
 
+.container__wrapper--vertical {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.container__wrapper--horizontal {
+  display: flex;
+  flex-direction: row;
+  gap: calc(var(--gap) * 2);
+}
+
 .rule {
   display: flex;
   flex-direction: column;
@@ -136,4 +151,42 @@ body:has(#game-mode-2:hover) #rule-2 {
 
 #words-difficulty-selector-rules {
   margin-bottom: calc(var(--gap) * 2);
+}
+
+#game-screen-hangman-images {
+  height: 300px;
+  width: 225px;
+  padding: var(--gap);
+  position: relative;
+  border-radius: var(--radius);
+  border: 2px solid var(--text-first-color);
+  background: linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, 0.1) 100%);
+  box-shadow: inset 0 0 10px rgba(27, 253, 156, 0.4), 0 0 9px 3px rgba(27, 253, 156, 0.1);
+}
+
+.hangman-image {
+  position: absolute;
+  object-fit: cover;
+  /* display: none; */
+}
+
+#game-screen-word {
+  display: flex;
+  justify-content: center;
+  gap: calc(var(--gap) / 2);
+}
+
+.char,
+#game-screen-input {
+  padding: var(--gap);
+  background: var(--primary-color);
+  border-radius: var(--radius-sharp);
+  font-size: large;
+  border: none;
+  border-bottom: var(--text-third-color) 1px solid;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  width: 10px;
+  color: var(--text-third-color);
+  text-align: center;
 }

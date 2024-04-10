@@ -1,3 +1,5 @@
+import { getRandomWord } from "./library.js";
+
 /**
  * Game mode enum
  * @enum {Object}
@@ -34,8 +36,9 @@ const WordsLanguageEnum = {
  * @constructor
  * @param {*} renderElement
  */
-function App(renderElement) {
+function App(renderElement, hangmanImages) {
   this.renderElement = renderElement;
+  this.hangmanImages = hangmanImages;
 }
 
 /**
@@ -211,23 +214,104 @@ App.prototype.showWordsDifficultySelector = function () {
   this.renderElement.appendChild(fragment);
 };
 
+App.prototype.createGameScreen = function (word) {
+  const fragment = document.createDocumentFragment();
+  const gameScreenDiv = document.createElement("div");
+  gameScreenDiv.id = "game-screen";
+  gameScreenDiv.classList.add("container");
+
+  const gameScreenTitle = document.createElement("h1");
+  gameScreenTitle.textContent = "Hangman";
+  gameScreenDiv.appendChild(gameScreenTitle);
+
+  const gameScreenWrapper = document.createElement("div");
+  gameScreenWrapper.classList.add("container__wrapper--horizontal");
+
+  const gameScreenHangmanImagesDiv = document.createElement("div");
+  gameScreenHangmanImagesDiv.id = "game-screen-hangman-images";
+
+  for (let i = 1; i <= Object.keys(this.hangmanImages).length; i++) {
+    const gameScreenHangmanImage = document.createElement("img");
+    gameScreenHangmanImage.src = this.hangmanImages[i];
+    gameScreenHangmanImage.id = `game-screen-hangman-image-${i}`;
+    gameScreenHangmanImage.classList.add("hangman-image");
+    gameScreenHangmanImage.style.zIndex = i;
+    gameScreenHangmanImagesDiv.appendChild(gameScreenHangmanImage);
+  }
+  gameScreenWrapper.appendChild(gameScreenHangmanImagesDiv);
+
+  const gameScreenGuessArea = document.createElement("div");
+  gameScreenGuessArea.classList.add("container__wrapper--vertical");
+
+  const gameScreenWord = document.createElement("div");
+  gameScreenWord.id = "game-screen-word";
+  for (let i = 0; i < word.length; i++) {
+    const charDiv = document.createElement("div");
+    charDiv.classList.add("char");
+    charDiv.textContent = word[i];
+    gameScreenWord.appendChild(charDiv);
+  }
+  gameScreenGuessArea.appendChild(gameScreenWord);
+
+  const gameScreenInput = document.createElement("input");
+  gameScreenInput.id = "game-screen-input";
+  gameScreenInput.type = "text";
+  gameScreenInput.maxLength = 1;
+  gameScreenGuessArea.appendChild(gameScreenInput);
+
+  const gameScreenButton = document.createElement("button");
+  gameScreenButton.id = "game-screen-button";
+  gameScreenButton.textContent = "Guess";
+  gameScreenButton.addEventListener("click", this.handleGuess.bind(this));
+  gameScreenGuessArea.appendChild(gameScreenButton);
+
+  gameScreenWrapper.appendChild(gameScreenGuessArea);
+  gameScreenDiv.appendChild(gameScreenWrapper);
+  fragment.appendChild(gameScreenDiv);
+  return fragment;
+};
+
+App.prototype.showGameScreen = function (word) {
+  this.clearRenderElement();
+  const fragment = this.createGameScreen(word);
+  this.renderElement.appendChild(fragment);
+};
+
+App.prototype.handleGuess = function (event) {
+  console.log(event);
+};
+
 /**
  * Handle words difficulty selection
  * @method
  * @param {Event} event
  */
-App.prototype.handleWordsDifficultySelection = function (event) {
+App.prototype.handleWordsDifficultySelection = function (_event) {
   this.selectedLanguage = document.getElementById("words-language-dropdown").value;
   this.selectedDifficulty = document.getElementById("words-difficulty-dropdown").value;
-  console.log(this.selectedLanguage);
-  console.log(this.selectedDifficulty);
-  // this.showGameScreen();
+
+  const word = getRandomWord(this.selectedDifficulty, this.selectedLanguage);
+  this.showGameScreen(word);
 };
 
 /**
  * DOMContentLoaded event listener
  */
 document.addEventListener("DOMContentLoaded", () => {
-  const app = new App(document.getElementById("app"));
+  const appElement = document.getElementById("app");
+  const hangmanImages = {
+    1: "./images/hangman/stage_1.svg",
+    2: "./images/hangman/stage_2.svg",
+    3: "./images/hangman/stage_3.svg",
+    4: "./images/hangman/stage_4.svg",
+    5: "./images/hangman/stage_5.svg",
+    6: "./images/hangman/stage_6.svg",
+    7: "./images/hangman/stage_7.svg",
+    8: "./images/hangman/stage_8.svg",
+    9: "./images/hangman/stage_9.svg",
+    10: "./images/hangman/stage_10_alt.svg",
+  };
+
+  const app = new App(appElement, hangmanImages);
   app.showGameModeSelector();
 });
