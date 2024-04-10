@@ -35,6 +35,7 @@ const WordsLanguageEnum = {
  * App
  * @constructor
  * @param {*} renderElement
+ * @param {*} hangmanImages
  */
 function App(renderElement, hangmanImages) {
   this.renderElement = renderElement;
@@ -214,6 +215,12 @@ App.prototype.showWordsDifficultySelector = function () {
   this.renderElement.appendChild(fragment);
 };
 
+/**
+ * Create game screen
+ * @method
+ * @param {string} word
+ * @returns {DocumentFragment}
+ */
 App.prototype.createGameScreen = function (word) {
   const fragment = document.createDocumentFragment();
   const gameScreenDiv = document.createElement("div");
@@ -296,12 +303,22 @@ App.prototype.createGameScreen = function (word) {
   return fragment;
 };
 
+/**
+ * Show game screen
+ * @method
+ * @param {string} word
+ */
 App.prototype.showGameScreen = function (word) {
   this.clearRenderElement();
   const fragment = this.createGameScreen(word);
   this.renderElement.appendChild(fragment);
 };
 
+/**
+ * Handle guess
+ * @method
+ * @param {Event} event
+ */
 App.prototype.handleGuess = function (event) {
   console.log(event);
 };
