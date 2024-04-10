@@ -120,7 +120,7 @@ p {
   display: flex;
   flex-direction: column;
   gap: var(--gap);
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
 }
 
@@ -151,6 +151,19 @@ body:has(#game-mode-2:hover) #rule-2 {
 
 #words-difficulty-selector-rules {
   margin-bottom: calc(var(--gap) * 2);
+}
+
+#used-chars {
+  background: var(--primary-color);
+  padding: var(--gap);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+#used-chars h2 {
+  margin: 0;
 }
 
 #game-screen-hangman-images {

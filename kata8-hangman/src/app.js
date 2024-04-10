@@ -224,6 +224,20 @@ App.prototype.createGameScreen = function (word) {
   gameScreenTitle.textContent = "Hangman";
   gameScreenDiv.appendChild(gameScreenTitle);
 
+  const usedChars = document.createElement("div");
+  usedChars.id = "used-chars";
+
+  const usedCharsTitle = document.createElement("h2");
+  usedCharsTitle.textContent = "Used letters:";
+  usedChars.appendChild(usedCharsTitle);
+  const usedCharsList = document.createElement("div");
+  usedCharsList.id = "used-chars-list";
+  // TODO: add used chars
+  usedCharsList.textContent = "A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y";
+  usedChars.appendChild(usedCharsList);
+
+  gameScreenDiv.appendChild(usedChars);
+
   const gameScreenWrapper = document.createElement("div");
   gameScreenWrapper.classList.add("container__wrapper--horizontal");
 
@@ -259,11 +273,22 @@ App.prototype.createGameScreen = function (word) {
   gameScreenInput.maxLength = 1;
   gameScreenGuessArea.appendChild(gameScreenInput);
 
+  const gameScreenButtons = document.createElement("div");
+  gameScreenButtons.classList.add("container__buttons");
+
+  const gameScreenBackButton = document.createElement("button");
+  gameScreenBackButton.id = "game-screen-back-button";
+  gameScreenBackButton.textContent = "Back";
+  gameScreenBackButton.addEventListener("click", this.showWordsDifficultySelector.bind(this));
+  gameScreenButtons.appendChild(gameScreenBackButton);
+
   const gameScreenButton = document.createElement("button");
   gameScreenButton.id = "game-screen-button";
   gameScreenButton.textContent = "Guess";
   gameScreenButton.addEventListener("click", this.handleGuess.bind(this));
-  gameScreenGuessArea.appendChild(gameScreenButton);
+  gameScreenButtons.appendChild(gameScreenButton);
+
+  gameScreenGuessArea.appendChild(gameScreenButtons);
 
   gameScreenWrapper.appendChild(gameScreenGuessArea);
   gameScreenDiv.appendChild(gameScreenWrapper);
