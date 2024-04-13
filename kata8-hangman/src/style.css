@@ -199,7 +199,24 @@ body:has(#game-mode-2:hover) #rule-2 {
   border-bottom: var(--text-third-color) 1px solid;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  width: 10px;
+  width: 12px;
+  height: 20px;
   color: var(--text-third-color);
   text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+#game-over {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
 }

@@ -239,8 +239,6 @@ App.prototype.createGameScreen = function (word) {
   usedChars.appendChild(usedCharsTitle);
   const usedCharsList = document.createElement("div");
   usedCharsList.id = "used-chars-list";
-  // TODO: add used chars
-  usedCharsList.textContent = "A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y";
   usedChars.appendChild(usedCharsList);
 
   gameScreenDiv.appendChild(usedChars);
@@ -251,12 +249,13 @@ App.prototype.createGameScreen = function (word) {
   const gameScreenHangmanImagesDiv = document.createElement("div");
   gameScreenHangmanImagesDiv.id = "game-screen-hangman-images";
 
+  console.log(word);
+
   for (let i = 1; i <= Object.keys(this.hangmanImages).length; i++) {
     const gameScreenHangmanImage = document.createElement("img");
     gameScreenHangmanImage.src = this.hangmanImages[i];
     gameScreenHangmanImage.id = `game-screen-hangman-image-${i}`;
-    gameScreenHangmanImage.classList.add("hangman-image");
-    gameScreenHangmanImage.style.zIndex = i;
+    gameScreenHangmanImage.classList.add("hangman-image", "hidden");
     gameScreenHangmanImagesDiv.appendChild(gameScreenHangmanImage);
   }
   gameScreenWrapper.appendChild(gameScreenHangmanImagesDiv);
@@ -269,7 +268,10 @@ App.prototype.createGameScreen = function (word) {
   for (let i = 0; i < word.length; i++) {
     const charDiv = document.createElement("div");
     charDiv.classList.add("char");
-    charDiv.textContent = word[i];
+    const char = document.createElement("span");
+    char.classList.add("hidden");
+    char.textContent = word[i];
+    charDiv.appendChild(char);
     gameScreenWord.appendChild(charDiv);
   }
   gameScreenGuessArea.appendChild(gameScreenWord);
@@ -303,6 +305,93 @@ App.prototype.createGameScreen = function (word) {
   return fragment;
 };
 
+App.prototype.handleGuess = function (event) {
+  // Get the guessed letter
+  const guessedLetter = document.getElementById("game-screen-input").value.toLowerCase();
+  const word = document.getElementById("game-screen-word").children;
+
+  // Check if the guessed letter is in the word
+  let found = false;
+  for (let i = 0; i < word.length; i++) {
+    if (word[i].children[0].textContent.toLowerCase() === guessedLetter) {
+      word[i].children[0].classList.remove("hidden");
+      found = true;
+    }
+  }
+
+  // Update used characters list
+  const usedCharsList = document.getElementById("used-chars-list");
+  const usedChars = usedCharsList.textContent ? usedCharsList.textContent.split(", ") : [];
+  usedChars.push(guessedLetter);
+  usedCharsList.textContent = usedChars.join(", ");
+
+  // Check if the guessed letter is not in the word
+  if (!found) {
+    this.updateHangmanImage(); // If not found, update the hangman image
+  }
+
+  if (this.checkWin(word)) {
+    this.gameOver(true);
+  }
+};
+
+App.prototype.updateHangmanImage = function () {
+  const hangmanImages = document.getElementById("game-screen-hangman-images").children;
+  for (let i = 0; i < hangmanImages.length; i++) {
+    if (hangmanImages[i].classList.contains("hidden")) {
+      hangmanImages[i].classList.remove("hidden");
+      this.stage = i;
+      if (this.stage === hangmanImages.length - 1) {
+        this.gameOver(false);
+      }
+      break;
+    }
+  }
+};
+
+/**
+ * Check win condition
+ * @method
+ * @param {HTMLCollection} word
+ * @returns {boolean}
+ */
+App.prototype.checkWin = function (word) {
+  for (let i = 0; i < word.length; i++) {
+    if (word[i].children[0].classList.contains("hidden")) {
+      return false;
+    }
+  }
+  return true;
+};
+
+App.prototype.createGameOverLay = function (win) {
+  const fragment = document.createDocumentFragment();
+  const gameOverDiv = document.createElement("div");
+  gameOverDiv.id = "game-over";
+  gameOverDiv.classList.add("container");
+
+  const gameOverTitle = document.createElement("h1");
+  gameOverTitle.textContent = win ? "You won!" : "You lost!";
+  gameOverDiv.appendChild(gameOverTitle);
+
+  const gameOverButtons = document.createElement("div");
+  gameOverButtons.classList.add("container__buttons");
+
+  const gameOverMenuButton = document.createElement("button");
+  gameOverMenuButton.textContent = "Main menu";
+  gameOverMenuButton.addEventListener("click", this.showGameModeSelector.bind(this));
+  gameOverButtons.appendChild(gameOverMenuButton);
+
+  gameOverDiv.appendChild(gameOverButtons);
+  fragment.appendChild(gameOverDiv);
+  return fragment;
+};
+
+App.prototype.gameOver = function (win) {
+  const fragment = this.createGameOverLay(win);
+  this.renderElement.appendChild(fragment);
+};
+
 /**
  * Show game screen
  * @method
@@ -312,15 +401,6 @@ App.prototype.showGameScreen = function (word) {
   this.clearRenderElement();
   const fragment = this.createGameScreen(word);
   this.renderElement.appendChild(fragment);
-};
-
-/**
- * Handle guess
- * @method
- * @param {Event} event
- */
-App.prototype.handleGuess = function (event) {
-  console.log(event);
 };
 
 /**
@@ -334,6 +414,12 @@ App.prototype.handleWordsDifficultySelection = function (_event) {
 
   const word = getRandomWord(this.selectedDifficulty, this.selectedLanguage);
   this.showGameScreen(word);
+
+  // Reset hangman images to hide all stages
+  const hangmanImages = document.getElementById("game-screen-hangman-images").children;
+  for (let i = 0; i < hangmanImages.length; i++) {
+    hangmanImages[i].classList.add("hidden");
+  }
 };
 
 /**
