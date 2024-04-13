@@ -130,6 +130,20 @@ p {
   gap: calc(var(--gap) * 2);
 }
 
+#word-user-input-input {
+  padding: var(--gap);
+  background: var(--primary-color);
+  border-radius: var(--radius-sharp);
+  font-size: large;
+  border: none;
+  border-bottom: var(--text-third-color) 1px solid;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  height: 20px;
+  color: var(--text-third-color);
+  text-align: center;
+}
+
 .rule {
   display: flex;
   flex-direction: column;

@@ -119,8 +119,7 @@ App.prototype.handleGameModeSelection = function (event) {
   if (event.target.dataset.gameMode == GameModeEnum.AGAINST_PC.code) {
     this.showWordsDifficultySelector();
   } else {
-    // TODO: show screen with input for the word
-    // this.showWordsDifficultySelector()
+    this.showWordUserInputScreen();
   }
 };
 
@@ -215,6 +214,51 @@ App.prototype.showWordsDifficultySelector = function () {
   this.renderElement.appendChild(fragment);
 };
 
+App.prototype.createWordUserInputScreen = function () {
+  const fragment = document.createDocumentFragment();
+  const wordUserInputDiv = document.createElement("div");
+  wordUserInputDiv.id = "word-user-input";
+  wordUserInputDiv.classList.add("container");
+
+  const wordUserInputTitle = document.createElement("h1");
+  wordUserInputTitle.textContent = "Enter a word";
+  wordUserInputDiv.appendChild(wordUserInputTitle);
+
+  const wordUserInputInput = document.createElement("input");
+  wordUserInputInput.id = "word-user-input-input";
+  wordUserInputInput.type = "text";
+  wordUserInputInput.maxLength = 20;
+  wordUserInputDiv.appendChild(wordUserInputInput);
+
+  const wordUserInputButtons = document.createElement("div");
+  wordUserInputButtons.classList.add("container__buttons");
+
+  const wordUserInputBackButton = document.createElement("button");
+  wordUserInputBackButton.textContent = "Back";
+  wordUserInputBackButton.addEventListener("click", this.showGameModeSelector.bind(this));
+  wordUserInputButtons.appendChild(wordUserInputBackButton);
+
+  const wordUserInputButton = document.createElement("button");
+  wordUserInputButton.textContent = "Start the game";
+  wordUserInputButton.addEventListener("click", this.handleWordUserInput.bind(this));
+  wordUserInputButtons.appendChild(wordUserInputButton);
+
+  wordUserInputDiv.appendChild(wordUserInputButtons);
+  fragment.appendChild(wordUserInputDiv);
+  return fragment;
+};
+
+App.prototype.handleWordUserInput = function (_event) {
+  const word = document.getElementById("word-user-input-input").value;
+  this.showGameScreen(word);
+};
+
+App.prototype.showWordUserInputScreen = function () {
+  this.clearRenderElement();
+  const fragment = this.createWordUserInputScreen();
+  this.renderElement.appendChild(fragment);
+};
+
 /**
  * Create game screen
  * @method
@@ -248,8 +292,6 @@ App.prototype.createGameScreen = function (word) {
 
   const gameScreenHangmanImagesDiv = document.createElement("div");
   gameScreenHangmanImagesDiv.id = "game-screen-hangman-images";
-
-  console.log(word);
 
   for (let i = 1; i <= Object.keys(this.hangmanImages).length; i++) {
     const gameScreenHangmanImage = document.createElement("img");
