@@ -386,6 +386,9 @@ App.prototype.handleGuess = function (_event) {
   usedChars.push(guessedLetter);
   usedCharsList.textContent = usedChars.join(", ");
 
+  // Clear input
+  document.getElementById("game-screen-input").value = "";
+
   // Check if the guessed letter is not in the word
   if (!found) {
     this.updateHangmanImage(); // If not found, update the hangman image
