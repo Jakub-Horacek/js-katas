@@ -214,6 +214,11 @@ App.prototype.showWordsDifficultySelector = function () {
   this.renderElement.appendChild(fragment);
 };
 
+/**
+ * Create word user input screen
+ * @method
+ * @returns {DocumentFragment}
+ */
 App.prototype.createWordUserInputScreen = function () {
   const fragment = document.createDocumentFragment();
   const wordUserInputDiv = document.createElement("div");
@@ -248,11 +253,20 @@ App.prototype.createWordUserInputScreen = function () {
   return fragment;
 };
 
+/**
+ * Handle word user input
+ * @method
+ * @param {Event} event
+ */
 App.prototype.handleWordUserInput = function (_event) {
   const word = document.getElementById("word-user-input-input").value;
   this.showGameScreen(word);
 };
 
+/**
+ * Show word user input screen
+ * @method
+ */
 App.prototype.showWordUserInputScreen = function () {
   this.clearRenderElement();
   const fragment = this.createWordUserInputScreen();
@@ -347,7 +361,12 @@ App.prototype.createGameScreen = function (word) {
   return fragment;
 };
 
-App.prototype.handleGuess = function (event) {
+/**
+ * Handle guess
+ * @method
+ * @param {Event} event
+ */
+App.prototype.handleGuess = function (_event) {
   // Get the guessed letter
   const guessedLetter = document.getElementById("game-screen-input").value.toLowerCase();
   const word = document.getElementById("game-screen-word").children;
@@ -377,6 +396,10 @@ App.prototype.handleGuess = function (event) {
   }
 };
 
+/**
+ * Update hangman image
+ * @method
+ */
 App.prototype.updateHangmanImage = function () {
   const hangmanImages = document.getElementById("game-screen-hangman-images").children;
   for (let i = 0; i < hangmanImages.length; i++) {
@@ -399,6 +422,7 @@ App.prototype.updateHangmanImage = function () {
  */
 App.prototype.checkWin = function (word) {
   for (let i = 0; i < word.length; i++) {
+    // Taking the first child of the word element because each letter is wrapped in a span element
     if (word[i].children[0].classList.contains("hidden")) {
       return false;
     }
@@ -406,6 +430,12 @@ App.prototype.checkWin = function (word) {
   return true;
 };
 
+/**
+ * Create game over overlay
+ * @method
+ * @param {boolean} win
+ * @returns {DocumentFragment}
+ */
 App.prototype.createGameOverLay = function (win) {
   const fragment = document.createDocumentFragment();
   const gameOverDiv = document.createElement("div");
@@ -429,6 +459,11 @@ App.prototype.createGameOverLay = function (win) {
   return fragment;
 };
 
+/**
+ * Show game over overlay
+ * @method
+ * @param {boolean} win
+ */
 App.prototype.gameOver = function (win) {
   const fragment = this.createGameOverLay(win);
   this.renderElement.appendChild(fragment);
@@ -466,9 +501,11 @@ App.prototype.handleWordsDifficultySelection = function (_event) {
 
 /**
  * DOMContentLoaded event listener
+ * @eventlistener
  */
 document.addEventListener("DOMContentLoaded", () => {
   const appElement = document.getElementById("app");
+  // Easy access to hangman images paths
   const hangmanImages = {
     1: "./images/hangman/stage_1.svg",
     2: "./images/hangman/stage_2.svg",
