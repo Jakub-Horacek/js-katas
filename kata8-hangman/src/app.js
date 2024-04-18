@@ -260,6 +260,13 @@ App.prototype.createWordUserInputScreen = function () {
  */
 App.prototype.handleWordUserInput = function (_event) {
   const word = document.getElementById("word-user-input-input").value;
+
+  if (!word.match(/^[a-zA-Z]+$/)) {
+    console.warn("The input is not a word");
+    document.getElementById("word-user-input-input").value = "";
+    return;
+  }
+
   this.showGameScreen(word);
 };
 
