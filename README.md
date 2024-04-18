@@ -1,11 +1,12 @@
-# Elixeum JavaScript Katas
-Welcome to the Elixeum Series of JavaScript tasks! 🚀
+# JavaScript Katas
+Welcome to the series of JavaScript tasks! 🚀
 
 ## Overview
-This repository is a collection of JavaScript Katas designed to enhance my Vanilla JS skills and is exclusively shared with other members of the Elixeum Katas program.
+This repository is a collection of JavaScript Katas designed to enhance my Vanilla JS skills and is exclusively shared with other members of the Katas program.
+It used to be an @Elixeum only project but nowadays it is not.
 
 ## Purpose
-The primary goal of this series is to sharpen my Vanilla JS skills. As part of Elixeum's initiative to foster continuous learning, these katas serve as a freetime activity for me and my fellow Elixeum Katas program members.
+The primary goal of this series is to sharpen my Vanilla JS skills. These katas serve as a freetime activity for me and my fellow Katas program members.
 
 ## Guidelines
 - **Vanilla JS Only:** Stick to pure JavaScript without the use of AI, JavaScript libraries, or frameworks.
