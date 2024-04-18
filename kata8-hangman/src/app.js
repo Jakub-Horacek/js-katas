@@ -389,6 +389,13 @@ App.prototype.handleGuess = function (_event) {
 
   // Check if the guessed letter is already in used characters
   if (usedChars.includes(guessedLetter)) {
+    console.warn(`The letter ${guessedLetter.toUpperCase()} has already been used`);
+    return;
+  }
+
+  // Check if the guessed letter is a letter
+  if (!guessedLetter.match(/[a-z]/)) {
+    console.warn(`The input (${guessedLetter}) is not a letter`);
     return;
   }
 
