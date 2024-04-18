@@ -3,7 +3,7 @@ Welcome to the series of JavaScript tasks! 🚀
 
 ## Overview
 This repository is a collection of JavaScript Katas designed to enhance my Vanilla JS skills and is exclusively shared with other members of the Katas program.
-It used to be an @Elixeum only project but nowadays it is not.
+It used to be an Elixeum only project but nowadays it is not.
 
 ## Purpose
 The primary goal of this series is to sharpen my Vanilla JS skills. These katas serve as a freetime activity for me and my fellow Katas program members.
