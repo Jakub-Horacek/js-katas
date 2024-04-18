@@ -22,4 +22,4 @@ The primary goal of this series is to sharpen my Vanilla JS skills. These katas 
 
 ## Katas
 
-Want to try out my already solved Katas? It is being updated regularly at this [link](jakub-horacek.github.io/js-katas/).
+Want to try out my already solved Katas? It is being updated regularly at this [link](https://jakub-horacek.github.io/js-katas/).
