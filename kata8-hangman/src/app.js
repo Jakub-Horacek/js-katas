@@ -383,11 +383,17 @@ App.prototype.handleGuess = function (_event) {
   // Update used characters list
   const usedCharsList = document.getElementById("used-chars-list");
   const usedChars = usedCharsList.textContent ? usedCharsList.textContent.split(", ") : [];
-  usedChars.push(guessedLetter);
-  usedCharsList.textContent = usedChars.join(", ");
 
   // Clear input
   document.getElementById("game-screen-input").value = "";
+
+  // Check if the guessed letter is already in used characters
+  if (usedChars.includes(guessedLetter)) {
+    return;
+  }
+
+  usedChars.push(guessedLetter);
+  usedCharsList.textContent = usedChars.join(", ");
 
   // Check if the guessed letter is not in the word
   if (!found) {
