@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Elixeum JS Katas</title>
+    <title>JavaScript Katas</title>
 
     <link rel="shortcut icon" type="image/x-icon" href="./assets/js.png" />
   </head>
   <body>
-    <h1>Elixeum JS Katas</h1>
+    <h1>JavaScript Katas</h1>
     <div class="katas">
       <button class="kata-button" onclick="location.href='./kata1-calculator/src/index.html'">
         <img class="kata-button__preview" src="./assets/previews/kata1.png" alt="Calculator" />
@@ -45,6 +45,11 @@
       </button>
       <button class="kata-button kata-button--tbd">coming soon...</button>
     </div>
+    <footer>
+      <a href="https://github.com/Jakub-Horacek/js-katas" target="_blank">
+        <img id="gh-logo" src="./assets/github.png" alt="GitHub" width="24" height="24" />
+      </a>
+    </footer>
   </body>
 </html>
 <style>
@@ -121,5 +126,38 @@
     letter-spacing: 1.5px;
     color: #bdbdbe;
     transition: all 0.25s ease-in;
+  }
+
+  footer {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    text-align: center;
+    padding: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+
+  footer::before {
+    content: "Want to see the code?";
+  }
+
+  footer:hover::before {
+    content: "Click on this icon >>>";
+  }
+
+  #gh-logo {
+    filter: invert(100%);
+    transition: all 0.25s ease-in-out;
+  }
+
+  #gh-logo:hover {
+    filter: invert(75%);
+  }
+
+  #gh-logo:active {
+    filter: invert(0%);
   }
 </style>
