@@ -27,8 +27,8 @@ const WordsDifficultyEnum = {
  * @readonly
  */
 const WordsLanguageEnum = {
-  CZECH: { code: "cs", name: "czech", emoji: "🇨🇿" },
   ENGLISH: { code: "en", name: "english", emoji: "🇺🇸" },
+  CZECH: { code: "cs", name: "czech", emoji: "🇨🇿" },
 };
 
 /**
@@ -150,6 +150,7 @@ App.prototype.createWordsDifficultySelector = function () {
     option.textContent = `${WordsDifficultyEnum[wordsDifficulty].name} ${WordsDifficultyEnum[wordsDifficulty].emoji}`;
     wordsDifficultyDropdown.appendChild(option);
   }
+  wordsDifficultyDropdown.value = WordsDifficultyEnum.MEDIUM.code;
   dropdowns.appendChild(wordsDifficultyDropdown);
 
   const wordsLanguageDropdown = document.createElement("select");
@@ -261,8 +262,7 @@ App.prototype.createWordUserInputScreen = function () {
 App.prototype.handleWordUserInput = function (_event) {
   const word = document.getElementById("word-user-input-input").value;
 
-  if (!word.match(/^[a-zA-Z]+$/)) {
-    console.warn("The input is not a word");
+  if (!this.isValid(word)) {
     document.getElementById("word-user-input-input").value = "";
     return;
   }
@@ -343,6 +343,7 @@ App.prototype.createGameScreen = function (word) {
   gameScreenInput.id = "game-screen-input";
   gameScreenInput.type = "text";
   gameScreenInput.maxLength = 1;
+  gameScreenInput.addEventListener("keydown", this.handleKeyDown.bind(this));
   gameScreenGuessArea.appendChild(gameScreenInput);
 
   const gameScreenButtons = document.createElement("div");
@@ -369,11 +370,40 @@ App.prototype.createGameScreen = function (word) {
 };
 
 /**
+ * Check if the input is valid
+ * @method
+ * @param {string} input (word or letter)
+ * @returns {boolean} isValid
+ */
+App.prototype.isValid = function (input) {
+  if (!input.match(/[a-zěščřžýáíéóůúďťň]/)) {
+    console.warn(`Invalid input. The input (${input}) is not a letter`);
+    return false;
+  }
+  return true;
+};
+
+/**
+ * Handle key down
+ * @method
+ * @param {Event} event
+ */
+App.prototype.handleKeyDown = function (event) {
+  if (event.key === "Enter") {
+    this.handleGuess(event);
+  }
+};
+
+/**
  * Handle guess
  * @method
  * @param {Event} event
  */
 App.prototype.handleGuess = function (_event) {
+  if (!this.canGuess) {
+    return;
+  }
+
   // Get the guessed letter
   const guessedLetter = document.getElementById("game-screen-input").value.toLowerCase();
   const word = document.getElementById("game-screen-word").children;
@@ -401,8 +431,7 @@ App.prototype.handleGuess = function (_event) {
   }
 
   // Check if the guessed letter is a letter
-  if (!guessedLetter.match(/[a-z]/)) {
-    console.warn(`The input (${guessedLetter}) is not a letter`);
+  if (!this.isValid(guessedLetter)) {
     return;
   }
 
@@ -466,8 +495,21 @@ App.prototype.createGameOverLay = function (win) {
   gameOverDiv.classList.add("container");
 
   const gameOverTitle = document.createElement("h1");
-  gameOverTitle.textContent = win ? "You won!" : "You lost!";
+  gameOverTitle.textContent = win ? "🏆 You won!" : "😢 You lost!";
   gameOverDiv.appendChild(gameOverTitle);
+
+  const gameOverTextDiv = document.createElement("div");
+  gameOverTextDiv.classList.add("container__wrapper--horizontal");
+
+  const gameOverText = document.createElement("p");
+  gameOverText.textContent = win ? "Congratulations! You have guessed the word!" : "You have lost! The word was:";
+  gameOverTextDiv.appendChild(gameOverText);
+  const gameOverWord = document.createElement("p");
+  gameOverWord.classList.add("game-over-word");
+  gameOverWord.textContent = document.getElementById("game-screen-word").textContent;
+  gameOverTextDiv.appendChild(gameOverWord);
+
+  gameOverDiv.appendChild(gameOverTextDiv);
 
   const gameOverButtons = document.createElement("div");
   gameOverButtons.classList.add("container__buttons");
@@ -489,6 +531,8 @@ App.prototype.createGameOverLay = function (win) {
  */
 App.prototype.gameOver = function (win) {
   const fragment = this.createGameOverLay(win);
+  this.canGuess = false;
+  document.activeElement.blur();
   this.renderElement.appendChild(fragment);
 };
 
@@ -501,6 +545,8 @@ App.prototype.showGameScreen = function (word) {
   this.clearRenderElement();
   const fragment = this.createGameScreen(word);
   this.renderElement.appendChild(fragment);
+  this.canGuess = true;
+  document.getElementById("game-screen-input").focus();
 };
 
 /**

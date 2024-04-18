@@ -44,6 +44,7 @@ const czechWords = {
     "kámen",
     "zahrada",
     "pole",
+    "cibule",
   ],
   medium: [
     "autobus",
@@ -95,6 +96,7 @@ const czechWords = {
     "rozhodnutí",
     "efektivita",
     "akce",
+    "pyramida",
   ],
   hard: [
     "nejednoznačný",
@@ -216,6 +218,7 @@ const englishWords = {
     "clock",
     "pen",
     "cake",
+    "onion",
   ],
   medium: [
     "elephant",
@@ -268,6 +271,7 @@ const englishWords = {
     "cassowary",
     "eland",
     "fossa",
+    "pyramid",
   ],
   hard: [
     "exaggeration",

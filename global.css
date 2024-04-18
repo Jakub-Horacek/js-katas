@@ -1,9 +1,21 @@
 #kata-select {
   position: absolute;
+  font-family: Arial, Helvetica, sans-serif;
   top: 0;
   right: 0;
   padding: 12px;
   color: white;
   text-decoration: none;
   background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  border-bottom-left-radius: 5px;
+}
+
+#kata-select:hover {
+  background: rgba(0, 0, 0, 1);
+  text-decoration: underline;
+}
+
+#kata-select::after {
+  content: "Kata select";
 }
