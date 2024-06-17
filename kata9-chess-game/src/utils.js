@@ -1,3 +1,5 @@
+import { log } from "./logger.js";
+
 /**
  * Determine if a move is legal
  * @param {number} fromRow - The starting row index
@@ -13,10 +15,21 @@ export function isLegalMove(fromRow, fromCol, toRow, toCol, board) {
   const target = board[toRow][toCol];
 
   // Basic rules: piece cannot move to a square occupied by a piece of the same color
-  if (piece && target && piece.toLowerCase() === target.toLowerCase()) return false;
+  if (piece && target && checkColor(piece) === checkColor(target)) {
+    log("Illegal move: piece cannot move to a square occupied by a piece of the same color", "warn");
+    return false;
+  }
 
   const possibleMoves = getPossibleMoves(fromRow, fromCol, piece, board);
   return possibleMoves.some(([row, col]) => row === toRow && col === toCol);
+}
+
+function checkColor(pieceCharacter) {
+  if (pieceCharacter === pieceCharacter.toUpperCase()) {
+    return "WHITE";
+  } else if (pieceCharacter === pieceCharacter.toLowerCase()) {
+    return "BLACK";
+  }
 }
 
 /**
