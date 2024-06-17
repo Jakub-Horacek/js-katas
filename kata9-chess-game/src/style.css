@@ -47,18 +47,3 @@ body {
   height: 100%;
   background-size: cover;
 }
-
-button {
-  display: inline-block;
-  margin: 5px;
-}
-
-.rotated {
-  transform: rotate(180deg);
-}
-
-#rotate-btn {
-  margin-top: 20px;
-  padding: 10px 20px;
-  cursor: pointer;
-}

@@ -9,8 +9,14 @@
  */
 export function isLegalMove(fromRow, fromCol, toRow, toCol, board) {
   // Implement logic to determine if the move is legal
-  // For now, just allow any move
-  return true;
+  const piece = board[fromRow][fromCol];
+  const target = board[toRow][toCol];
+
+  // Basic rules: piece cannot move to a square occupied by a piece of the same color
+  if (piece && target && piece.toLowerCase() === target.toLowerCase()) return false;
+
+  const possibleMoves = getPossibleMoves(fromRow, fromCol, piece, board);
+  return possibleMoves.some(([row, col]) => row === toRow && col === toCol);
 }
 
 /**
@@ -22,7 +28,114 @@ export function isLegalMove(fromRow, fromCol, toRow, toCol, board) {
  * @returns {Array<Array<number>>} Array of possible move positions
  */
 export function getPossibleMoves(row, col, piece, board) {
-  // Implement logic to get possible moves for the piece
-  // For now, return an empty array
-  return [];
+  const moves = [];
+  const directions = {
+    P: [[-1, 0]], // White pawn moves up
+    p: [[1, 0]], // Black pawn moves down
+    R: [
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1],
+    ], // Rook
+    B: [
+      [1, 1],
+      [1, -1],
+      [-1, 1],
+      [-1, -1],
+    ], // Bishop
+    N: [
+      [2, 1],
+      [2, -1],
+      [-2, 1],
+      [-2, -1],
+      [1, 2],
+      [1, -2],
+      [-1, 2],
+      [-1, -2],
+    ], // Knight
+    Q: [
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1],
+      [1, 1],
+      [1, -1],
+      [-1, 1],
+      [-1, -1],
+    ], // Queen
+    K: [
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1],
+      [1, 1],
+      [1, -1],
+      [-1, 1],
+      [-1, -1],
+    ], // King
+  };
+
+  const isWithinBoard = (r, c) => r >= 0 && r < 8 && c >= 0 && c < 8;
+
+  if (piece.toLowerCase() === "r" || piece.toLowerCase() === "q") {
+    for (const [dr, dc] of directions.R) {
+      for (let i = 1; i < 8; i++) {
+        const newRow = row + dr * i;
+        const newCol = col + dc * i;
+        if (!isWithinBoard(newRow, newCol)) break;
+        if (board[newRow][newCol]) {
+          if (piece.toLowerCase() !== board[newRow][newCol].toLowerCase()) moves.push([newRow, newCol]);
+          break;
+        }
+        moves.push([newRow, newCol]);
+      }
+    }
+  }
+  if (piece.toLowerCase() === "b" || piece.toLowerCase() === "q") {
+    for (const [dr, dc] of directions.B) {
+      for (let i = 1; i < 8; i++) {
+        const newRow = row + dr * i;
+        const newCol = col + dc * i;
+        if (!isWithinBoard(newRow, newCol)) break;
+        if (board[newRow][newCol]) {
+          if (piece.toLowerCase() !== board[newRow][newCol].toLowerCase()) moves.push([newRow, newCol]);
+          break;
+        }
+        moves.push([newRow, newCol]);
+      }
+    }
+  }
+  if (piece.toLowerCase() === "n") {
+    for (const [dr, dc] of directions.N) {
+      const newRow = row + dr;
+      const newCol = col + dc;
+      if (isWithinBoard(newRow, newCol) && (!board[newRow][newCol] || piece.toLowerCase() !== board[newRow][newCol].toLowerCase())) {
+        moves.push([newRow, newCol]);
+      }
+    }
+  }
+  if (piece.toLowerCase() === "k") {
+    for (const [dr, dc] of directions.K) {
+      const newRow = row + dr;
+      const newCol = col + dc;
+      if (isWithinBoard(newRow, newCol) && (!board[newRow][newCol] || piece.toLowerCase() !== board[newRow][newCol].toLowerCase())) {
+        moves.push([newRow, newCol]);
+      }
+    }
+  }
+  if (piece === "P") {
+    const [dr, dc] = directions.P[0];
+    const newRow = row + dr;
+    const newCol = col + dc;
+    if (isWithinBoard(newRow, newCol) && !board[newRow][newCol]) moves.push([newRow, newCol]);
+  }
+  if (piece === "p") {
+    const [dr, dc] = directions.p[0];
+    const newRow = row + dr;
+    const newCol = col + dc;
+    if (isWithinBoard(newRow, newCol) && !board[newRow][newCol]) moves.push([newRow, newCol]);
+  }
+
+  return moves;
 }

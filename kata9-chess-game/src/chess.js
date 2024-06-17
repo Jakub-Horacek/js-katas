@@ -66,15 +66,6 @@ export function renderChessBoard(container, board) {
 }
 
 /**
- * Rotate the chess board
- * @param {Array<Array<string>>} board - The 2D array representing the chess board
- */
-export function rotateBoard(board) {
-  board.reverse().forEach((row) => row.reverse());
-  renderChessBoard(document.getElementById("app"), board);
-}
-
-/**
  * Handle piece click
  * @param {number} row - The row index of the clicked piece
  * @param {number} col - The column index of the clicked piece
