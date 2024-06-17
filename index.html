@@ -27,7 +27,7 @@
         <img class="kata-button__preview" src="./assets/previews/kata4.png" alt="Observation Game" />
         <div class="kata-button__text">Kata #4 - Observation Game</div>
       </button>
-      <button class="kata-button" onclick="location.href='./kata5-typing-test/src/index.html'">
+      <button class="kata-button recommended" onclick="location.href='./kata5-typing-test/src/index.html'">
         <img class="kata-button__preview" src="./assets/previews/kata5.png" alt="Typing Test" />
         <div class="kata-button__text">Kata #5 - Typing Test</div>
       </button>
@@ -39,16 +39,22 @@
         <img class="kata-button__preview" src="./assets/previews/kata7.png" alt="Typing Test" />
         <div class="kata-button__text">Kata #7 - Snake Game</div>
       </button>
-      <button class="kata-button" onclick="location.href='./kata8-hangman/src/index.html'">
+      <button class="kata-button recommended" onclick="location.href='./kata8-hangman/src/index.html'">
         <img class="kata-button__preview" src="./assets/previews/kata8.png" alt="Typing Test" />
         <div class="kata-button__text">Kata #8 - Hangman</div>
       </button>
-      <button class="kata-button" onclick="location.href='./kata9-chess-game/src/index.html'">
+      <button class="kata-button wip" onclick="location.href='./kata9-chess-game/src/index.html'">
         <img class="kata-button__preview" src="./assets/previews/kata9.png" alt="Typing Test" />
         <div class="kata-button__text">Kata #9 - Chess Game</div>
       </button>
       <button class="kata-button kata-button--tbd">coming soon...</button>
     </div>
+    <legend>
+      <ul>
+        <li class="⭐️">⭐️ - recommended</li>
+        <li class="🚧">🚧 - work in progress</li>
+      </ul>
+    </legend>
     <footer>
       <a href="https://github.com/Jakub-Horacek/js-katas" target="_blank">
         <img id="gh-logo" src="./assets/github.png" alt="GitHub" width="24" height="24" />
@@ -79,7 +85,7 @@
   .kata-button {
     border-radius: 8px;
     cursor: pointer;
-    border: none;
+    border: 2px solid #bdbdbe;
     outline: none;
     box-shadow: none;
     overflow: hidden;
@@ -130,6 +136,50 @@
     letter-spacing: 1.5px;
     color: #bdbdbe;
     transition: all 0.25s ease-in;
+  }
+
+  .kata-button.recommended {
+    background: #2d2d2d;
+    border: 2px solid #f0db4f;
+  }
+
+  .kata-button.recommended .kata-button__text::before {
+    content: "⭐️";
+    margin-right: 2px;
+  }
+
+  .⭐️ {
+    color: #f0db4f;
+  }
+
+  .kata-button.wip {
+    background: #2d2d2d;
+    border: 2px solid #ff391b;
+  }
+
+  .kata-button.wip .kata-button__text::before {
+    content: "🚧";
+    margin-right: 2px;
+  }
+
+  .🚧 {
+    color: #ff391b;
+  }
+
+  legend {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 12px;
+    color: #bdbdbeaa;
+    font-size: 0.9em;
+    font-style: italic;
+  }
+
+  legend ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
   }
 
   footer {
