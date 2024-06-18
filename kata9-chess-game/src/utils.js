@@ -15,6 +15,8 @@ export function isLegalMove(fromRow, fromCol, toRow, toCol, board) {
   const target = board[toRow][toCol];
 
   // Basic rules: piece cannot move to a square occupied by a piece of the same color
+  log(`Checking if move from [${fromRow}, ${fromCol}] to [${toRow}, ${toCol}] is legal`, "info");
+  log(`Piece: ${piece}, Target: ${target}`, "debug");
   if (piece && target && checkColor(piece) === checkColor(target)) {
     log("Illegal move: piece cannot move to a square occupied by a piece of the same color", "warn");
     return false;
