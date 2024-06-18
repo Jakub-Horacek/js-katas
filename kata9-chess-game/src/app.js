@@ -1,4 +1,4 @@
-import { createChessBoard, renderChessBoard, handlePieceClick } from "./chess.js";
+import { createChessBoard, renderChessBoard } from "./chess.js";
 
 /**
  * App initialization

@@ -1,25 +1,31 @@
-/**
- * Logs message to console
- * @param {string} message - Message to log
- * @param {string} type - Log type (info, warn, error, debug, log)
- */
-export function log(message, type = "log") {
-  let prefix = "Chess Game";
+let debugMode = true; // Set this to false to disable debug logs
 
-  switch (type) {
-    case "info":
-      console.info(`%c${prefix} [INFO]: ${message}`, "color: lightblue;");
-      break;
-    case "warn":
-      console.warn(`%c${prefix} [WARN]: ${message}`, "color: orange;");
-      break;
-    case "error":
-      console.error(`%c${prefix} [ERROR]: ${message}`, "color: red;");
-      break;
-    case "debug":
-      console.debug(`%c${prefix} [DEBUG]: ${message}`, "color: grey;");
-      break;
-    default:
-      console.log(`%c${prefix} [${type.toUpperCase()}]: ${message}`, "color: white;");
-  }
+/**
+ * Log a message to the console
+ * @param {string} message - The message to log
+ * @param {string} type - The type of log message (info, warn, error, debug)
+ */
+export function log(message, type = "info") {
+  if (type === "debug" && !debugMode) return;
+
+  const styles = {
+    info: "color: lightblue;",
+    warn: "color: orange;",
+    error: "color: red;",
+    debug: "color: grey;",
+  };
+
+  console.log(`%c[Chess Game ${type.toUpperCase()}]: ${message}`, styles[type]);
 }
+
+/**
+ * Set the debug mode
+ * @param {boolean} mode - The debug mode to set
+ */
+export function setDebugMode(mode) {
+  debugMode = mode;
+  log(`Debug mode set to ${mode}`, "info");
+}
+
+// Expose the setDebugMode function to the global scope
+window.setDebugMode = setDebugMode;

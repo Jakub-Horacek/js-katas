@@ -10,11 +10,16 @@ import { log } from "./logger.js";
  * @returns {boolean} True if the move is legal, false otherwise
  */
 export function isLegalMove(fromRow, fromCol, toRow, toCol, board) {
-  // Implement logic to determine if the move is legal
   const piece = board[fromRow][fromCol];
   const target = board[toRow][toCol];
 
+  const pieceName = piece ? piece : "empty";
+  const fromPosition = `[${fromRow}, ${fromCol}]`;
+  const toPosition = `[${toRow}, ${toCol}]`;
+  const targetPiece = target ? target : "empty";
+
   // Basic rules: piece cannot move to a square occupied by a piece of the same color
+  log(`Checking if [${pieceName}] piece moves from ${fromPosition} to ${toPosition} with target [${targetPiece}] is legal`, "debug");
   if (piece && target && checkColor(piece) === checkColor(target)) {
     log("Illegal move: piece cannot move to a square occupied by a piece of the same color", "warn");
     return false;

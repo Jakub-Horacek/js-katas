@@ -1,4 +1,5 @@
 import { isLegalMove, getPossibleMoves } from "./utils.js";
+import { log } from "./logger.js";
 
 const pieceImages = {
   P: "pieces/white-pawn.png",
@@ -14,6 +15,8 @@ const pieceImages = {
   K: "pieces/white-king.png",
   k: "pieces/black-king.png",
 };
+
+let selectedPiece = null; // Track the currently selected piece
 
 /**
  * Create initial chess board configuration
@@ -72,17 +75,24 @@ export function renderChessBoard(container, board) {
  * @param {Array<Array<string>>} board - The 2D array representing the chess board
  */
 export function handlePieceClick(row, col, board) {
+  log(`Piece clicked: ${board[row][col]}`, "info");
   const piece = board[row][col];
+
+  // Update the selected piece state
+  selectedPiece = { row, col, piece };
   const possibleMoves = getPossibleMoves(row, col, piece, board);
 
-  // Clear previous highlights
-  document.querySelectorAll(".possible-move").forEach((cell) => cell.classList.remove("possible-move"));
+  // Clear previous highlights and event listeners
+  document.querySelectorAll(".possible-move").forEach((cell) => {
+    cell.classList.remove("possible-move");
+    cell.replaceWith(cell.cloneNode(true)); // Remove all event listeners by replacing the node
+  });
 
   possibleMoves.forEach(([moveRow, moveCol]) => {
     const cell = document.querySelector(`.cell[data-row="${moveRow}"][data-col="${moveCol}"]`);
     if (cell) {
       cell.classList.add("possible-move");
-      cell.addEventListener("click", () => movePiece(row, col, moveRow, moveCol, board), { once: true });
+      cell.addEventListener("click", () => movePiece(selectedPiece.row, selectedPiece.col, moveRow, moveCol, board), { once: true });
     }
   });
 }
@@ -101,5 +111,6 @@ function movePiece(fromRow, fromCol, toRow, toCol, board) {
   board[toRow][toCol] = board[fromRow][fromCol];
   board[fromRow][fromCol] = "";
 
+  selectedPiece = null; // Clear the selected piece state
   renderChessBoard(document.getElementById("app"), board);
 }
