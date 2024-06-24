@@ -96,7 +96,10 @@ export function getPossibleMoves(row, col, piece, board) {
 
   const isWithinBoard = (r, c) => r >= 0 && r < 8 && c >= 0 && c < 8;
 
+  // dr = direction row, dc = direction column
+
   if (piece.toLowerCase() === "r" || piece.toLowerCase() === "q") {
+    // Rook and Queen
     for (const [dr, dc] of directions.R) {
       for (let i = 1; i < 8; i++) {
         const newRow = row + dr * i;
@@ -111,6 +114,7 @@ export function getPossibleMoves(row, col, piece, board) {
     }
   }
   if (piece.toLowerCase() === "b" || piece.toLowerCase() === "q") {
+    // Bishop and Queen
     for (const [dr, dc] of directions.B) {
       for (let i = 1; i < 8; i++) {
         const newRow = row + dr * i;
@@ -125,6 +129,7 @@ export function getPossibleMoves(row, col, piece, board) {
     }
   }
   if (piece.toLowerCase() === "n") {
+    // Knight
     for (const [dr, dc] of directions.N) {
       const newRow = row + dr;
       const newCol = col + dc;
@@ -134,6 +139,7 @@ export function getPossibleMoves(row, col, piece, board) {
     }
   }
   if (piece.toLowerCase() === "k") {
+    // King
     for (const [dr, dc] of directions.K) {
       const newRow = row + dr;
       const newCol = col + dc;
@@ -143,17 +149,20 @@ export function getPossibleMoves(row, col, piece, board) {
     }
   }
   if (piece === "P") {
+    // White pawn
     const [dr, dc] = directions.P[0];
     const newRow = row + dr;
     const newCol = col + dc;
     if (isWithinBoard(newRow, newCol) && !board[newRow][newCol]) moves.push([newRow, newCol]);
   }
   if (piece === "p") {
+    // Black pawn
     const [dr, dc] = directions.p[0];
     const newRow = row + dr;
     const newCol = col + dc;
     if (isWithinBoard(newRow, newCol) && !board[newRow][newCol]) moves.push([newRow, newCol]);
   }
 
+  log(`Possible moves for piece [${piece}] at [${row}, ${col}] are: ${JSON.stringify(moves)}`, "debug");
   return moves;
 }
