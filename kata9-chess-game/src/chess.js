@@ -53,6 +53,7 @@ export function renderChessBoard(container, board) {
       cellElement.dataset.row = rowIndex;
       cellElement.dataset.col = colIndex;
 
+      // If the cell contains non-empty string, add the chess piece
       if (cell) {
         const pieceElement = document.createElement("div");
         pieceElement.className = "piece";
@@ -75,8 +76,8 @@ export function renderChessBoard(container, board) {
  * @param {Array<Array<string>>} board - The 2D array representing the chess board
  */
 export function handlePieceClick(row, col, board) {
-  log(`Piece clicked: ${board[row][col]}`, "info");
   const piece = board[row][col];
+  log(`Piece clicked: ${piece}`, "info");
 
   // Update the selected piece state
   selectedPiece = { row, col, piece };
@@ -88,8 +89,10 @@ export function handlePieceClick(row, col, board) {
     cell.replaceWith(cell.cloneNode(true)); // Remove all event listeners by replacing the node
   });
 
+  // Highlight possible moves and add click event listeners
   possibleMoves.forEach(([moveRow, moveCol]) => {
     const cell = document.querySelector(`.cell[data-row="${moveRow}"][data-col="${moveCol}"]`);
+
     if (cell) {
       cell.classList.add("possible-move");
       cell.addEventListener("click", () => movePiece(selectedPiece.row, selectedPiece.col, moveRow, moveCol, board), { once: true });
@@ -112,5 +115,7 @@ function movePiece(fromRow, fromCol, toRow, toCol, board) {
   board[fromRow][fromCol] = "";
 
   selectedPiece = null; // Clear the selected piece state
+
+  // Render the updated board
   renderChessBoard(document.getElementById("app"), board);
 }
