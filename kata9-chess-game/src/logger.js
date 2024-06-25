@@ -15,7 +15,7 @@ export function log(message, type = "info") {
     debug: "color: grey;",
   };
 
-  console.log(`%c[Chess Game ${type.toUpperCase()}]: ${message}`, styles[type]);
+  console.log(`%c[Chess Game - ${type.toUpperCase()}]: ${message}`, styles[type]);
 }
 
 /**

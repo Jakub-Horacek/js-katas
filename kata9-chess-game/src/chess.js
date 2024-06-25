@@ -23,6 +23,7 @@ let selectedPiece = null; // Track the currently selected piece
  * @returns {Array<Array<string>>} 2D array representing the chess board
  */
 export function createChessBoard() {
+  log("Creating initial chess board configuration", "info");
   return [
     ["r", "n", "b", "q", "k", "b", "n", "r"],
     ["p", "p", "p", "p", "p", "p", "p", "p"],
