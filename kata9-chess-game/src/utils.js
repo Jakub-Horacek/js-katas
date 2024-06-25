@@ -29,7 +29,7 @@ export function isLegalMove(fromRow, fromCol, toRow, toCol, board) {
   return possibleMoves.some(([row, col]) => row === toRow && col === toCol);
 }
 
-function checkColor(pieceCharacter) {
+export function checkColor(pieceCharacter) {
   if (pieceCharacter === pieceCharacter.toUpperCase()) {
     return "WHITE";
   } else if (pieceCharacter === pieceCharacter.toLowerCase()) {

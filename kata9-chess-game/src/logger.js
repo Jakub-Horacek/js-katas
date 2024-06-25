@@ -3,9 +3,9 @@ let debugMode = true; // Set this to false to disable debug logs
 /**
  * Log a message to the console
  * @param {string} message - The message to log
- * @param {string} type - The type of log message (info, warn, error, debug)
+ * @param {string} type - The type of log message (info, warn, error, debug, log)
  */
-export function log(message, type = "info") {
+export function log(message, type = "log") {
   if (type === "debug" && !debugMode) return;
 
   const styles = {
@@ -13,9 +13,10 @@ export function log(message, type = "info") {
     warn: "color: orange;",
     error: "color: red;",
     debug: "color: grey;",
+    log: "color: white;",
   };
 
-  console.log(`%c[Chess Game - ${type.toUpperCase()}]: ${message}`, styles[type]);
+  console[type](`%c[Chess Game - ${type.toUpperCase()}]: ${message}`, styles[type]);
 }
 
 /**

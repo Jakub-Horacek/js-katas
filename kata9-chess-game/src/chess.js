@@ -1,4 +1,4 @@
-import { isLegalMove, getPossibleMoves } from "./utils.js";
+import { isLegalMove, getPossibleMoves, checkColor } from "./utils.js";
 import { log } from "./logger.js";
 
 const pieceImages = {
@@ -42,6 +42,7 @@ export function createChessBoard() {
  * @param {Array<Array<string>>} board - The 2D array representing the chess board
  */
 export function renderChessBoard(container, board) {
+  log("Rendering chess board", "log");
   container.innerHTML = ""; // Clear the container
 
   const boardElement = document.createElement("div");
@@ -80,8 +81,30 @@ export function handlePieceClick(row, col, board) {
   const piece = board[row][col];
   log(`Piece clicked: ${piece}`, "info");
 
+  if (selectedPiece) {
+    // Check if the clicked piece is of the opposite color
+    if (checkColor(selectedPiece.piece) !== checkColor(piece)) {
+      // Ensure selectedPiece is still valid before moving
+      if (selectedPiece) {
+        log(`Attempting to move ${selectedPiece.piece} from [${selectedPiece.row}, ${selectedPiece.col}] to [${row}, ${col}]`, "debug");
+        movePiece(selectedPiece.row, selectedPiece.col, row, col, board);
+      }
+      return;
+    } else {
+      // Deselect the piece if the same color piece is clicked
+      log(`Deselecting piece: ${selectedPiece.piece} at [${selectedPiece.row}, ${selectedPiece.col}]`, "debug");
+      selectedPiece = null;
+      // Clear previous highlights and event listeners
+      document.querySelectorAll(".possible-move").forEach((cell) => {
+        cell.classList.remove("possible-move");
+        cell.replaceWith(cell.cloneNode(true)); // Remove all event listeners by replacing the node
+      });
+    }
+  }
+
   // Update the selected piece state
   selectedPiece = { row, col, piece };
+  log(`Selected piece: ${piece} at [${row}, ${col}]`, "info");
   const possibleMoves = getPossibleMoves(row, col, piece, board);
 
   // Clear previous highlights and event listeners
@@ -96,7 +119,17 @@ export function handlePieceClick(row, col, board) {
 
     if (cell) {
       cell.classList.add("possible-move");
-      cell.addEventListener("click", () => movePiece(selectedPiece.row, selectedPiece.col, moveRow, moveCol, board), { once: true });
+      cell.addEventListener(
+        "click",
+        () => {
+          // Ensure selectedPiece is still valid before moving
+          if (selectedPiece) {
+            log(`Moving piece: ${selectedPiece.piece} from [${selectedPiece.row}, ${selectedPiece.col}] to [${moveRow}, ${moveCol}]`, "log");
+            movePiece(selectedPiece.row, selectedPiece.col, moveRow, moveCol, board);
+          }
+        },
+        { once: true }
+      );
     }
   });
 }
@@ -112,8 +145,19 @@ export function handlePieceClick(row, col, board) {
 function movePiece(fromRow, fromCol, toRow, toCol, board) {
   if (!isLegalMove(fromRow, fromCol, toRow, toCol, board)) return;
 
+  const piece = board[fromRow][fromCol];
+  const target = board[toRow][toCol];
+
+  // Log if a piece is taken
+  if (target) {
+    log(`Piece taken: ${target} at [${toRow}, ${toCol}] by ${piece}`, "info");
+  }
+
+  // Move the piece
   board[toRow][toCol] = board[fromRow][fromCol];
   board[fromRow][fromCol] = "";
+
+  log(`Piece moved: ${piece} from [${fromRow}, ${fromCol}] to [${toRow}, ${toCol}]`, "info");
 
   selectedPiece = null; // Clear the selected piece state
 
