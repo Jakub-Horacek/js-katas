@@ -17,6 +17,7 @@ const pieceImages = {
 };
 
 let selectedPiece = null; // Track the currently selected piece
+let currentPlayer = "WHITE"; // Track whose turn it is
 
 /**
  * Create initial chess board configuration
@@ -79,6 +80,13 @@ export function renderChessBoard(container, board) {
  */
 export function handlePieceClick(row, col, board) {
   const piece = board[row][col];
+  const pieceColor = checkColor(piece);
+
+  if (pieceColor !== currentPlayer) {
+    log(`It is ${currentPlayer}'s turn.`, "warn");
+    return;
+  }
+
   log(`Piece clicked: ${piece}`, "info");
 
   if (selectedPiece) {
@@ -160,6 +168,8 @@ function movePiece(fromRow, fromCol, toRow, toCol, board) {
   log(`Piece moved: ${piece} from [${fromRow}, ${fromCol}] to [${toRow}, ${toCol}]`, "info");
 
   selectedPiece = null; // Clear the selected piece state
+  currentPlayer = currentPlayer === "WHITE" ? "BLACK" : "WHITE"; // Switch turns
+  log(`It is now ${currentPlayer}'s turn.`, "info");
 
   // Render the updated board
   renderChessBoard(document.getElementById("app"), board);
