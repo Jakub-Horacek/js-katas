@@ -159,6 +159,22 @@ function movePiece(fromRow, fromCol, toRow, toCol, board) {
   // Log if a piece is taken
   if (target) {
     log(`Piece taken: ${target} at [${toRow}, ${toCol}] by ${piece}`, "info");
+
+    if (target === "K" || target === "k") {
+      console.clear();
+      log(`⚠️              `, "log");
+      log(`▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁`, "info");
+      log(`❕ Game over! ${checkColor(piece)} wins! ❕`, "info");
+      log(`▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔`, "info");
+      log(`⚠️              `, "log");
+
+      // Reset the game
+      selectedPiece = null;
+      currentPlayer = "WHITE";
+      renderChessBoard(document.getElementById("app"), createChessBoard());
+
+      return;
+    }
   }
 
   // Move the piece
