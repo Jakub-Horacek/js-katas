@@ -14,14 +14,14 @@ body {
 #counter {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
   background: rgba(0, 0, 0, 0.75);
   color: white;
   font-size: xx-large;
   z-index: 1;
-  text-align: right;
+  text-align: left;
   padding: 15px;
-  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
   opacity: 0;
   transition: 0.5s all;
 }
@@ -48,9 +48,7 @@ body {
   height: inherit;
   visibility: hidden;
   border-radius: 20px;
-  box-shadow:
-    5px 5px 10px #161616,
-    -5px -5px 10px #303030;
+  box-shadow: 5px 5px 10px #161616, -5px -5px 10px #303030;
 }
 
 .playcard__side--visible {
