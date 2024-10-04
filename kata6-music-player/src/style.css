@@ -21,6 +21,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--gap);
+  height: 100dvh;
 }
 
 .brand {
@@ -206,6 +207,7 @@ body {
 
   body {
     padding: 0;
+    position: fixed;
   }
 
   .brand {
@@ -213,7 +215,7 @@ body {
   }
 
   #app {
-    height: 78.5svh;
+    height: 75%;
     width: 97vw;
     border-radius: 0;
     flex-direction: column;
