@@ -170,6 +170,7 @@ h2 {
 @media (max-width: 768px) {
   body {
     margin: 0;
+    height: 100dvh;
   }
 
   #app {
@@ -179,7 +180,7 @@ h2 {
 
   .game {
     width: 80vw;
-    height: 60svh;
+    height: 60%;
     border-radius: 15px;
   }
 
