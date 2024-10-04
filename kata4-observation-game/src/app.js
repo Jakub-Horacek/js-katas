@@ -82,14 +82,8 @@ Cookie.prototype.spawn = function () {
       break;
   }
 
-  this.element.style.left = `${this.getRandomPosition(
-    0,
-    window.innerWidth - 35,
-  )}px`;
-  this.element.style.top = `${this.getRandomPosition(
-    0,
-    window.innerHeight - 35,
-  )}px`;
+  this.element.style.left = `${this.getRandomPosition(0, window.innerWidth - 35)}px`;
+  this.element.style.top = `${this.getRandomPosition(0, window.innerHeight - 35)}px`;
 };
 
 /**
@@ -112,9 +106,7 @@ function ObservationGame() {
  */
 ObservationGame.prototype.updateCookieCount = function (count, isNew = false) {
   const cookieCounter = document.getElementById("cookie-counter");
-  const cookieCount = isNew
-    ? document.createElement("div")
-    : document.getElementById("cookie-count");
+  const cookieCount = isNew ? document.createElement("div") : document.getElementById("cookie-count");
 
   cookieCount.innerText = `Cookies: ${count}`;
 
@@ -143,9 +135,7 @@ ObservationGame.prototype.handleCookieClick = function (cookie) {
     this.updateHealthpoints(Player.health.current + Player.health.gain);
   } else {
     Player.bombs.clicked++;
-    this.updateHealthpoints(
-      Player.health.current - Player.health.dmg.explosion,
-    );
+    this.updateHealthpoints(Player.health.current - Player.health.dmg.explosion);
   }
 
   this.gameElement.removeChild(cookie.getElement());
@@ -166,15 +156,11 @@ ObservationGame.prototype.updateHealthpoints = function (hp, isNew = false) {
     hp = 100;
   }
 
-  const hpTitle = isNew
-    ? document.createElement("div")
-    : document.getElementById("hp-title");
+  const hpTitle = isNew ? document.createElement("div") : document.getElementById("hp-title");
   hpTitle.className = "hp--title";
   hpTitle.innerText = `Healthpoints: ${hp}/100`;
 
-  const hpBar = isNew
-    ? document.createElement("div")
-    : document.getElementById("hp-bar");
+  const hpBar = isNew ? document.createElement("div") : document.getElementById("hp-bar");
   hpBar.className = "hp--fill";
   hpBar.style.width = `${hp}%`;
 
@@ -280,7 +266,7 @@ ObservationGame.prototype.over = function () {
 
   location.reload();
   window.alert(
-    `⚠️ GAME OVER \n Here are your stats: \n\n 🍪 COOKIES \n Cookies collected (HIGHSCORE): ${highscore} \n Cookies collected (current score): ${score} \n Cookies missed: ${Player.cookies.missed} \n Cookies spawned: ${Player.cookies.spawned} \n\n 💣 BOMBS \n Bombs clicked: ${Player.bombs.clicked} \n Bombs spawned: ${Player.bombs.spawned} \n\n ℹ️ NOTE \n After closing this dialog the game automaticaly restarts.`,
+    `⚠️ GAME OVER \n Here are your stats: \n\n 🍪 COOKIES \n Cookies collected (HIGHSCORE): ${highscore} \n Cookies collected (current score): ${score} \n Cookies missed: ${Player.cookies.missed} \n Cookies spawned: ${Player.cookies.spawned} \n\n 💣 BOMBS \n Bombs clicked: ${Player.bombs.clicked} \n Bombs spawned: ${Player.bombs.spawned} \n\n ℹ️ NOTE \n After closing this dialog the game automaticaly restarts.`
   );
 };
 
