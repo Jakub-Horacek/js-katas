@@ -16,13 +16,14 @@ body {
 }
 
 #app {
-  border-radius: 50px;
-  background-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(2.5px);
-  -webkit-backdrop-filter: blur(2.5px);
-  width: 70vw;
-  height: 70vh;
-  margin: auto;
+  width: inherit;
+  height: inherit;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
 h1 {
@@ -77,13 +78,16 @@ h2 {
 }
 
 .game {
-  width: 60%;
-  height: 100%;
-  margin: auto;
+  width: 70vw;
+  height: 70vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border-radius: 50px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(2.5px);
+  -webkit-backdrop-filter: blur(2.5px);
 }
 
 .game__grid {
@@ -110,8 +114,8 @@ h2 {
   background-color: red;
 }
 
-.back-button {
-  margin-top: 10px;
+.back-button,
+.pause-button {
   padding: 10px 20px;
   border-radius: 10px;
   border: none;
@@ -123,7 +127,7 @@ h2 {
   font-size: 1.25rem;
   font-weight: 700;
   cursor: pointer;
-  width: 100%;
+  width: 70vw;
   transition: all 0.3s;
 }
 
@@ -139,8 +143,57 @@ h2 {
   text-align: center;
   color: white;
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
 }
 
 .hidden {
   display: none;
+}
+
+.play-button {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  background-color: #fff;
+  color: #330033;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+@media (max-width: 768px) {
+  body {
+    margin: 0;
+  }
+
+  #app {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .game {
+    width: 80vw;
+    height: 60dvh;
+    border-radius: 15px;
+  }
+
+  .back-button,
+  .pause-button {
+    width: 80vw;
+  }
+
+  .game_grid {
+    width: 100%;
+    height: 100%;
+  }
+
+  .pause-screen {
+    width: 80vw;
+    height: 20vh;
+  }
 }

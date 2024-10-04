@@ -120,9 +120,10 @@ function Game(renderElement, level) {
 
 Game.prototype.createGameGrid = function () {
   const fragment = document.createDocumentFragment();
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
   const gameGrid = document.createElement("div");
-  const gridWidth = 300;
-  const gridHeight = 300;
+  const gridWidth = isMobile ? 200 : 300;
+  const gridHeight = isMobile ? 200 : 300;
   gameGrid.classList.add("game__grid");
   gameGrid.style.width = `${gridWidth}px`;
   gameGrid.style.height = `${gridHeight}px`;
@@ -177,6 +178,7 @@ Game.prototype.createBackButton = function () {
   button.addEventListener("click", () => {
     this.renderElement.innerHTML = "";
     const app = new App(this.renderElement);
+    clearInterval(this.gameLoop); // Stop the game loop
     app.showLevelSelector();
   });
   fragment.appendChild(button);
@@ -266,8 +268,8 @@ Game.prototype.hideGameOverScreen = function () {
 
 Game.prototype.start = function () {
   this.showGameScreen();
-  this.showBackButton();
   this.showPauseButton();
+  this.showBackButton();
   this.spawnSnake();
   this.spawnApple();
   this.setupKeyboardControls();
