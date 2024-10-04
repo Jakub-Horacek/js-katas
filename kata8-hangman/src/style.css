@@ -246,3 +246,33 @@ body:has(#game-mode-2:hover) #rule-2 {
   color: var(--text-second-color);
   font-size: 2em;
 }
+
+@media (max-width: 768px) {
+  body {
+    position: fixed;
+  }
+
+  #game-screen {
+    width: 100vw;
+    height: 100dvh;
+    padding: 0;
+  }
+
+  .container__wrapper--horizontal {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #used-chars {
+    width: 90vw;
+  }
+
+  #game-over .container__wrapper--horizontal {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #game-screen-word {
+    flex-wrap: wrap;
+  }
+}
