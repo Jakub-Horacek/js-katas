@@ -106,6 +106,8 @@ App.prototype.startGame = function (level) {
   game.start();
 };
 
+const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
 function Game(renderElement, level) {
   this.renderElement = renderElement;
   this.level = level;
@@ -120,7 +122,6 @@ function Game(renderElement, level) {
 
 Game.prototype.createGameGrid = function () {
   const fragment = document.createDocumentFragment();
-  const isMobile = window.matchMedia("(max-width: 768px)").matches;
   const gameGrid = document.createElement("div");
   const gridWidth = isMobile ? 200 : 300;
   const gridHeight = isMobile ? 200 : 300;
@@ -163,6 +164,7 @@ Game.prototype.createGameScreen = function () {
 
 Game.prototype.showGameScreen = function () {
   const fragment = this.createGameScreen();
+  this.showMobileControls();
   this.pauseScreen = this.createPauseScreen();
   this.gameOverScreen = this.createGameOverScreen();
   this.renderElement.appendChild(this.pauseScreen);
@@ -383,6 +385,55 @@ Game.prototype.setupKeyboardControls = function () {
   });
 
   this.setupGameLoop();
+};
+
+Game.prototype.createMobileControls = function () {
+  if (!isMobile) return null;
+
+  const fragment = document.createDocumentFragment();
+  const controlsContainer = document.createElement("div");
+  controlsContainer.classList.add("mobile-controls");
+
+  const directions = [
+    { direction: "up", icon: "▲" },
+    { direction: "down", icon: "▼" },
+    { direction: "left", icon: "◀" },
+    { direction: "right", icon: "▶" },
+  ];
+  directions.forEach((direction) => {
+    const button = document.createElement("button");
+    button.classList.add(`mobile-control--${direction.direction}`, "mobile-control");
+    button.textContent = direction.icon;
+    button.addEventListener("click", () => {
+      this.changeDirection(direction.direction);
+    });
+    controlsContainer.appendChild(button);
+  });
+
+  fragment.appendChild(controlsContainer);
+  return fragment;
+};
+
+Game.prototype.showMobileControls = function () {
+  if (!isMobile) return;
+
+  const mobileControls = this.createMobileControls();
+  if (mobileControls) {
+    this.renderElement.appendChild(mobileControls);
+  }
+};
+
+Game.prototype.changeDirection = function (newDirection) {
+  const allowedDirections = {
+    up: ["left", "right"],
+    down: ["left", "right"],
+    left: ["up", "down"],
+    right: ["up", "down"],
+  };
+
+  if (allowedDirections[this.direction].includes(newDirection)) {
+    this.direction = newDirection;
+  }
 };
 
 /**

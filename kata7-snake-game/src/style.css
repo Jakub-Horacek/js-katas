@@ -154,7 +154,8 @@ h2 {
   display: none;
 }
 
-.play-button {
+.play-button,
+.mobile-control {
   padding: 10px 20px;
   border-radius: 10px;
   border: none;
@@ -195,5 +196,21 @@ h2 {
   .pause-screen {
     width: 80vw;
     height: 20vh;
+  }
+
+  .mobile-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mobile-control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    width: 50px;
+    height: 50px;
   }
 }
