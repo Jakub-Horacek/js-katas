@@ -250,11 +250,12 @@ body:has(#game-mode-2:hover) #rule-2 {
 @media (max-width: 768px) {
   body {
     position: fixed;
+    height: 100dvh;
   }
 
   #game-screen {
     width: 100vw;
-    height: 100svh;
+    height: 100%;
     padding: 0;
   }
 

@@ -199,7 +199,7 @@ body {
   cursor: pointer;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 768px) {
   :root {
     --song-height: 30px;
   }
@@ -213,7 +213,7 @@ body {
   }
 
   #app {
-    height: 78.5vh;
+    height: 78.5svh;
     width: 97vw;
     border-radius: 0;
     flex-direction: column;
