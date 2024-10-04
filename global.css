@@ -1,4 +1,5 @@
 #kata-select {
+  box-sizing: initial;
   position: absolute;
   font-family: Arial, Helvetica, sans-serif;
   top: 0;
@@ -23,10 +24,10 @@
 @media (max-width: 768px) {
   #kata-select {
     top: auto;
-    left: 8px;
+    left: 12px;
     bottom: 8px;
     right: auto;
-
+    padding: 12px;
     width: 25px;
     height: 25px;
     border-radius: 50%;

@@ -14,6 +14,12 @@
   --radius-sharp: 5px;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   display: flex;
   justify-content: center;
@@ -249,14 +255,34 @@ body:has(#game-mode-2:hover) #rule-2 {
 
 @media (max-width: 768px) {
   body {
-    position: fixed;
     height: 100dvh;
+    width: 100vw;
+    padding: 0;
+    margin: 0;
+  }
+
+  #app {
+    width: 100%;
   }
 
   #game-screen {
     width: 100vw;
     height: 100%;
     padding: 0;
+  }
+
+  .container {
+    width: 100%;
+    border-radius: 0;
+    text-wrap: balance;
+  }
+
+  .container__buttons {
+    flex-direction: column;
+  }
+
+  .rule {
+    text-wrap: balance;
   }
 
   .container__wrapper--horizontal {
