@@ -254,7 +254,7 @@ body:has(#game-mode-2:hover) #rule-2 {
 
   #game-screen {
     width: 100vw;
-    height: 100dvh;
+    height: 100svh;
     padding: 0;
   }
 

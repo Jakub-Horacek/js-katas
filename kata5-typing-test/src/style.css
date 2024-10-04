@@ -185,7 +185,7 @@ input,
   body,
   #app {
     width: 100%;
-    height: 100dvh;
+    height: 100svh;
     position: fixed;
     margin: 0;
     padding: 0;

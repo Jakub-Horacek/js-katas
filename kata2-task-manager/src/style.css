@@ -160,7 +160,7 @@ input[type="submit"] {
 
 @media (max-width: 768px) {
   body {
-    height: 100dvh;
+    height: 100svh;
     position: fixed;
   }
 
