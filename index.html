@@ -63,11 +63,21 @@
         <li class="🚧">work in progress</li>
       </ul>
     </legend>
-    <footer>
+    <footer class="footer--desktop">
       <a href="https://github.com/Jakub-Horacek/js-katas" target="_blank">
         <img id="gh-logo" src="./assets/github.png" alt="GitHub" width="24" height="24" />
       </a>
     </footer>
+    <footer class="footer--mobile">
+      <img id="hillman-memoji" src="./assets/hillman-memoji.png" alt="Hillman Memoji" width="80" height="80" />
+      <div class="footer__data">
+        <a href="https://linktr.ee/jamess_hillman" target="_blank">Jakub Horáček</a>
+        <span id="current-year"></span>
+      </div>
+    </footer>
+    <script>
+      document.getElementById("current-year").textContent = new Date().getFullYear();
+    </script>
   </body>
 </html>
 <style>
@@ -91,7 +101,6 @@
   .katas {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
     gap: 12px;
   }
 
@@ -205,7 +214,7 @@
     margin: 0;
   }
 
-  footer {
+  footer.footer--desktop {
     position: fixed;
     bottom: 0;
     right: 0;
@@ -217,11 +226,15 @@
     gap: 8px;
   }
 
-  footer::before {
+  footer.footer--mobile {
+    display: none;
+  }
+
+  footer.footer--desktop::before {
     content: "Want to see the code?";
   }
 
-  footer:hover::before {
+  footer.footer--desktop:hover::before {
     content: "Click on this icon >>>";
   }
 
@@ -265,7 +278,7 @@
       letter-spacing: 1.5px;
     }
 
-    footer {
+    footer.footer--desktop {
       display: none;
     }
 
@@ -276,7 +289,7 @@
       gap: 8px;
       justify-content: center;
       align-items: center;
-      margin-top: 26px;
+      margin-top: 30px;
       padding: 0;
     }
 
@@ -289,6 +302,40 @@
       display: inline-flex;
       gap: 12px;
       align-items: center;
+    }
+
+    footer.footer--mobile {
+      margin-top: 80px;
+      margin-bottom: 30px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
+      text-align: left;
+    }
+
+    #hillman-memoji {
+      border-radius: 50%;
+    }
+
+    footer a {
+      color: #fbbe17;
+      text-decoration: none;
+    }
+
+    .footer__data {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    #current-year {
+      font-size: 0.9em;
+    }
+
+    #current-year::before {
+      content: "© ";
     }
   }
 
