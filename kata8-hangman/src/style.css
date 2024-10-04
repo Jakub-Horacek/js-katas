@@ -14,12 +14,6 @@
   --radius-sharp: 5px;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
   display: flex;
   justify-content: center;
@@ -254,6 +248,12 @@ body:has(#game-mode-2:hover) #rule-2 {
 }
 
 @media (max-width: 768px) {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
   body {
     height: 100dvh;
     width: 100vw;
@@ -268,13 +268,14 @@ body:has(#game-mode-2:hover) #rule-2 {
   #game-screen {
     width: 100vw;
     height: 100%;
-    padding: 0;
   }
 
   .container {
     width: 100%;
+    height: 100%;
     border-radius: 0;
     text-wrap: balance;
+    padding: 24px 0;
   }
 
   .container__buttons {
@@ -301,5 +302,11 @@ body:has(#game-mode-2:hover) #rule-2 {
 
   #game-screen-word {
     flex-wrap: wrap;
+  }
+
+  .char,
+  #game-screen-input {
+    width: 30px;
+    height: 40px;
   }
 }
