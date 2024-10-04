@@ -239,6 +239,17 @@ ObservationGame.prototype.spawning = function () {
 };
 
 /**
+ * Remove all cookies and bombs
+ */
+ObservationGame.prototype.removeAllCookiesAndBombs = function () {
+  const cookies = document.querySelectorAll(".cookie");
+
+  cookies.forEach((cookie) => {
+    this.gameElement.removeChild(cookie);
+  });
+};
+
+/**
  * Update and return the highscore
  * @param {number} score
  * @returns {number} highscore
@@ -262,10 +273,11 @@ ObservationGame.prototype.over = function () {
   const highscore = this.setAndReturnHighscore(score);
 
   clearInterval(this.gameInterval);
+  this.removeAllCookiesAndBombs();
   console.warn("GAME OVER");
-
   location.reload();
-  window.alert(
+
+  window.confirm(
     `⚠️ GAME OVER \n Here are your stats: \n\n 🍪 COOKIES \n Cookies collected (HIGHSCORE): ${highscore} \n Cookies collected (current score): ${score} \n Cookies missed: ${Player.cookies.missed} \n Cookies spawned: ${Player.cookies.spawned} \n\n 💣 BOMBS \n Bombs clicked: ${Player.bombs.clicked} \n Bombs spawned: ${Player.bombs.spawned} \n\n ℹ️ NOTE \n After closing this dialog the game automaticaly restarts.`
   );
 };
