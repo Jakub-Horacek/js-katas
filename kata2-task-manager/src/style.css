@@ -15,12 +15,7 @@
 }
 
 body {
-  font-family:
-    "SF Pro Text",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Helvetica Neue",
-    sans-serif;
+  font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
   background: var(--background-color);
   color: var(--dark-color);
   margin: 0;
@@ -161,4 +156,26 @@ input[type="submit"] {
   padding: 0;
   cursor: pointer;
   font-size: large;
+}
+
+@media (max-width: 720px) {
+  body {
+    height: 100dvh;
+    position: fixed;
+  }
+
+  h1 {
+    font-size: xx-large;
+    width: 100%;
+    text-align: center;
+  }
+
+  .container {
+    width: 90vw;
+    height: 80vh;
+  }
+
+  .alert__box {
+    width: 90vw;
+  }
 }
