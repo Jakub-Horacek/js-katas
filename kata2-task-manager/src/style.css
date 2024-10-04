@@ -158,7 +158,7 @@ input[type="submit"] {
   font-size: large;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   body {
     height: 100dvh;
     position: fixed;

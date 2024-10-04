@@ -249,7 +249,7 @@ button.top {
   transition: 0.5s;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   h1 {
     display: none;
   }

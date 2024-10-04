@@ -42,7 +42,7 @@ h1 {
   z-index: 1;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   :root {
     --cookie-size: 45px;
   }

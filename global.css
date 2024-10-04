@@ -20,7 +20,7 @@
   content: "Kata select";
 }
 
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   #kata-select {
     top: auto;
     left: 8px;

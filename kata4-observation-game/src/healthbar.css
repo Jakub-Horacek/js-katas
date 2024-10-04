@@ -20,7 +20,7 @@
   height: inherit;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   #healthbar {
     top: 0;
     left: 0;

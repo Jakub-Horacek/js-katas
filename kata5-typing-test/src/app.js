@@ -26,10 +26,7 @@ Logger.prototype.log = function (message, type = "log") {
       console.debug(`%c${this.prefix} [DEBUG]: ${message}`, "color: grey;");
       break;
     default:
-      console.log(
-        `%c${this.prefix} [${type.toUpperCase()}]: ${message}`,
-        "color: white;",
-      );
+      console.log(`%c${this.prefix} [${type.toUpperCase()}]: ${message}`, "color: white;");
   }
 };
 
@@ -164,7 +161,7 @@ function TypingTest(
     logger: new Logger(),
     viewScreen: TestViewScreen,
     viewRestartButton: TestViewRestartButton,
-  },
+  }
 ) {
   this.isDebug = options.debug;
   this.logger = options.logger;
@@ -172,15 +169,33 @@ function TypingTest(
   this.viewRestartButton = options.viewRestartButton;
 }
 
+/**
+ * Creates the test options.
+ * @returns {DocumentFragment} The test options.
+ */
 TypingTest.prototype.createTestOptions = function () {
+  const isMobile = this.getDeviceType() === "mobile";
   const fragment = document.createDocumentFragment();
 
   const optionsDiv = document.createElement("div");
   optionsDiv.classList.add("wrapper");
 
   const title = document.createElement("h2");
-  title.textContent = "Options";
+  title.textContent = isMobile ? "Typing Test" : "Options";
   optionsDiv.appendChild(title);
+
+  if (isMobile) {
+    const message = document.createElement("h3");
+    message.textContent = "Sorry. This app is not optimized for mobile devices. Please use a desktop or a tablet.";
+    optionsDiv.appendChild(message);
+
+    const explanation = document.createElement("p");
+    explanation.innerHTML = "You were really going to try the <strong><u>Typing Test</u></strong> on a mobile device, weren't you? 😄";
+    optionsDiv.appendChild(explanation);
+
+    fragment.appendChild(optionsDiv);
+    return fragment;
+  }
 
   const sentenceLengthWrapper = document.createElement("div");
   sentenceLengthWrapper.classList.add("field-wrapper");
@@ -222,15 +237,10 @@ TypingTest.prototype.createTestOptions = function () {
 
   const debugDurations = [10, 30];
   const normalDurations = [60, 120, 300];
-  const durations = this.isDebug
-    ? [...debugDurations, ...normalDurations]
-    : normalDurations;
+  const durations = this.isDebug ? [...debugDurations, ...normalDurations] : normalDurations;
 
   if (this.isDebug) {
-    this.logger.log(
-      `Time Limits:\n[${debugDurations}] = [DEBUG options]\n[${normalDurations}] = [STANDARD options]`,
-      "debug",
-    );
+    this.logger.log(`Time Limits:\n[${debugDurations}] = [DEBUG options]\n[${normalDurations}] = [STANDARD options]`, "debug");
   }
 
   durations.forEach((duration) => {
@@ -246,6 +256,10 @@ TypingTest.prototype.createTestOptions = function () {
   return fragment;
 };
 
+/**
+ * Gets the test options.
+ * @returns {object} The test options.
+ */
 TypingTest.prototype.getTestOptions = function () {
   const sentenceLengthSelect = document.querySelector("#sentences-length");
   const timerDurationSelect = document.querySelector("#time-limit");
@@ -254,6 +268,22 @@ TypingTest.prototype.getTestOptions = function () {
     sentenceLength: SentenceLengths[sentenceLengthSelect.value],
     secondsDuration: timerDurationSelect.value,
   };
+};
+
+/**
+ * Gets the user's device type by screen size.
+ * @returns {string} The device type.
+ */
+TypingTest.prototype.getDeviceType = function () {
+  const width = window.innerWidth;
+
+  if (width < 768) {
+    return "mobile";
+  } else if (width < 1024) {
+    return "tablet";
+  } else {
+    return "desktop";
+  }
 };
 
 /**
@@ -329,10 +359,7 @@ TypingTest.prototype.getRandomInt = function (min = 10, max = 50) {
   const randomInt = Math.floor(Math.random() * (max - min + 1)) + min;
 
   if (this.isDebug) {
-    this.logger.log(
-      `Random integer in a range [${min}-${max}] is: ${randomInt}`,
-      "debug",
-    );
+    this.logger.log(`Random integer in a range [${min}-${max}] is: ${randomInt}`, "debug");
   }
 
   return randomInt;
@@ -414,10 +441,7 @@ TypingTest.prototype.createSentence = function () {
 TypingTest.prototype.checkWordMatch = function (inputWord) {
   if (this.wordIndex >= this.sentenceWords.length) {
     if (this.isDebug) {
-      this.logger.log(
-        "Player has reached the end of the current sentence.",
-        "debug",
-      );
+      this.logger.log("Player has reached the end of the current sentence.", "debug");
     }
 
     const screen = this.getTestScreen();
@@ -445,10 +469,7 @@ TypingTest.prototype.checkWordMatch = function (inputWord) {
 
   if (this.isDebug) {
     this.logger.log(`Current word index is: ${this.wordIndex}`, "debug");
-    this.logger.log(
-      `\nCorrect word: ${currentWord}\nYour input: ${inputWord}`,
-      "debug",
-    );
+    this.logger.log(`\nCorrect word: ${currentWord}\nYour input: ${inputWord}`, "debug");
   }
 };
 
@@ -485,9 +506,7 @@ TypingTest.prototype.createInput = function () {
   inputElement.type = "text";
   inputElement.id = "input";
 
-  inputElement.addEventListener("keydown", (e) =>
-    this.handleInputEvent(e, inputElement),
-  );
+  inputElement.addEventListener("keydown", (e) => this.handleInputEvent(e, inputElement));
 
   fragment.appendChild(inputElement);
 
@@ -675,10 +694,7 @@ TypingTest.prototype.getWpm = function (seconds) {
   const wpm = Math.round((this.currentPlayer.correctWords / seconds) * 60);
 
   if (this.isDebug) {
-    this.logger.log(
-      `\nWPM Calculation:\nMath.floor(${this.currentPlayer.correctWords} / ${seconds} * 60) = ${wpm}`,
-      "debug",
-    );
+    this.logger.log(`\nWPM Calculation:\nMath.floor(${this.currentPlayer.correctWords} / ${seconds} * 60) = ${wpm}`, "debug");
   }
 
   return wpm;
@@ -690,14 +706,12 @@ TypingTest.prototype.getWpm = function (seconds) {
  * @returns {string} accuracy percentage
  */
 TypingTest.prototype.getAccuracy = function () {
-  const accuracy = Math.round(
-    (this.currentPlayer.correctWords / this.currentPlayer.wordsTotal) * 100,
-  );
+  const accuracy = Math.round((this.currentPlayer.correctWords / this.currentPlayer.wordsTotal) * 100);
 
   if (this.isDebug) {
     this.logger.log(
       `\nAccuracy Calculation:\nMath.round((${this.currentPlayer.correctWords} / ${this.currentPlayer.wordsTotal}) * 100) = ${accuracy}`,
-      "debug",
+      "debug"
     );
   }
 
@@ -716,10 +730,7 @@ TypingTest.prototype.gameOver = function () {
 
   if (this.currentPlayer.wpm > this.currentPlayer.wpmHighScore) {
     if (this.isDebug) {
-      this.logger.log(
-        `Saving new WPM highscore (${this.currentPlayer.wpm})`,
-        "debug",
-      );
+      this.logger.log(`Saving new WPM highscore (${this.currentPlayer.wpm})`, "debug");
     }
     this.currentPlayer.saveHighScore();
   }
@@ -776,7 +787,7 @@ TypingTest.prototype.runTest = function () {
 TypingTest.prototype.init = function (
   options = {
     renderElement: null,
-  },
+  }
 ) {
   this.options = options;
 
@@ -809,11 +820,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   logger.log(
     `\n- DOMContentLoaded, Test initialized with DEBUG mode ${
-      debug
-        ? "ON"
-        : 'OFF\n- To turn the DEBUG mode ON, add "?debug=true" parameter to the end of the URL'
+      debug ? "ON" : 'OFF\n- To turn the DEBUG mode ON, add "?debug=true" parameter to the end of the URL'
     }`,
-    "info",
+    "info"
   );
 
   test.showIntroScreen();
