@@ -3,7 +3,7 @@
 body {
   font-family: "Figtree", sans-serif;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   margin: 0;
   background: #232323;
   display: flex;
@@ -30,7 +30,7 @@ body {
   display: grid;
   grid-template-columns: auto auto auto auto;
   gap: 25px;
-  height: 90vh;
+  height: 90%;
   width: 90vw;
 }
 
