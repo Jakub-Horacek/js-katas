@@ -21,20 +21,14 @@
 }
 
 body {
-  font-family:
-    "SF Pro Text",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Helvetica Neue",
-    sans-serif;
+  font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
   color: var(--foreground-light-color);
   margin: 0;
   width: 100vw;
   height: 100vh;
 
   /* background: var(--site-background-color); */
-  background: url("./assets/images/macos-ventura-wallpaper.jpg") no-repeat
-    center center fixed;
+  background: url("./assets/images/macos-ventura-wallpaper.jpg") no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -253,4 +247,16 @@ button.top {
   pointer-events: none;
   transform-origin: top;
   transition: 0.5s;
+}
+
+@media (max-width: 720px) {
+  h1 {
+    display: none;
+  }
+
+  .calculator {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
 }
