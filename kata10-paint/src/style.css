@@ -58,6 +58,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 18px;
   margin-bottom: 18px;
 }
 
@@ -69,6 +70,7 @@
 .paint-toolbar {
   display: flex;
   gap: 10px;
+  margin-right: 18px;
 }
 
 .paint-canvas {
@@ -182,4 +184,64 @@
 }
 .new-painting-btn:hover {
   background: #125ea2;
+}
+
+/* Toolbar button styles */
+.paint-toolbar button {
+  padding: 8px 20px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  outline: none;
+  margin: 0;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+.paint-toolbar button:hover,
+.paint-toolbar button.active {
+  background: #125ea2;
+}
+
+.paint-toolbar button.toolbar-btn--active {
+  border: 2px solid #ff9800;
+  background: #fffbe6;
+  color: #1976d2;
+  box-shadow: 0 0 0 2px #ff980033;
+}
+
+.paint-toolbar input[type="color"] {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #1976d2;
+  border-radius: 6px;
+  background: #f4f8fd;
+  cursor: pointer;
+  margin-right: 8px;
+  padding: 0;
+  box-sizing: border-box;
+  transition: border 0.2s;
+}
+.paint-toolbar input[type="color"]:focus {
+  border: 2px solid #125ea2;
+}
+
+.paint-toolbar input[type="color"].toolbar-color-picker {
+  border: 2px solid #1976d2;
+  background: #f4f8fd;
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  margin-right: 8px;
+  transition: border 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
+}
+.paint-toolbar input[type="color"].toolbar-color-picker:focus,
+.paint-toolbar input[type="color"].toolbar-color-picker.active {
+  border: 2px solid #ff9800;
+  box-shadow: 0 0 0 2px #ff980033;
 }

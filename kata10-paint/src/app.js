@@ -83,18 +83,19 @@ const createWelcomeScreen = () => {
   widthInput.type = "number";
   widthInput.min = 1;
   widthInput.max = 8192;
-  widthInput.value = 1024;
+  widthInput.value = 400;
   widthInput.className = "dimension-input";
 
   heightInput = document.createElement("input");
   heightInput.type = "number";
   heightInput.min = 1;
   heightInput.max = 8192;
-  heightInput.value = 1024;
+  heightInput.value = 400;
   heightInput.className = "dimension-input";
 
   // Now create the select field with the real inputs
   const presetSelect = createSelectField(widthInput, heightInput);
+  presetSelect.value = "400x400";
   screenWrapper.appendChild(presetSelect);
   screenWrapper.appendChild(customTitle);
   screenWrapper.appendChild(widthInput);
