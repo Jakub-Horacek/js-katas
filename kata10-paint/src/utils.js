@@ -71,3 +71,24 @@ export const loadHistoryStacks = () => ({ undoStack: [], redoStack: [] });
  * Clears the undo/redo stacks from local storage (NO-OP)
  */
 export const clearHistoryStacks = () => {};
+
+/**
+ * Converts hex color to rgb
+ * @param {string} hex
+ * @returns {{r:number,g:number,b:number}}
+ */
+export function hexToRgb(hex) {
+  hex = hex.replace(/^#/, "");
+  if (hex.length === 3) {
+    hex = hex
+      .split("")
+      .map((x) => x + x)
+      .join("");
+  }
+  const num = parseInt(hex, 16);
+  return {
+    r: (num >> 16) & 255,
+    g: (num >> 8) & 255,
+    b: num & 255,
+  };
+}

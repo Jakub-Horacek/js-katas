@@ -1,6 +1,6 @@
 import { getCanvasDimensions, saveScreenState } from "./utils.js";
 import { showWelcomeScreen } from "./app.js";
-import { savePaintingData, loadPaintingData, clearPaintingData, saveHistoryStacks, loadHistoryStacks, clearHistoryStacks } from "./utils.js";
+import { savePaintingData, loadPaintingData, clearPaintingData, clearHistoryStacks, hexToRgb } from "./utils.js";
 
 /**
  * Painting state and config
@@ -8,8 +8,6 @@ import { savePaintingData, loadPaintingData, clearPaintingData, saveHistoryStack
 const MAX_HISTORY = 50;
 let currentColor = "#000000";
 let tool = "brush"; // 'brush' or 'delete'
-let isPainting = false;
-let dragPoints = [];
 
 /**
  * PaintSession class encapsulates canvas, context, undo/redo, and painting logic
@@ -341,24 +339,3 @@ const createCanvas = () => {
   const session = new PaintSession(canvas, ctx);
   return { canvas, session };
 };
-
-/**
- * Converts hex color to rgb
- * @param {string} hex
- * @returns {{r:number,g:number,b:number}}
- */
-function hexToRgb(hex) {
-  hex = hex.replace(/^#/, "");
-  if (hex.length === 3) {
-    hex = hex
-      .split("")
-      .map((x) => x + x)
-      .join("");
-  }
-  const num = parseInt(hex, 16);
-  return {
-    r: (num >> 16) & 255,
-    g: (num >> 8) & 255,
-    b: num & 255,
-  };
-}
