@@ -379,20 +379,46 @@ TypingTest.prototype.getWords = function (count = 10) {
     this.logger.log(`HTTP Request ${apiUrl}`, "debug");
   }
 
+  // Helper to get fallback words from customWords
+  const getFallbackWords = () => {
+    // Default to NORMAL if config is missing
+    let group = "NORMAL";
+    if (this.options && this.options.config && this.options.config.sentenceLength) {
+      // Find which key in customWords matches the current config
+      const min = this.options.config.sentenceLength.min;
+      const max = this.options.config.sentenceLength.max;
+      for (const key in window.customWords) {
+        if (SentenceLengths[key] && SentenceLengths[key].min === min && SentenceLengths[key].max === max) {
+          group = key;
+          break;
+        }
+      }
+    }
+    const wordsArray = window.customWords[group];
+    // Shuffle and pick count words
+    const shuffled = wordsArray.slice().sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  };
+
   return new Promise((resolve, reject) => {
     fetch(apiUrl)
       .then((response) => {
         if (!response.ok) {
-          reject(new Error("Network response was not ok"));
+          // Fallback to customWords
+          this.logger.log("API failed, using fallback words.", "warn");
+          resolve(getFallbackWords());
+          return null;
         }
-
         return response.json();
       })
       .then((data) => {
-        resolve(data);
+        if (data) {
+          resolve(data);
+        }
       })
       .catch((error) => {
-        reject(error);
+        this.logger.log(`API error: ${error}. Using fallback words.`, "error");
+        resolve(getFallbackWords());
       });
   });
 };
