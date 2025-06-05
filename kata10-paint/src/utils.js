@@ -92,3 +92,35 @@ export function hexToRgb(hex) {
     b: num & 255,
   };
 }
+
+/**
+ * Exports a canvas as an image to the user's downloads
+ * @param {HTMLCanvasElement} canvas
+ * @param {'png'|'jpg'|'jpeg'} [format] - Image format
+ */
+export function exportCanvasAsImage(canvas, format = "png") {
+  let link = document.createElement("a");
+  let mime = "image/png";
+  let filename = "pixel-painting.png";
+  let dataUrl;
+  if (format === "jpg" || format === "jpeg") {
+    mime = "image/jpeg";
+    filename = "pixel-painting.jpg";
+    // Create a temporary canvas with white background
+    const tmp = document.createElement("canvas");
+    tmp.width = canvas.width;
+    tmp.height = canvas.height;
+    const ctx = tmp.getContext("2d");
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, tmp.width, tmp.height);
+    ctx.drawImage(canvas, 0, 0);
+    dataUrl = tmp.toDataURL(mime);
+  } else {
+    dataUrl = canvas.toDataURL("image/png");
+  }
+  link.download = filename;
+  link.href = dataUrl;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}

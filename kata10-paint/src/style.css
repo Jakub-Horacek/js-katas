@@ -1,3 +1,10 @@
+/* Import Inter font from Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap");
+
+body {
+  font-family: "Inter", "Segoe UI", "Roboto", "Nunito Sans", Arial, sans-serif;
+}
+
 .screen-wrapper {
   max-width: 400px;
   margin: 60px auto;
@@ -83,10 +90,12 @@
 }
 
 .paint-dimensions {
+  display: block;
   font-size: 1rem;
-  margin-left: 12px;
+  margin: 6px auto 0 auto;
   color: #555;
   font-weight: normal;
+  text-align: center;
 }
 
 .big-presets-container,
@@ -172,7 +181,7 @@
 }
 
 .new-painting-btn {
-  margin-left: auto;
+  margin-right: 12px;
   padding: 8px 20px;
   background: #1976d2;
   color: #fff;
@@ -244,4 +253,83 @@
 .paint-toolbar input[type="color"].toolbar-color-picker.active {
   border: 2px solid #ff9800;
   box-shadow: 0 0 0 2px #ff980033;
+}
+
+/* Toolbar group styles */
+.toolbar-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.toolbar-group--paint {
+  border-right: 2px solid #e0e0e0;
+  padding-right: 16px;
+  margin-right: 8px;
+}
+.toolbar-group--doc {
+  gap: 8px;
+}
+
+.toolbar-subgroup {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.toolbar-subgroup--undoredo {
+  border-right: 2px solid #e0e0e0;
+  padding-right: 12px;
+  margin-right: 6px;
+}
+.toolbar-subgroup--newexport {
+  gap: 0;
+}
+
+.toolbar-export-format {
+  height: 40px;
+  padding: 0 12px;
+  border: 1.5px solid #1976d2;
+  border-radius: 6px 0 0 6px;
+  font-size: 1rem;
+  margin-right: 0;
+  background: #f4f8fd;
+  color: #1976d2;
+  outline: none;
+  transition: border 0.2s;
+  border-right: none;
+}
+.toolbar-export-format:focus {
+  border: 2px solid #ff9800;
+  border-right: none;
+}
+.export-btn {
+  border-radius: 0 6px 6px 0;
+  border-left: none;
+}
+
+.export-group {
+  display: inline-flex;
+  align-items: center;
+}
+.export-group .toolbar-export-format {
+  margin-right: 0;
+  border-radius: 6px 0 0 6px;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.export-group .export-btn {
+  margin-left: 0;
+  border-radius: 0 6px 6px 0;
+}
+
+.toolbar-subgroup--newexport > .new-painting-btn {
+  margin-right: 12px;
+}
+
+.paint-toolbar button:disabled {
+  background: #e0e0e0;
+  color: #b0b0b0;
+  border: none;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.7;
 }

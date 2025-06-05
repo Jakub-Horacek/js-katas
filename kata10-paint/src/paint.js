@@ -1,6 +1,6 @@
 import { getCanvasDimensions, saveScreenState } from "./utils.js";
 import { showWelcomeScreen } from "./app.js";
-import { savePaintingData, loadPaintingData, clearPaintingData, clearHistoryStacks, hexToRgb } from "./utils.js";
+import { savePaintingData, loadPaintingData, clearPaintingData, clearHistoryStacks, hexToRgb, exportCanvasAsImage } from "./utils.js";
 
 /**
  * Painting state and config
@@ -51,6 +51,7 @@ class PaintSession {
     if (this.undoStack.length >= MAX_HISTORY) this.undoStack.shift();
     this.undoStack.push(this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height));
     this.redoStack = [];
+    if (this.onHistoryChange) this.onHistoryChange();
   }
 
   /**
@@ -105,6 +106,7 @@ class PaintSession {
     const last = this.undoStack[this.undoStack.length - 1];
     this.ctx.putImageData(last, 0, 0);
     savePaintingData(last.data);
+    if (this.onHistoryChange) this.onHistoryChange();
   }
 
   /**
@@ -116,6 +118,7 @@ class PaintSession {
     this.undoStack.push(next);
     this.ctx.putImageData(next, 0, 0);
     savePaintingData(next.data);
+    if (this.onHistoryChange) this.onHistoryChange();
   }
 
   /**
@@ -184,6 +187,14 @@ class PaintSession {
       }
     });
   }
+
+  canUndo() {
+    return this.undoStack.length > 1;
+  }
+
+  canRedo() {
+    return this.redoStack.length > 0;
+  }
 }
 
 /**
@@ -213,36 +224,30 @@ const createPaintScreen = () => {
 
   const paintHeaderTitle = document.createElement("h1");
   paintHeaderTitle.textContent = "Paint";
-  paintHeader.appendChild(paintHeaderTitle);
 
   // Display current canvas dimensions
   const dims = getCanvasDimensions();
   if (dims && dims.width && dims.height) {
-    const dimDisplay = document.createElement("span");
+    const dimDisplay = document.createElement("div");
     dimDisplay.textContent = `(${dims.width} x ${dims.height})`;
     dimDisplay.className = "paint-dimensions";
     paintHeaderTitle.appendChild(dimDisplay);
   }
-
-  // New Painting button
-  const newPaintingBtn = document.createElement("button");
-  newPaintingBtn.textContent = "New Painting";
-  newPaintingBtn.className = "new-painting-btn";
-  newPaintingBtn.addEventListener("click", () => {
-    saveScreenState("welcome");
-    clearPaintingData();
-    clearHistoryStacks();
-    showWelcomeScreen();
-  });
-  paintHeader.appendChild(newPaintingBtn);
+  paintHeader.appendChild(paintHeaderTitle);
 
   // Create canvas and session
   const { canvas, session } = createCanvas();
   // Create toolbar, always using the current session's undo/redo
   const toolbar = createToolbar(
     () => session.undo(),
-    () => session.redo()
+    () => session.redo(),
+    canvas,
+    session
   );
+  // Attach onHistoryChange callback to update toolbar state
+  session.onHistoryChange = () => {
+    if (toolbar && toolbar.updateUndoRedoState) toolbar.updateUndoRedoState();
+  };
   paintHeader.appendChild(toolbar);
   paintWrapper.appendChild(canvas);
 
@@ -253,9 +258,13 @@ const createPaintScreen = () => {
  * Creates the toolbar with color picker, brush, delete, undo, redo
  * @returns {DocumentFragment}
  */
-const createToolbar = (undo, redo) => {
+const createToolbar = (undo, redo, canvas, session) => {
   const toolbar = document.createElement("div");
   toolbar.classList.add("paint-toolbar");
+
+  // --- Paint group ---
+  const paintGroup = document.createElement("div");
+  paintGroup.className = "toolbar-group toolbar-group--paint";
 
   // Color picker
   const colorInput = document.createElement("input");
@@ -268,7 +277,7 @@ const createToolbar = (undo, redo) => {
     tool = "brush";
     setActiveToolBtn();
   });
-  toolbar.appendChild(colorInput);
+  paintGroup.appendChild(colorInput);
 
   // Brush tool button
   const brushBtn = document.createElement("button");
@@ -279,18 +288,26 @@ const createToolbar = (undo, redo) => {
     tool = "brush";
     setActiveToolBtn();
   });
-  toolbar.appendChild(brushBtn);
+  paintGroup.appendChild(brushBtn);
 
-  // Delete tool button
-  const deleteBtn = document.createElement("button");
-  deleteBtn.textContent = "Delete";
-  deleteBtn.title = "Delete Tool (make transparent)";
-  deleteBtn.className = "toolbar-btn delete-btn";
-  deleteBtn.addEventListener("click", () => {
+  // Eraser tool button (was Delete)
+  const eraserBtn = document.createElement("button");
+  eraserBtn.textContent = "Eraser";
+  eraserBtn.title = "Eraser Tool (make transparent)";
+  eraserBtn.className = "toolbar-btn eraser-btn";
+  eraserBtn.addEventListener("click", () => {
     tool = "delete";
     setActiveToolBtn();
   });
-  toolbar.appendChild(deleteBtn);
+  paintGroup.appendChild(eraserBtn);
+
+  // --- Document group ---
+  const docGroup = document.createElement("div");
+  docGroup.className = "toolbar-group toolbar-group--doc";
+
+  // --- Undo/Redo subgroup ---
+  const undoRedoGroup = document.createElement("div");
+  undoRedoGroup.className = "toolbar-subgroup toolbar-subgroup--undoredo";
 
   // Undo button
   const undoBtn = document.createElement("button");
@@ -300,8 +317,9 @@ const createToolbar = (undo, redo) => {
   undoBtn.addEventListener("click", () => {
     undo();
     setActiveToolBtn();
+    updateUndoRedoState();
   });
-  toolbar.appendChild(undoBtn);
+  undoRedoGroup.appendChild(undoBtn);
 
   // Redo button
   const redoBtn = document.createElement("button");
@@ -311,17 +329,79 @@ const createToolbar = (undo, redo) => {
   redoBtn.addEventListener("click", () => {
     redo();
     setActiveToolBtn();
+    updateUndoRedoState();
   });
-  toolbar.appendChild(redoBtn);
+  undoRedoGroup.appendChild(redoBtn);
+
+  // --- New/Export subgroup ---
+  const newExportGroup = document.createElement("div");
+  newExportGroup.className = "toolbar-subgroup toolbar-subgroup--newexport";
+
+  // New Painting button (toolbar)
+  const newPaintingBtn = document.createElement("button");
+  newPaintingBtn.textContent = "New";
+  newPaintingBtn.title = "New Painting";
+  newPaintingBtn.className = "toolbar-btn new-painting-btn";
+  newPaintingBtn.addEventListener("click", () => {
+    saveScreenState("welcome");
+    clearPaintingData();
+    clearHistoryStacks();
+    showWelcomeScreen();
+  });
+  newExportGroup.appendChild(newPaintingBtn);
+
+  // Export group (select + button)
+  const exportGroup = document.createElement("div");
+  exportGroup.className = "export-group";
+
+  // Export format select
+  const exportFormatSelect = document.createElement("select");
+  exportFormatSelect.className = "toolbar-export-format";
+  const optionPng = document.createElement("option");
+  optionPng.value = "png";
+  optionPng.textContent = "PNG";
+  exportFormatSelect.appendChild(optionPng);
+  const optionJpg = document.createElement("option");
+  optionJpg.value = "jpg";
+  optionJpg.textContent = "JPG";
+  exportFormatSelect.appendChild(optionJpg);
+  exportGroup.appendChild(exportFormatSelect);
+
+  // Export button
+  const exportBtn = document.createElement("button");
+  exportBtn.textContent = "Export";
+  exportBtn.title = "Export as Image";
+  exportBtn.className = "toolbar-btn export-btn";
+  exportBtn.addEventListener("click", () => {
+    const format = exportFormatSelect.value;
+    exportCanvasAsImage(canvas, format);
+  });
+  exportGroup.appendChild(exportBtn);
+
+  newExportGroup.appendChild(exportGroup);
+
+  docGroup.appendChild(undoRedoGroup);
+  docGroup.appendChild(newExportGroup);
 
   // Helper to update active tool button
   function setActiveToolBtn() {
-    [brushBtn, deleteBtn].forEach((btn) => btn.classList.remove("active", "toolbar-btn--active"));
+    [brushBtn, eraserBtn].forEach((btn) => btn.classList.remove("active", "toolbar-btn--active"));
     if (tool === "brush") brushBtn.classList.add("active", "toolbar-btn--active");
-    if (tool === "delete") deleteBtn.classList.add("active", "toolbar-btn--active");
+    if (tool === "delete") eraserBtn.classList.add("active", "toolbar-btn--active");
   }
+  function updateUndoRedoState() {
+    if (!session) return;
+    undoBtn.disabled = !session.canUndo();
+    redoBtn.disabled = !session.canRedo();
+  }
+  // Expose updateUndoRedoState for external calls
+  toolbar.updateUndoRedoState = updateUndoRedoState;
+  // Initial state
   setActiveToolBtn();
+  updateUndoRedoState();
 
+  toolbar.appendChild(paintGroup);
+  toolbar.appendChild(docGroup);
   return toolbar;
 };
 
