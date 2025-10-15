@@ -3,374 +3,161 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Series of JavaScript tasks to improve Vanilla JS skills" />
 
     <title>JavaScript Katas</title>
 
     <link rel="shortcut icon" type="image/x-icon" href="./assets/js.png" />
+    <link rel="stylesheet" href="./index.css" />
 
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
     <meta property="og:title" content="JavaScript Katas" />
     <meta property="og:description" content="Series of JavaScript tasks to improve my Vanilla JS skills" />
     <meta property="og:url" content="https://jakub-horacek.github.io/js-katas/" />
     <meta property="og:image" content="https://raw.githubusercontent.com/Jakub-Horacek/js-katas/main/assets/previews/kata-select.png" />
     <meta property="og:image:width" content="1191" />
     <meta property="og:image:height" content="932" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="JavaScript Katas" />
+    <meta property="twitter:description" content="Series of JavaScript tasks to improve my Vanilla JS skills" />
+    <meta property="twitter:image" content="https://raw.githubusercontent.com/Jakub-Horacek/js-katas/main/assets/previews/kata-select.png" />
   </head>
   <body>
-    <h1>JavaScript Katas</h1>
-    <div class="katas">
-      <button class="kata-button" onclick="location.href='./kata1-calculator/src/index.html'">
-        <img class="kata-button__preview" src="./assets/previews/kata1.png" alt="Calculator" />
-        <div class="kata-button__text">Kata #1 - Calculator</div>
-      </button>
-      <button class="kata-button" onclick="location.href='./kata2-task-manager/src/index.html'">
-        <img class="kata-button__preview" src="./assets/previews/kata2.png" alt="Task Manager" />
-        <div class="kata-button__text">Kata #2 - Task Manager</div>
-      </button>
-      <button class="kata-button" onclick="location.href='./kata3-memory-game/src/index.html'">
-        <img class="kata-button__preview" src="./assets/previews/kata3.png" alt="Memory Game" />
-        <div class="kata-button__text">Kata #3 - Memory Game</div>
-      </button>
-      <button class="kata-button" onclick="location.href='./kata4-observation-game/src/index.html'">
-        <img class="kata-button__preview" src="./assets/previews/kata4.png" alt="Observation Game" />
-        <div class="kata-button__text">Kata #4 - Observation Game</div>
-      </button>
-      <button class="kata-button recommended" onclick="location.href='./kata5-typing-test/src/index.html'">
-        <img class="kata-button__preview" src="./assets/previews/kata5.png" alt="Typing Test" />
-        <div class="kata-button__text">Kata #5 - Typing Test</div>
-      </button>
-      <button class="kata-button" onclick="location.href='./kata6-music-player/src/index.html'">
-        <img class="kata-button__preview" src="./assets/previews/kata6.png" alt="Music Player" />
-        <div class="kata-button__text">Kata #6 - Music Player</div>
-      </button>
-      <button class="kata-button" onclick="location.href='./kata7-snake-game/src/index.html'">
-        <img class="kata-button__preview" src="./assets/previews/kata7.png" alt="Snake Game" />
-        <div class="kata-button__text">Kata #7 - Snake Game</div>
-      </button>
-      <button class="kata-button recommended" onclick="location.href='./kata8-hangman/src/index.html'">
-        <img class="kata-button__preview" src="./assets/previews/kata8.png" alt="Hangman" />
-        <div class="kata-button__text">Kata #8 - Hangman</div>
-      </button>
-      <button class="kata-button" onclick="location.href='./kata9-chess-game/src/index.html'">
-        <img class="kata-button__preview" src="./assets/previews/kata9.png" alt="Chess Game" />
-        <div class="kata-button__text">Kata #9 - Chess Game</div>
-      </button>
-      <button class="kata-button recommended" onclick="location.href='./kata10-paint/src/index.html'">
-        <img class="kata-button__preview" src="./assets/previews/kata10.png" alt="Paint" />
-        <div class="kata-button__text">Kata #10 - Paint</div>
-      </button>
-      <!-- <button class="kata-button wip"></button> -->
-      <button class="kata-button kata-button--tbd">coming soon...</button>
-    </div>
-    <legend>
-      <h3>Legend:</h3>
-      <ul>
-        <li class="⭐️">recommended</li>
-        <li class="🚧">work in progress</li>
+    <header class="header">
+      <h1 class="header__title">JavaScript Katas</h1>
+      <p class="header__subtitle">A collection of JavaScript projects designed to enhance my Vanilla JS expertise through hands-on practice.</p>
+    </header>
+
+    <main class="main">
+      <section class="katas" role="grid" aria-label="JavaScript Katas" id="katas-container">
+        <!-- Kata cards will be dynamically generated here -->
+      </section>
+    </main>
+
+    <aside class="legend" role="complementary" aria-label="Legend">
+      <h3 class="legend__title">Legend</h3>
+      <ul class="legend__list">
+        <li class="legend__item legend__item--recommended">
+          <span class="legend__icon" aria-hidden="true">⭐</span>
+          <span class="legend__text">Recommended</span>
+        </li>
+        <li class="legend__item legend__item--mobile">
+          <span class="legend__icon" aria-hidden="true">📱</span>
+          <span class="legend__text">Mobile optimized</span>
+        </li>
+        <li class="legend__item legend__item--desktop">
+          <span class="legend__icon" aria-hidden="true">🖥️</span>
+          <span class="legend__text">Desktop optimized</span>
+        </li>
+        <li class="legend__item legend__item--wip">
+          <span class="legend__icon" aria-hidden="true">🚧</span>
+          <span class="legend__text">Work in progress</span>
+        </li>
       </ul>
-    </legend>
-    <footer class="footer--desktop">
-      <a href="https://github.com/Jakub-Horacek/js-katas" target="_blank">
-        <img id="gh-logo" src="./assets/github.png" alt="GitHub" width="24" height="24" />
-      </a>
-    </footer>
-    <footer class="footer--mobile">
-      <img id="hillman-memoji" src="./assets/hillman-memoji.png" alt="Hillman Memoji" width="80" height="80" />
-      <div class="footer__data">
-        <a href="https://linktr.ee/jamess_hillman" target="_blank">Jakub Horáček</a>
-        <span id="current-year"></span>
+    </aside>
+
+    <footer class="footer">
+      <div class="footer__content">
+        <div class="footer__author">
+          <img class="footer__avatar" src="./assets/hillman-memoji.png" alt="Hillman Memoji" width="60" height="60" />
+          <div class="footer__info">
+            <a href="https://callmehillman.com" class="footer__link" target="_blank" rel="noopener noreferrer">
+              Jakub Horáček
+            </a>
+            <span class="footer__copyright" id="current-year"></span>
+          </div>
+        </div>
+        <a href="https://github.com/Jakub-Horacek/js-katas" class="footer__github" target="_blank" rel="noopener noreferrer" aria-label="View source code on GitHub">
+          <img src="./assets/github.png" alt="GitHub" width="24" height="24" />
+          <span class="footer__github-text">View Code</span>
+        </a>
       </div>
     </footer>
+
     <script>
+      // Set current year
       document.getElementById("current-year").textContent = new Date().getFullYear();
+
+      // Load and render katas
+      async function loadKatas() {
+        try {
+          const response = await fetch('./katas.json');
+          const data = await response.json();
+          renderKatas(data);
+        } catch (error) {
+          console.error('Error loading katas:', error);
+          // Fallback: show error message
+          document.getElementById('katas-container').innerHTML = 
+            '<p style="text-align: center; color: var(--color-text-secondary);">Unable to load katas. Please refresh the page.</p>';
+        }
+      }
+
+      function renderKatas(data) {
+        const container = document.getElementById('katas-container');
+        const { katas, badges } = data;
+
+        // Generate kata cards
+        const kataCards = katas.map(kata => {
+          const cardClasses = ['kata-card'];
+          if (kata.recommended) cardClasses.push('kata-card--recommended');
+
+          // Generate device badges
+          const deviceBadges = kata.badges.map(badgeType => {
+            const badge = badges[badgeType];
+            return `<div class="kata-card__badge kata-card__badge--${badgeType}" aria-label="${badge.label}">${badge.icon}</div>`;
+          }).join('');
+
+          // Add recommended badge if needed
+          const recommendedBadge = kata.recommended ? 
+            `<div class="kata-card__badge" aria-label="${badges.recommended.label}">${badges.recommended.icon}</div>` : '';
+
+          const badgeElements = deviceBadges + recommendedBadge;
+
+          return `
+            <article class="${cardClasses.join(' ')}" role="gridcell">
+              <a href="${kata.href}" class="kata-card__link" aria-label="${kata.title} - ${kata.description}">
+                <div class="kata-card__image-container">
+                  <img class="kata-card__image" src="${kata.image}" alt="${kata.title} preview" loading="lazy" />
+                  ${badgeElements}
+                </div>
+                <div class="kata-card__content">
+                  <h3 class="kata-card__title">${kata.title}</h3>
+                  <p class="kata-card__description">${kata.description}</p>
+                </div>
+              </a>
+            </article>
+          `;
+        }).join('');
+
+        // Add "Coming Soon" card
+        const comingSoonCard = `
+          <article class="kata-card kata-card--coming-soon" role="gridcell">
+            <div class="kata-card__link kata-card__link--disabled" aria-label="Coming soon">
+              <div class="kata-card__image-container">
+                <div class="kata-card__placeholder">
+                  <span class="kata-card__placeholder-icon">🚀</span>
+                </div>
+              </div>
+              <div class="kata-card__content">
+                <h3 class="kata-card__title">Coming Soon</h3>
+                <p class="kata-card__description">More katas on the way</p>
+              </div>
+            </div>
+          </article>
+        `;
+
+        container.innerHTML = kataCards + comingSoonCard;
+      }
+
+      // Load katas when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadKatas);
+      } else {
+        loadKatas();
+      }
     </script>
   </body>
 </html>
-<style>
-  body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #2d2d2d;
-    color: #bdbdbe;
-    display: grid;
-    place-content: center;
-  }
-
-  h1 {
-    text-align: center;
-  }
-
-  h3 {
-    margin: 0;
-    margin-bottom: 1px;
-  }
-
-  .katas {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-  }
-
-  .kata-button {
-    border-radius: 8px;
-    cursor: pointer;
-    border: 2px solid #bdbdbe;
-    outline: none;
-    box-shadow: none;
-    overflow: hidden;
-    padding: 0;
-    margin: 0;
-    height: 250px;
-    width: 250px;
-    color: white;
-    transition: all 0.25s ease-in;
-  }
-
-  .kata-button--tbd {
-    letter-spacing: 1.25px;
-    background: rgba(0, 0, 0, 1);
-    opacity: 0.4;
-    cursor: default;
-  }
-
-  .kata-button:hover .kata-button__preview {
-    scale: 1.15;
-  }
-
-  .kata-button:hover .kata-button__text {
-    background: rgba(0, 0, 0, 1);
-    color: white;
-    height: 20%;
-    letter-spacing: 1.8px;
-  }
-
-  .kata-button__preview {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    scale: 1;
-    transition: all 0.25s ease-in-out;
-  }
-
-  .kata-button__text {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 15%;
-    background: rgba(0, 0, 0, 0.9);
-    position: sticky;
-    bottom: -1px;
-    z-index: 1;
-    font-weight: normal;
-    letter-spacing: 1.5px;
-    color: #bdbdbe;
-    transition: all 0.25s ease-in;
-  }
-
-  .kata-button.recommended {
-    background: #2d2d2d;
-    border: 2px solid #f0db4f;
-  }
-
-  .kata-button.recommended .kata-button__text::before {
-    content: "⭐️";
-    margin-right: 2px;
-  }
-
-  .⭐️ {
-    color: #f0db4f;
-  }
-
-  .⭐️::before {
-    content: "⭐️ -";
-    margin-right: 4px;
-  }
-
-  .kata-button.wip {
-    background: #2d2d2d;
-    border: 2px solid #ff391b;
-  }
-
-  .kata-button.wip .kata-button__text::before {
-    content: "🚧";
-    margin-right: 2px;
-  }
-
-  .🚧 {
-    color: #ff391b;
-  }
-
-  .🚧::before {
-    content: "🚧 -";
-    margin-right: 4px;
-  }
-
-  legend {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    padding: 12px;
-    color: #bdbdbeaa;
-    font-size: 0.9em;
-    font-style: italic;
-  }
-
-  legend ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  footer.footer--desktop {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    text-align: center;
-    padding: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-  }
-
-  footer.footer--mobile {
-    display: none;
-  }
-
-  footer.footer--desktop::before {
-    content: "Want to see the code?";
-  }
-
-  footer.footer--desktop:hover::before {
-    content: "Click on this icon >>>";
-  }
-
-  #gh-logo {
-    filter: invert(100%);
-    transition: all 0.25s ease-in-out;
-  }
-
-  #gh-logo:hover {
-    filter: invert(75%);
-  }
-
-  #gh-logo:active {
-    filter: invert(0%);
-  }
-
-  @media (max-width: 1200px) {
-    .katas {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    .kata-button {
-      height: 200px;
-      width: 200px;
-    }
-
-    .kata-button__text {
-      height: 30%;
-      text-wrap: balance;
-      gap: 8px;
-      word-break: break-word;
-      text-align: center;
-      line-height: 1.5;
-      padding: 0 8px;
-    }
-
-    .kata-button:hover .kata-button__text {
-      background: rgba(0, 0, 0, 1);
-      color: white;
-      height: 30%;
-      letter-spacing: 1.5px;
-    }
-
-    footer.footer--desktop {
-      display: none;
-    }
-
-    legend {
-      width: 100%;
-      position: relative;
-      display: inline-flex;
-      gap: 8px;
-      justify-content: center;
-      align-items: center;
-      margin-top: 30px;
-      padding: 0;
-    }
-
-    legend h3 {
-      display: none;
-    }
-
-    legend ul {
-      flex-wrap: wrap;
-      display: inline-flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    footer.footer--mobile {
-      margin-top: 80px;
-      margin-bottom: 30px;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      gap: 24px;
-      text-align: left;
-    }
-
-    #hillman-memoji {
-      border-radius: 50%;
-    }
-
-    footer.footer--mobile a {
-      color: #fbbe17;
-      user-select: none;
-      text-decoration: none;
-    }
-
-    .footer__data {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    #current-year {
-      font-size: 0.9em;
-    }
-
-    #current-year::before {
-      content: "© ";
-    }
-  }
-
-  @media (max-width: 768px) {
-    .katas {
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: auto;
-    }
-
-    .kata-button {
-      height: 170px;
-      width: 170px;
-    }
-
-    .kata-button__text {
-      display: none;
-    }
-
-    .⭐️::before,
-    .🚧::before {
-      content: "*";
-      margin-right: 0;
-    }
-  }
-
-  @media (max-width: 380px) {
-    .katas {
-      grid-template-columns: 1fr;
-      justify-items: center;
-    }
-  }
-</style>

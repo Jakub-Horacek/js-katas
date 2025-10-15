@@ -1,0 +1,111 @@
+{
+  "katas": [
+    {
+      "id": "calculator",
+      "title": "Calculator",
+      "description": "Basic calculator application",
+      "href": "./kata1-calculator/src/index.html",
+      "image": "./assets/previews/kata1.png",
+      "badges": ["desktop"],
+      "recommended": false
+    },
+    {
+      "id": "task-manager",
+      "title": "Task Manager",
+      "description": "Organize and manage your tasks",
+      "href": "./kata2-task-manager/src/index.html",
+      "image": "./assets/previews/kata2.png",
+      "badges": ["desktop"],
+      "recommended": false
+    },
+    {
+      "id": "memory-game",
+      "title": "Memory Game",
+      "description": "Test your memory skills",
+      "href": "./kata3-memory-game/src/index.html",
+      "image": "./assets/previews/kata3.png",
+      "badges": ["desktop"],
+      "recommended": false
+    },
+    {
+      "id": "observation-game",
+      "title": "Observation Game",
+      "description": "Sharpen your observation skills",
+      "href": "./kata4-observation-game/src/index.html",
+      "image": "./assets/previews/kata4.png",
+      "badges": ["desktop"],
+      "recommended": false
+    },
+    {
+      "id": "typing-test",
+      "title": "Typing Test",
+      "description": "Improve your typing speed and accuracy",
+      "href": "./kata5-typing-test/src/index.html",
+      "image": "./assets/previews/kata5.png",
+      "badges": ["desktop"],
+      "recommended": true
+    },
+    {
+      "id": "music-player",
+      "title": "Music Player",
+      "description": "Create a custom music player",
+      "href": "./kata6-music-player/src/index.html",
+      "image": "./assets/previews/kata6.png",
+      "badges": ["mobile", "desktop"],
+      "recommended": false
+    },
+    {
+      "id": "snake-game",
+      "title": "Snake Game",
+      "description": "Classic snake game implementation",
+      "href": "./kata7-snake-game/src/index.html",
+      "image": "./assets/previews/kata7.png",
+      "badges": ["desktop"],
+      "recommended": false
+    },
+    {
+      "id": "hangman",
+      "title": "Hangman",
+      "description": "Word guessing game",
+      "href": "./kata8-hangman/src/index.html",
+      "image": "./assets/previews/kata8.png",
+      "badges": ["mobile", "desktop"],
+      "recommended": true
+    },
+    {
+      "id": "chess-game",
+      "title": "Chess Game",
+      "description": "Full chess implementation",
+      "href": "./kata9-chess-game/src/index.html",
+      "image": "./assets/previews/kata9.png",
+      "badges": ["desktop", "mobile"],
+      "recommended": false
+    },
+    {
+      "id": "paint",
+      "title": "Paint",
+      "description": "Digital drawing application",
+      "href": "./kata10-paint/src/index.html",
+      "image": "./assets/previews/kata10.png",
+      "badges": ["desktop", "mobile"],
+      "recommended": true
+    }
+  ],
+  "badges": {
+    "mobile": {
+      "icon": "📱",
+      "label": "Mobile optimized",
+      "color": "#4CAF50"
+    },
+    "desktop": {
+      "icon": "🖥️",
+      "label": "Desktop optimized",
+      "color": "#2196F3"
+    },
+    "recommended": {
+      "icon": "⭐",
+      "label": "Recommended",
+      "color": "#f0db4f"
+    }
+  }
+}
