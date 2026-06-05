@@ -366,12 +366,65 @@ TypingTest.prototype.getRandomInt = function (min = 10, max = 50) {
 };
 
 /**
- * Gets random words from the API
+ * Normalizes and validates a word list from any source.
+ * @param {unknown} words
+ * @returns {string[]}
+ */
+TypingTest.prototype.normalizeWords = function (words) {
+  if (!Array.isArray(words)) {
+    return [];
+  }
+
+  return words
+    .map((word) => String(word).trim().toLowerCase())
+    .filter((word) => /^[a-z]+$/.test(word));
+};
+
+/**
+ * Gets fallback words from the local customWords library.
+ * @param {number} count
+ * @returns {string[]}
+ */
+TypingTest.prototype.getFallbackWords = function (count = 10) {
+  const fallbackLibrary = window.customWords ?? {};
+  let group = "NORMAL";
+
+  if (this.options?.config?.sentenceLength) {
+    const { min, max } = this.options.config.sentenceLength;
+
+    for (const key of Object.keys(fallbackLibrary)) {
+      if (SentenceLengths[key]?.min === min && SentenceLengths[key]?.max === max) {
+        group = key;
+        break;
+      }
+    }
+  }
+
+  const pool = fallbackLibrary[group] ?? fallbackLibrary.NORMAL ?? [];
+
+  if (pool.length === 0) {
+    this.logger.log("Custom words library is empty.", "error");
+    return [];
+  }
+
+  const shuffled = pool.slice().sort(() => Math.random() - 0.5);
+  const words = [];
+
+  while (words.length < count) {
+    words.push(...shuffled);
+  }
+
+  return words.slice(0, count);
+};
+
+/**
+ * Gets random words from the API with a local fallback.
  * @param {number} count of words to get from the API.
- * @returns {Promise} The promise object with response
+ * @returns {Promise<string[]>}
  */
 TypingTest.prototype.getWords = function (count = 10) {
   const apiUrl = `https://random-word-api.herokuapp.com/word?number=${count}`;
+  const fetchTimeoutMs = 5000;
 
   this.logger.log(`Generating ${count} random words.`, "info");
 
@@ -379,48 +432,38 @@ TypingTest.prototype.getWords = function (count = 10) {
     this.logger.log(`HTTP Request ${apiUrl}`, "debug");
   }
 
-  // Helper to get fallback words from customWords
-  const getFallbackWords = () => {
-    // Default to NORMAL if config is missing
-    let group = "NORMAL";
-    if (this.options && this.options.config && this.options.config.sentenceLength) {
-      // Find which key in customWords matches the current config
-      const min = this.options.config.sentenceLength.min;
-      const max = this.options.config.sentenceLength.max;
-      for (const key in window.customWords) {
-        if (SentenceLengths[key] && SentenceLengths[key].min === min && SentenceLengths[key].max === max) {
-          group = key;
-          break;
-        }
-      }
-    }
-    const wordsArray = window.customWords[group];
-    // Shuffle and pick count words
-    const shuffled = wordsArray.slice().sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
+  const useFallback = (reason, type = "warn") => {
+    this.logger.log(`${reason} Using fallback words.`, type);
+    return this.getFallbackWords(count);
   };
 
-  return new Promise((resolve, reject) => {
-    fetch(apiUrl)
-      .then((response) => {
-        if (!response.ok) {
-          // Fallback to customWords
-          this.logger.log("API failed, using fallback words.", "warn");
-          resolve(getFallbackWords());
-          return null;
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data) {
-          resolve(data);
-        }
-      })
-      .catch((error) => {
-        this.logger.log(`API error: ${error}. Using fallback words.`, "error");
-        resolve(getFallbackWords());
-      });
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), fetchTimeoutMs);
+
+  return fetch(apiUrl, { signal: controller.signal })
+    .then((response) => {
+      if (!response.ok) {
+        return useFallback(`API responded with ${response.status}.`);
+      }
+
+      return response.json();
+    })
+    .then((data) => {
+      const words = this.normalizeWords(data);
+
+      if (words.length === 0) {
+        return useFallback("API returned no usable words.");
+      }
+
+      return words.slice(0, count);
+    })
+    .catch((error) => {
+      const reason = error.name === "AbortError" ? "API request timed out." : `API error: ${error.message}.`;
+      return useFallback(reason, "error");
+    })
+    .finally(() => {
+      clearTimeout(timeoutId);
+    });
 };
 
 /**
@@ -432,32 +475,48 @@ TypingTest.prototype.getSentenceChildren = function () {
 };
 
 /**
- * Creates a sentece of a random words.
- * @returns {DocumentFragment} The sentece.
+ * Builds the words container and fills it asynchronously.
+ * @returns {Promise<HTMLElement>}
  */
 TypingTest.prototype.createSentence = function () {
-  const fragment = document.createDocumentFragment();
-
   const sentenceElement = document.createElement("div");
   sentenceElement.id = "words";
 
   const minLength = this.options.config.sentenceLength.min;
   const maxLength = this.options.config.sentenceLength.max;
+  const wordCount = this.getRandomInt(minLength, maxLength);
 
-  this.getWords(this.getRandomInt(minLength, maxLength)).then(function (data) {
-    const words = data;
-
+  return this.getWords(wordCount).then((words) => {
     words.forEach((word) => {
       const wordElement = document.createElement("div");
       wordElement.classList.add("word");
-      wordElement.innerText = word;
+      wordElement.textContent = word;
       sentenceElement.appendChild(wordElement);
     });
+
+    if (words.length === 0) {
+      sentenceElement.textContent = "Unable to load words. Please restart the test.";
+    }
+
+    return sentenceElement;
   });
+};
 
-  fragment.appendChild(sentenceElement);
+/**
+ * Replaces the current sentence and refreshes sentenceWords when ready.
+ * @returns {Promise<void>}
+ */
+TypingTest.prototype.replaceSentence = function () {
+  return this.createSentence().then((sentenceElement) => {
+    const screen = this.getTestScreen();
+    const oldSentence = screen?.querySelector("#words");
 
-  return fragment;
+    if (screen && oldSentence) {
+      screen.replaceChild(sentenceElement, oldSentence);
+    }
+
+    this.sentenceWords = this.getSentenceChildren();
+  });
 };
 
 /**
@@ -465,21 +524,34 @@ TypingTest.prototype.createSentence = function () {
  * @param {string} inputWord The provided word
  */
 TypingTest.prototype.checkWordMatch = function (inputWord) {
+  if (this.isLoadingSentence) {
+    return;
+  }
+
   if (this.wordIndex >= this.sentenceWords.length) {
     if (this.isDebug) {
       this.logger.log("Player has reached the end of the current sentence.", "debug");
     }
 
-    const screen = this.getTestScreen();
-    const newSentence = this.createSentence();
-    const oldSentence = screen.querySelector("#words");
-    screen.replaceChild(newSentence, oldSentence);
+    this.isLoadingSentence = true;
     this.wordIndex = 0;
-    this.sentenceWords = this.getSentenceChildren();
+
+    return this.replaceSentence()
+      .finally(() => {
+        this.isLoadingSentence = false;
+      })
+      .then(() => {
+        this.checkWordMatch(inputWord);
+      });
   }
 
   const currentWordElement = this.sentenceWords.item(this.wordIndex);
-  const currentWord = currentWordElement?.innerText;
+
+  if (!currentWordElement) {
+    return;
+  }
+
+  const currentWord = currentWordElement.textContent;
 
   this.currentPlayer.wordsTotal++;
 
@@ -507,16 +579,34 @@ TypingTest.prototype.checkWordMatch = function (inputWord) {
 TypingTest.prototype.handleInputEvent = function (event, inputElement) {
   if (event.code === "Enter" || event.code === "Space") {
     event.preventDefault();
-    const inputWord = inputElement.value.toLowerCase();
+
+    if (this.isLoadingSentence) {
+      return;
+    }
+
+    const inputWord = inputElement.value.toLowerCase().trim();
+
+    if (!inputWord) {
+      return;
+    }
 
     if (this.isDebug) {
       this.logger.log(`word "${inputWord}" submitted`, "debug");
     }
 
-    this.checkWordMatch(inputWord);
-    this.wordIndex++;
+    const matchResult = this.checkWordMatch(inputWord);
 
-    inputElement.value = "";
+    const advance = () => {
+      this.wordIndex++;
+      inputElement.value = "";
+    };
+
+    if (matchResult instanceof Promise) {
+      matchResult.then(advance);
+      return;
+    }
+
+    advance();
   }
 };
 
@@ -593,10 +683,13 @@ TypingTest.prototype.getTestScreen = function () {
  * @returns {DocumentFragment} The test screen.
  */
 TypingTest.prototype.createTestScreen = function () {
-  screen = this.viewScreen.create("test", "Typing Test");
+  const screen = this.viewScreen.create("test", "Typing Test");
 
-  const sentence = this.createSentence();
-  screen.screenElement.appendChild(sentence);
+  const loadingElement = document.createElement("div");
+  loadingElement.id = "words";
+  loadingElement.classList.add("words--loading");
+  loadingElement.textContent = "Loading words...";
+  screen.screenElement.appendChild(loadingElement);
 
   const input = this.createInput();
   screen.screenElement.appendChild(input);
@@ -614,20 +707,27 @@ TypingTest.prototype.createTestScreen = function () {
 
   screen.screenElement.appendChild(restartButton);
 
-  return screen.fragmentElement;
+  return screen;
 };
 
 /**
  * Shows the test screen.
  */
 TypingTest.prototype.showTestScreen = function () {
-  const fragment = this.createTestScreen();
+  this.isLoadingSentence = true;
 
-  this.options.renderElement.appendChild(fragment);
-  this.sentenceWords = this.getSentenceChildren();
-  document.querySelector("#input")?.focus();
+  const screen = this.createTestScreen();
 
-  this.runTest();
+  this.options.renderElement.appendChild(screen.fragmentElement);
+
+  this.replaceSentence()
+    .then(() => {
+      document.querySelector("#input")?.focus();
+      this.runTest();
+    })
+    .finally(() => {
+      this.isLoadingSentence = false;
+    });
 };
 
 /**
@@ -646,7 +746,7 @@ TypingTest.prototype.removeTestScreen = function () {
  * @returns {DocumentFragment} The end screen.
  */
 TypingTest.prototype.createEndScreen = function () {
-  screen = this.viewScreen.create("end", "Game Over");
+  const screen = this.viewScreen.create("end", "Game Over");
 
   const statsWrapper = document.createElement("div");
   statsWrapper.classList.add("wrapper");

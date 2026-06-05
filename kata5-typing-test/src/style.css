@@ -123,6 +123,11 @@ button,
   transition: var(--transition);
 }
 
+.words--loading {
+  justify-content: center;
+  opacity: 0.7;
+}
+
 .word {
   transition: var(--transition);
 }
